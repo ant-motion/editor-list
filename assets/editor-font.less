@@ -1,0 +1,55 @@
+@import "custom";
+
+@font: editor-font;
+
+.@{font} {
+  &-align {
+    .left, .center, .right, .justify {
+      &:after, &:before {
+        background: @text-color;
+        box-shadow: 0 6px 0 @text-color;
+      }
+    }
+    .left, .center, .right, .justify {
+
+      &:after, &:before {
+        content: '';
+        display: block;
+        margin: auto;
+        height: 1px;
+      }
+      &:before {
+        margin-top: 5px;
+      }
+      &:after {
+        margin-top: 2px;
+      }
+    }
+    .left, .center, .right {
+      &:after {
+        width: 12px;
+      }
+      &:before {
+        width: 16px;
+
+      }
+    }
+    .left {
+      &:after {
+        margin-left: 0;
+      }
+    }
+    .right {
+      &:after {
+        margin-right: 0;
+      }
+    }
+    .justify {
+      &:after,
+      &:before {
+        width: 16px;
+      }
+    }
+  }
+}
+

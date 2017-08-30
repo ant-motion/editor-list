@@ -1,0 +1,191 @@
+@import "custom";
+
+@editor: editor-list;
+
+.@{editor} {
+  line-height: 22px;
+  .ant-row {
+    margin-bottom: 8px;
+  }
+  .ant-collapse-content-box {
+    position: relative;
+  }
+  .ant-input-number, .ant-input {
+    width: 100%;
+    background: transparent;
+    border-color: @input-line-color;
+    color: @text-color;
+    input {
+      background: transparent !important;
+      color: @text-color;
+      border-color: @input-line-color;
+    }
+    &:hover, &:focus, &-focused {
+      border-color: @input-line-color-hover;
+      box-shadow: 0 0 4px @input-line-color-hover;
+    }
+    &::-moz-placeholder {
+      color: fade(@text-color, 15);
+      opacity: 1;
+    }
+    &:-ms-input-placeholder {
+      color: fade(@text-color, 15);
+    }
+    &::-webkit-input-placeholder {
+      color: fade(@text-color, 15);
+    }
+  }
+  .ant-select-selection {
+    background: transparent;
+    color: @text-color;
+    border-color: @input-line-color;
+    &:hover, &:focus {
+      border-color: @input-line-color-hover;
+    }
+    .ant-select-selection-selected-value {
+      padding-right: 8px;
+    }
+    .ant-select-arrow {
+      right: 4px;
+    }
+    input {
+      padding: 0;
+      &:hover, &:focus, &-focused {
+        border: none;
+        box-shadow: none;
+      }
+    }
+  }
+  .ant-select-focused .ant-select-selection,
+  .ant-select-open .ant-select-selection {
+    border-color: @input-line-color-hover;
+    box-shadow: 0 0 4px @input-line-color-hover;
+  }
+  .ant-select-selection {
+    .ant-select-selection__placeholder {
+      color: fade(@text-color, 15);
+      width: 100%;
+    }
+  }
+  .ant-input-number-handler-wrap {
+    background: transparent;
+    .ant-input-number-handler {
+      .ant-input-number-handler-up-inner,
+      .ant-input-number-handler-down-inner {
+        color: @text-color;
+        &:hover {
+          color: @text-color;
+        }
+      }
+    }
+  }
+
+  .ant-radio-button-wrapper {
+    color: fade(@input-line-color, 30);
+    background: transparent;
+    border-color: fade(@input-line-color, 30);
+    width: 42px;
+    text-align: center;
+  }
+  .ant-radio-button-wrapper-checked {
+    color: @input-line-color-hover;
+    background: @heiColor;
+    border-color: @input-line-color-hover;
+    box-shadow: -1px 0 0 0 @input-line-color-hover;
+  }
+  .ant-radio-button-wrapper:not(:first-child)::before {
+    background-color: fade(@input-line-color, 30);
+  }
+
+  .ant-radio-button-auto-width {
+    width: auto;
+  }
+
+  .select-input {
+    position: relative;
+    & .anticon {
+      position: absolute;
+      right: 4px;
+      line-height: 22px;
+      cursor: pointer;
+      font-size: 12px;
+      transform: scale(0.75) rotate(0deg);
+      z-index: 2;
+    }
+  }
+  .ant-switch-checked{
+    background-color: @input-line-color;
+  }
+}
+
+.motion-common(@duration) {
+  animation-duration: @duration;
+  animation-fill-mode: both;
+}
+
+.motion-common-leave(@duration) {
+  animation-duration: @duration;
+  animation-fill-mode: both;
+}
+
+.make-motion(@className, @keyframeName, @duration) {
+  .@{className}-enter,
+  .@{className}-appear {
+    .motion-common(@duration);
+    animation-play-state: paused;
+  }
+  .@{className}-leave {
+    .motion-common-leave(@duration);
+    animation-play-state: paused;
+  }
+  .@{className}-enter.@{className}-enter-active,
+  .@{className}-appear.@{className}-appear-active {
+    animation-name: ~"@{keyframeName}In";
+    animation-play-state: running;
+  }
+  .@{className}-leave.@{className}-leave-active {
+    animation-name: ~"@{keyframeName}Out";
+    animation-play-state: running;
+    pointer-events: none;
+  }
+}
+
+.editor-slide-motion(@className, @keyframeName) {
+  .make-motion(@className, @keyframeName, .45s);
+  .@{className}-enter,
+  .@{className}-appear {
+    opacity: 0;
+    animation-timing-function: @ease-out-circ;
+  }
+  .@{className}-leave {
+    animation-timing-function: @ease-in-out-circ;
+  }
+}
+
+.editor-slide-motion(editor-slide-up, editorSlideUp);
+
+@keyframes editorSlideUpIn {
+  0% {
+    opacity: 0;
+    transform-origin: 50% 0;
+    transform: perspective(400px) rotateX(-45deg);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 50% 0;
+    transform: perspective(400px) rotateX(0deg);
+  }
+}
+
+@keyframes editorSlideUpOut {
+  0% {
+    opacity: 1;
+    transform-origin: 50% 0;
+    transform: perspective(400px) rotateX(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 50% 0;
+    transform: perspective(400px) rotateX(-45deg);
+  }
+}

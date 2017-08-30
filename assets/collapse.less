@@ -1,0 +1,83 @@
+@import "custom";
+@prefixCls: ant-collapse;
+.@{prefixCls} {
+  background-color: @bgColor;
+  & > &-item {
+
+    border-top: 1px solid fade(#fff, 15);
+    &:first-child {
+      border-top: none;
+    }
+
+    > .@{prefixCls}-header {
+      height: 40px;
+      line-height: 40px;
+      text-indent: 10px;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+      font-weight: normal;
+      border-bottom: 1px solid fade(@heiColor, 45);
+      .arrow {
+        display: inline-block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        &:after, &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 6px;
+          height: 2px;
+          background: #fff;
+          transition: transform .3s @ease-in-out;
+        }
+        &:after {
+          transform: rotate(45deg) translateX(-2px);
+        }
+        &:before {
+          transform: rotate(-45deg) translateX(2px);
+        }
+        transition: transform .3s @ease-in-out;
+      }
+    }
+  }
+
+  & > &-item-disabled > .@{prefixCls}-header {
+    cursor: not-allowed;
+    color: #999;
+    background-color: #f3f3f3;
+  }
+
+  &-content {
+    // overflow: hidden;
+    color: @text-color;
+    padding: 1px 16px;
+    box-shadow: 0 0 8px @heiColor inset;
+    background-color: @bgColor;
+
+    & > &-box {
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    &-inactive {
+      display: none;
+    }
+  }
+
+  & > &-item-active {
+    > .@{prefixCls}-header {
+      .arrow {
+        transform: translateY(-3px);
+        &:after {
+          transform: rotate(-45deg)  translateX(-2px);;
+        }
+        &:before{
+          transform: rotate(45deg) translateX(2px);
+        }
+      }
+    }
+  }
+}
