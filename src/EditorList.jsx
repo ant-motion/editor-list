@@ -20,13 +20,13 @@ import {
   toCss,
   getRandomKey,
   removeMultiEmpty,
-  getDomCssRule
+  getDomCssRule,
 } from './utils';
 
 const stateSort = { hover: 0, focus: 1, active: 2 };
 
 class EditorList extends Component {
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     defaultActiveKey: PropTypes.any,
     select: PropTypes.array,
@@ -39,12 +39,13 @@ class EditorList extends Component {
     className: 'editor-list',
     defaultActiveKey: ['EditorState'],
     useClassName: true,
+    onChange: () => {
+    },
   };
-
-  select = {};
 
   constructor(props) {
     super(props);
+    this.select = {};
     this.state = this.setDefaultState(props.editorElem);
     this.setEditorElemClassName();
   }
@@ -55,7 +56,89 @@ class EditorList extends Component {
     }
   }
 
-  setDefaultState = (dom) =>{
+  onStateChange = (key, data) => {
+    if (key === 'cursor') {
+      const value = {
+        cursor: data,
+      };
+      this.onChange('state', value);
+    } else {
+      this.setState({
+        classState: data,
+      }, this.changeCss);
+    }
+  }
+
+  onCssChange = (cssValue, cssNameValue) => {
+    const dom = this.props.editorElem;
+    const { css, cssName, classState } = this.state;
+    if (cssNameValue !== cssName) {
+      const styleDom = this.ownerDocument.querySelector(`#${cssName}`);
+      if (styleDom) {
+        styleDom.remove();
+      }
+      Object.keys(css).forEach(key => {
+        css[key] = css[key].replace(cssName, cssNameValue);
+      });
+      dom.className = dom.className.replace(cssName, '');
+    }
+    this.setState({
+      css: {
+        ...css,
+        [classState]: cssValue,
+      },
+      cssName: cssNameValue,
+    }, (cssValue !== css[classState] || cssNameValue !== cssName) && this.changeCss);
+  }
+
+  onChange = (key, data) => {
+    const { value, classState, cssName, css } = this.state;
+    const v = {
+      ...value,
+      [key]: data,
+    };
+    const state = {
+      value: v,
+      css: {
+        ...css,
+        [classState]: `.${cssName}${classState === 'default'
+          ? '' : `:${classState}`} {\n  ${toCss(v, this.defaultData).replace(/\n/g, '\n  ')}\n}`,
+      },
+    };
+    this.setState(state, this.setCssToDom);
+    this.props.onChange(state);
+  };
+
+  setCssToDom = () => {
+    const { css, cssName } = this.state;
+    const { editorElem } = this.props;
+    if (cssName) {
+      this.setClassNameToDom();
+      this.setEditorElemClassName();
+    } else {
+      editorElem.style.cssText = css;
+    }
+  }
+
+  setClassNameToDom = () => {
+    const { css } = this.state;
+    const cssStr = Object.keys(css).sort((a, b) => (
+      stateSort[a] > stateSort[b]
+    )).map(key => {
+      return css[key].replace(/;/g, ' !important;');
+    }).join('\n');
+    const style = this.ownerDocument.querySelector(`#${this.state.cssName}`) || this.createStyle();
+    style.innerHTML = cssStr;
+  }
+
+  setEditorElemClassName = () => {
+    const dom = this.props.editorElem;
+    const domClassName = dom.className.replace(this.state.cssName, '');
+    dom.className = removeMultiEmpty(`${domClassName ?
+      `${domClassName} ` : ''}${this.state.cssName}`);
+  }
+
+  setDefaultState = (dom) => {
     this.ownerDocument = dom.ownerDocument;
     this.domStyle = getComputedStyle(dom);
     const value = this.getDefaultData(this.domStyle);
@@ -77,19 +160,13 @@ class EditorList extends Component {
   getClassName = () => {
     const classNameArray = this.props.editorElem.className &&
       this.props.editorElem.className.split(' ');
-    const lastClassName = classNameArray[classNameArray.length-1];
+    const lastClassName = classNameArray[classNameArray.length - 1];
     const lastStyle = this.ownerDocument.querySelector(`#${lastClassName}`);
     const editorClassName = lastStyle && lastStyle.tagName === 'STYLE' ? lastClassName :
-      classNameArray.filter(css => (css.indexOf('editor_css') > 0 ))[0] ||
-      `editor_css-${getRandomKey()}`;
-    return this.props.useClassName ? editorClassName : ''
+      (classNameArray.filter(css => (css.indexOf('editor_css') > 0))[0] ||
+      `editor_css-${getRandomKey()}`);
+    return this.props.useClassName ? editorClassName : '';
   };
-
-  setEditorElemClassName = () => {
-    const dom = this.props.editorElem;
-    const domClassName = dom.className.replace(this.state.cssName, '');
-    dom.className = removeMultiEmpty(`${domClassName ? `${domClassName} ` : ''}${this.state.cssName}`);
-  }
 
   getDefaultData = (style) => {
     const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
@@ -137,11 +214,11 @@ class EditorList extends Component {
       },
       margin: {
         margin: convertBorderData(style.margin),
-        padding: convertBorderData(style.padding)
+        padding: convertBorderData(style.padding),
       },
       shadow: {
         boxShadow: convertShadowData(style.boxShadow),
-        textShadow: convertShadowData(style.textShadow)
+        textShadow: convertShadowData(style.textShadow),
       },
       transition: style.transition,
     };
@@ -199,96 +276,24 @@ class EditorList extends Component {
     return style;
   }
 
-  setClassNameToDom = () => {
-    const { css } = this.state;
-    const cssStr = Object.keys(css).sort((a, b) => (
-      stateSort[a] > stateSort[b]
-    )).map(key => {
-      return css[key].replace(/;/g, ' !important;');
-    }).join('\n');
-    const style = this.ownerDocument.querySelector(`#${this.state.cssName}`) || this.createStyle();
-    style.innerHTML = cssStr;
-  }
-
-  setCssToDom = () => {
-    const { css, cssName } = this.state;
-    const { editorElem } = this.props;
-    if (cssName) {
-      this.setClassNameToDom();
-      this.setEditorElemClassName();
-    } else {
-      editorElem.style.cssText = css;
-    }
-  }
-
   changeCss = () => {
     const dom = this.props.editorElem;
     this.setCssToDom();
-    this.domStyle = getDomCssRule(dom, this.state.classState === 'default' ? null : this.state.classState);
+    this.domStyle = getDomCssRule(dom, this.state.classState === 'default' ?
+      null : this.state.classState);
     const value = this.getDefaultData(this.domStyle);
     this.setState({
       value,
     });
-    this.props.onChange && this.props.onChange({ value, css: this.state.css });
+    this.props.onChange({ value, css: this.state.css });
   }
-
-  onStateChange = (key, data) => {
-    if (key === 'cursor') {
-      const value = {
-        cursor: data,
-      };
-      this.onChange('state', value);
-    } else {
-      this.setState({
-        classState: data,
-      }, this.changeCss);
-    }
-  }
-
-  onCssChange = (cssValue, cssNameValue) => {
-    const dom = this.props.editorElem;
-    const { css, cssName, classState } = this.state;
-    if (cssNameValue !== cssName) {
-      const styleDom = this.ownerDocument.querySelector(`#${cssName}`);
-      styleDom && styleDom.remove();
-      Object.keys(css).forEach(key => {
-        css[key] = css[key].replace(cssName, cssNameValue);
-      });
-      dom.className = dom.className.replace(cssName, '');
-    }
-    this.setState({
-      css: {
-        ...css,
-        [classState]: cssValue,
-      },
-      cssName: cssNameValue,
-    }, (cssValue !== css[classState] || cssNameValue !== cssName) && this.changeCss);
-  }
-
-  onChange = (key, data) => {
-    const { value, classState, cssName, css } = this.state;
-    const v = {
-      ...value,
-      [key]: data,
-    };
-    const state = {
-      value: v,
-      css: {
-        ...css,
-        [classState]: `.${cssName}${classState === 'default'
-          ? '' : `:${classState}`} {\n  ${toCss(v, this.defaultData).replace(/\n/g, '\n  ')}\n}`,
-      },
-    };
-    this.setState(state, this.setCssToDom);
-    this.props.onChange && this.props.onChange(state);
-  };
 
   render() {
     const { ...props } = this.props;
     ['select', 'useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
     return (<Collapse bordered={false} {...props}>
       {this.getChildren(props)}
-    </Collapse>)
+    </Collapse>);
   }
 }
 EditorList.State = State;

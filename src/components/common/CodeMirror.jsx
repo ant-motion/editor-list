@@ -1,24 +1,31 @@
 import React from 'react';
-import CodeMirror from 'codemirror';
+import codeMirror from 'codemirror';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
+function noop() {}
+
 export default class RcCodeMirror extends React.Component {
 
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     options: PropTypes.object,
     value: PropTypes.string,
     onChange: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onKeyUp: PropTypes.func,
   };
 
   static defaultProps = {
     option: {},
-    value: ''
+    value: '',
+    onChange: noop,
+    onKeyDown: noop,
+    onKeyUp: noop,
   };
 
   componentDidMount() {
-    this.editor = CodeMirror(this.ref);
+    this.editor = codeMirror(this.ref);
     this.editor.on('change', (cm, metadata) => {
       if (this.props.onChange && !this.updated) {
         this.props.onChange(this.editor, metadata, this.editor.getValue());
@@ -31,9 +38,11 @@ export default class RcCodeMirror extends React.Component {
     }
     this.editor.on('keydown', (cm, event) => {
       this.updated = false;
-      this.props.onKeyDown && this.props.onKeyDown(this.editor, event);
-    })
-    Object.keys(this.props.options).forEach(key => this.editor.setOption(key, this.props.options[key]));
+      this.props.onKeyDown(this.editor, event);
+    });
+    Object.keys(this.props.options).forEach(key => {
+      this.editor.setOption(key, this.props.options[key]);
+    });
     this.editor.setValue(this.props.value);
   }
 
@@ -51,6 +60,6 @@ export default class RcCodeMirror extends React.Component {
     });
     return (
       <div className={className} ref={(self) => this.ref = self} />
-    )
+    );
   }
 }

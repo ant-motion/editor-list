@@ -14,10 +14,11 @@ import { getOption } from '../utils';
 const Panel = Collapse.Panel;
 
 export default class EditorInterface extends Component {
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     header: PropTypes.string,
     value: PropTypes.object,
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -34,22 +35,23 @@ export default class EditorInterface extends Component {
       bottom: null,
       left: null,
     },
+    onChange: () => {},
   };
+
+  onChange = (key, v) => {
+    const value = key === 'offset' ? {
+      ...this.props.value,
+      ...v,
+    } : {
+      ...this.props.value,
+      [key]: v,
+    };
+    this.props.onChange('interface', value);
+  }
 
   pos = { static: '没有定位', absolute: '绝对定位', relative: '相对定位', fixed: '窗口定位' };
 
   overflow = { visible: '不裁剪', hidden: '裁剪内容', scroll: '裁剪出现滚动', auto: '超出则出现滚动' };
-
-  onChange = (key, v) => {
-    const value = key === 'offset' ? {
-        ...this.props.value,
-        ...v,
-      } : {
-        ...this.props.value,
-        [key]: v,
-      };
-    this.props.onChange && this.props.onChange('interface', value);
-  }
 
   render() {
     const { ...props } = this.props;
@@ -156,8 +158,8 @@ export default class EditorInterface extends Component {
           </Col>
         </Row>
         <RowHelp title="定位" help={<div>
-          请选择当前相应的定位，如为绝对定位，请开启父级的相对定位，否则将以有相对定位的顶级为定位。
-        </div>}>
+          请选择当前相应的定位，如为绝对定位，请开启父级的相对定位，否则将以有相对定位的顶级为定位。</div>}
+        >
           <Select
             style={{ width: '100%' }}
             value={value.position || 'static'}
@@ -176,7 +178,7 @@ export default class EditorInterface extends Component {
             <Tooltip
               placement="topRight"
               arrowPointAtCenter
-              title={<span>1. 如需设定位置，请先设置定位; <br/> 2. 如果 4 个都有值，以 top left 为准;</span>}
+              title={<span>1. 如需设定位置，请先设置定位; <br /> 2. 如果 4 个都有值，以 top left 为准;</span>}
             >
               <Icon type="question-circle" style={{ marginLeft: 5 }} />
             </Tooltip>

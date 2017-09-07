@@ -8,7 +8,7 @@ import InputGroup from './InputGroup';
 const Option = Select.Option;
 
 export default class BoxModel extends Component {
-  static propsTypes = {
+  static propTypes = {
     value: PropTypes.any,
     onChange: PropTypes.func,
     keys: PropTypes.array,
@@ -17,7 +17,8 @@ export default class BoxModel extends Component {
   };
 
   static defaultProps = {
-    keys: ['top', 'right', 'bottom', 'left', 'center']
+    keys: ['top', 'right', 'bottom', 'left', 'center'],
+    onChange: () => {},
   };
 
   constructor(props) {
@@ -30,7 +31,7 @@ export default class BoxModel extends Component {
   }
 
   onChange = (e) => {
-    this.props.onChange && this.props.onChange(e);
+    this.props.onChange(e);
     this.setState({
       value: e,
     });
@@ -92,7 +93,7 @@ export default class BoxModel extends Component {
               </Option>
             ))}
           </Select>
-        )
+        );
       }));
   }
 

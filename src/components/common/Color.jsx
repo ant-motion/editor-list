@@ -13,7 +13,7 @@ import { alphaBg, isColor } from '../../utils';
 const TweenOneGroup = TweenOne.TweenOneGroup;
 
 class Color extends React.Component {
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     title: PropTypes.string,
     color: PropTypes.string,
@@ -23,6 +23,7 @@ class Color extends React.Component {
 
   static defaultProps = {
     title: '颜色',
+    onChange: () => {},
   };
 
   constructor(props) {
@@ -63,12 +64,6 @@ class Color extends React.Component {
     }
   }
 
-  defaultGetContainer = () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    return container;
-  };
-
   getStyle = (rect) => {
     const r = {
       w: 220,
@@ -90,7 +85,7 @@ class Color extends React.Component {
     return {
       top,
       left,
-      transformOrigin
+      transformOrigin,
     };
   };
 
@@ -103,7 +98,7 @@ class Color extends React.Component {
     const style = this.getStyle(rect);
     const pos = {
       top: style.top,
-      left: style.left
+      left: style.left,
     };
     const origin = style.transformOrigin;
     const rotateX = origin === '50% 100%' ? 45 : -45;
@@ -131,12 +126,12 @@ class Color extends React.Component {
                 '#00a2ae',
                 '#222222',
                 '#404040',
-                //'#5a5a5a',
+                // '#5a5a5a',
                 '#919191',
                 '#bfbfbf',
                 '#d9d9d9',
                 '#e9e9e9',
-                //'#f5f5f5',
+                // '#f5f5f5',
                 // '#f7f7f7',
                 '#fbfbfb',
                 'transparent',
@@ -148,9 +143,11 @@ class Color extends React.Component {
       </div>);
   }
 
-  renderPickerComponent = (rect) => {
-    ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getColorPicker(rect), this.container);
-  }
+  defaultGetContainer = () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    return container;
+  };
 
   colorHandleChange = (value) => {
     const rgb = value.rgb;
@@ -158,8 +155,7 @@ class Color extends React.Component {
     this.setState({
       color,
     });
-
-    this.props.onChange && this.props.onChange(color);
+    this.props.onChange(color);
   };
 
   closeColorPicker = () => {
@@ -179,14 +175,18 @@ class Color extends React.Component {
     this.setState({
       color: target.value,
     });
-    this.props.onChange && this.props.onChange(target.value);
+    this.props.onChange(target.value);
   };
 
   removeColor = () => {
     this.setState({
       color: null,
     });
-    this.props.onChange && this.props.onChange();
+    this.props.onChange();
+  }
+
+  renderPickerComponent = (rect) => {
+    ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getColorPicker(rect), this.container);
   }
 
   render() {
@@ -196,17 +196,19 @@ class Color extends React.Component {
     const { color } = this.state;
     const className = classnames({
       'editor-color': true,
-      'active': this.state.showPicker,
+      active: this.state.showPicker,
     });
-    const children = (<a
+    const children = (
+      <a
         className={className}
         style={{ background: `#fff url(${alphaBg})` }}
         onClick={this.colorClick}
         ref={c => {
-          this.colorDom = c
+          this.colorDom = c;
         }}
       >
-        <i style={{ background: color }}
+        <i
+          style={{ background: color }}
           className={`${!color ? 'no-color' : ''}`}
         >
           {!color && (<svg width="100%" height="100%" viewBox="0 0 60 20" id="no-color">
@@ -228,7 +230,7 @@ class Color extends React.Component {
         <span className="color-close" onClick={this.removeColor}>
           <Icon type="close" />
         </span>
-      </div>)
+      </div>);
     }
 
     return (

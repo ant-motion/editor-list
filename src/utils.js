@@ -1,9 +1,6 @@
 import React from 'react';
 import Select from 'antd/lib/select';
 import Radio from 'antd/lib/radio';
-/*import ToStyle from 'to-style';
-
- const toStyleString = ToStyle.string;*/
 
 const Option = Select.Option;
 
@@ -11,9 +8,6 @@ const RadioButton = Radio.Button;
 
 const colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
 
-const sort = { width: 0, style: 1, color: 2, radius: 3 };
-const sortPos = { top: 0, right: 1, bottom: 2, left: 3 };
-const sortRadius = { 'top-left': 0, 'top-right': 1, 'bottom-right': 2, 'bottom-left': 3 };
 
 export function toArrayChildren(children) {
   const ret = [];
@@ -23,11 +17,12 @@ export function toArrayChildren(children) {
   return ret;
 }
 
-export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4' +
-  'T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==';
+export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/' +
+  '9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0p' +
+  'gAAAABJRU5ErkJggg==';
 
 export function isColor(v) {
-  return v.charAt(0) === '#' || v.match(/rgb+(?:a)?\((.*)\)/) || v.charAt(3) === 'hsl';
+  return v.match(colorExp);
 }
 
 export function getRandomKey() {
@@ -51,14 +46,14 @@ export function getBorderDataToStyle(name, d) {
         [`borderTopRight${key}`]: d.topRight,
         [`borderBottomRight${key}`]: d.bottomRight,
         [`borderBottomLeft${key}`]: d.bottomLeft,
-      }
+      };
     }
     return {
       [`borderTop${key}`]: d.top,
       [`borderRight${key}`]: d.right,
       [`borderBottom${key}`]: d.bottom,
       [`borderLeft${key}`]: d.left,
-    }
+    };
   }
   return { [`border${key}`]: d };
 }
@@ -82,7 +77,7 @@ export function getRadioButton(array) {
     <RadioButton value={key} key={key} className="ant-radio-button-auto-width">
       {key}
     </RadioButton>
-  )))
+  )));
 }
 
 export function getComputedStyle() {
@@ -91,7 +86,7 @@ export function getComputedStyle() {
 
 export function convertData(d) {
   if (!d || d.indexOf('none') >= 0 || d === '0px' || d.indexOf('normal') >= 0 || d === 'auto') {
-    return null
+    return null;
   }
   return d;
 }
@@ -109,8 +104,8 @@ export function convertDefaultData(d) {
 }
 
 export function convertBorderData(d, width, isRadius) {
-  const isColor = d.match(colorExp);
-  const dArray = isColor ? isColor : d.split(' ');
+  const dataIsColor = isColor(d);
+  const dArray = !!dataIsColor ? dataIsColor : d.split(' ');
   if (dArray.length > 1) {
     let top = convertData(dArray[0]);
     let right = convertData(dArray[1]);
@@ -124,12 +119,11 @@ export function convertBorderData(d, width, isRadius) {
       right = parseFloat(wArray[1]) && right || null;
       bottom = parseFloat(wArray[2]) && bottom || null;
       left = parseFloat(wArray[3]) && left || null;
-
     }
     if (isRadius) {
-      return { 'top-left': top, 'top-right': right, 'bottom-right': bottom, 'bottom-left': left, };
+      return { 'top-left': top, 'top-right': right, 'bottom-right': bottom, 'bottom-left': left };
     }
-    return { top, right, bottom, left, };
+    return { top, right, bottom, left };
   }
   return convertData(d);
 }
@@ -151,9 +145,11 @@ function toCssLowerCase(d) {
   return d.replace(/[A-Z]/, ($1) => (`-${$1.toLocaleLowerCase()}`));
 }
 
+/*
 function toStyleUpperCase(d) {
-  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()))
+  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
 }
+*/
 
 function fontToCss(d, current) {
   return Object.keys(d).map(key => {
@@ -161,11 +157,11 @@ function fontToCss(d, current) {
     if (!data ||
       data === current[key]
     ) {
-      return;
+      return null;
     } else if (key === 'letterSpacing' || key === 'lineHeight' || key === 'color') {
       return `${toCssLowerCase(key)}: ${data};`;
     } else if (key === 'align' || key === 'decoration') {
-      return `text-${key}: ${data};`
+      return `text-${key}: ${data};`;
     }
     return `font-${key}: ${data};`;
   }).filter(item => item).join('\n');
@@ -178,17 +174,17 @@ function cssUnique(array) {
       array.splice(2, 1);
     }
   }
-  return array
+  return array;
 }
 
 function borderToCss(d, current) {
   if (!d.style && !d.radius) {
-    return
+    return null;
   }
   return Object.keys(d).map(key => {
     const data = d[key];
     if (!data || current[key] === data) {
-      return;
+      return null;
     }
     if (typeof data === 'string') {
       return `border-${key}: ${data};`;
@@ -197,9 +193,9 @@ function borderToCss(d, current) {
       const cData = data[cKey];
       const currentData = current[key] && current[key][cKey];
       if (!cData || cData === 'none' || currentData === cData) {
-        return;
+        return null;
       }
-      return `border-${cKey}-${key}: ${cData};`
+      return `border-${cKey}-${key}: ${cData};`;
     }).filter(item => item).join('\n');
   }).filter(item => item).join('\n');
 }
@@ -254,25 +250,25 @@ function borderToCss(d, current) {
 
 function marginToCss(d, current) {
   // 合并 margin padding, 用一个样式。。toStyleString 样式太多;
+  function getMargin(obj) {
+    return cssUnique(Object.keys(obj).map(key => (key === 'center' ? null : obj[key] || 0)))
+      .join(' ');
+  }
   return Object.keys(d).map(key => {
-    let style = `${key}: `;
+    const style = `${key}: `;
     const data = d[key];
     if (!data || current[key] === data) {
-      return;
+      return null;
     } else if (typeof data === 'string') {
       return `${style}${data};`;
     }
     const str = getMargin(data);
     const currentStr = current[key] && getMargin(current[key]);
     if (str === currentStr) {
-      return
+      return null;
     }
     return `${style}${str};`;
   }).filter(item => item).join('\n');
-  function getMargin(obj) {
-    return cssUnique(Object.keys(obj).map(key => (key === 'center' ? null : obj[key] || 0)))
-      .join(' ')
-  }
 }
 
 function shadowToCss(d, current) {
@@ -280,14 +276,15 @@ function shadowToCss(d, current) {
     const data = d[key];
     const cData = current[key];
     if (!data || !Object.keys(data).length) {
-      return;
+      return null;
     }
     if (data.x === cData.x && data.y === cData.y &&
       data.blur === cData.blur && data.spread === cData.spread
       && data.color === cData.color && data.inset === cData.inset) {
-      return
+      return null;
     }
-    return removeMultiEmpty(`${toCssLowerCase(key)}: ${data.x || 0} ${data.y || 0} ${data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
+    return removeMultiEmpty(`${toCssLowerCase(key)}: ${data.x || 0} ${data.y || 0} ${
+      data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
   }).filter(item => item).join('\n');
 }
 
@@ -295,7 +292,7 @@ function backgroundToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
     if (!data || current[key] === data) {
-      return
+      return null;
     } else if (key === 'image') {
       return `background-${key}: url(${data});`;
     }
@@ -307,9 +304,9 @@ function interfaceToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
     if (!data || current[key] === data) {
-      return;
+      return null;
     }
-    return `${key}: ${data};`
+    return `${key}: ${data};`;
   }).filter(item => item).join('\n');
 }
 
@@ -325,7 +322,7 @@ export function toCss(newData, currentData) {
         addCss = fontToCss(newData[key], currentData[key]);
         break;
       case 'interface':
-        addCss = interfaceToCss(newData[key], currentData[key]);// `${toStyleString(newData[key])};`.replace(/;\s+/g, ';\n');
+        addCss = interfaceToCss(newData[key], currentData[key]);
         break;
       case 'background':
         addCss = backgroundToCss(newData[key], currentData[key]);
@@ -340,7 +337,8 @@ export function toCss(newData, currentData) {
         addCss = shadowToCss(newData[key], currentData[key]);
         break;
       case 'transition':
-        addCss = newData[key] && currentData[key] !== newData[key] && newData[key] !== 'all 0s ease 0s' ? `transition: ${newData[key]}` : '';
+        addCss = newData[key] && currentData[key] !== newData[key]
+        && newData[key] !== 'all 0s ease 0s' ? `transition: ${newData[key]}` : '';
         break;
       default:
         break;
@@ -350,7 +348,7 @@ export function toCss(newData, currentData) {
 ${addCss}` : addCss;
     }
   });
-  return css
+  return css;
 }
 
 function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
@@ -385,7 +383,6 @@ export function getDomCssRule(dom, state) {
     const s = { ...getComputedStyle(div) };
     div.remove();
     return s;
-  } else {
-    return getComputedStyle(dom);
   }
+  return getComputedStyle(dom);
 }

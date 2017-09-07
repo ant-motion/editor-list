@@ -3,11 +3,17 @@ import Select from 'antd/lib/select';
 import PropTypes from 'prop-types';
 
 export default class SelectInput extends React.Component {
-  static propsTypes = {
+  static propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     placeholder: PropTypes.string,
     onSelect: PropTypes.func,
+    children: PropTypes.any,
+  };
+
+  static defaultProps = {
+    onChange: () => {
+    },
   };
 
   constructor(props) {
@@ -19,13 +25,6 @@ export default class SelectInput extends React.Component {
       noChange: false,
     };
   }
-
-  filterOption = (input, option) => {
-    if (this.state.showAll || this.state.noChange) {
-      return true;
-    }
-    return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-  };
 
   onBlur = (e) => {
     const o = {
@@ -42,17 +41,24 @@ export default class SelectInput extends React.Component {
   onFocus = () => {
     this.setState({
       showAll: true,
-      noChange: false
+      noChange: false,
     });
   }
 
   onChange = (value) => {
-    this.props.onChange && this.props.onChange(value);
+    this.props.onChange(value);
     this.setState({
       value,
       showAll: false,
     });
   }
+
+  filterOption = (input, option) => {
+    if (this.state.showAll || this.state.noChange) {
+      return true;
+    }
+    return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   render() {
     return (

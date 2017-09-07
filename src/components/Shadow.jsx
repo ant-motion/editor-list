@@ -13,7 +13,7 @@ const Panel = Collapse.Panel;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 export default class EditorShadow extends Component {
-  static propsTypes = {
+  static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
@@ -24,6 +24,8 @@ export default class EditorShadow extends Component {
     value: {
       boxShadow: {},
       textShadow: {},
+    },
+    onChange: () => {
     },
   };
 
@@ -52,12 +54,6 @@ export default class EditorShadow extends Component {
     };
   }
 
-  radioChange = (e) => {
-    this.setState({
-      key: e.target.value,
-    });
-  };
-
   onChange = (key, v) => {
     const keyValue = {
       ...this.defaultShadow,
@@ -66,7 +62,7 @@ export default class EditorShadow extends Component {
     };
     const value = this.props.value;
     value[this.state.key] = keyValue;
-    this.props.onChange && this.props.onChange('shadow', value);
+    this.props.onChange('shadow', value);
     this.setState({
       open: {
         ...this.state.open,
@@ -75,22 +71,6 @@ export default class EditorShadow extends Component {
       value,
     });
   };
-
-  openChange = (e) => {
-    const { open, key } = this.state;
-    const value = {
-      ...this.state.value,
-      [key]: e ? { ...this.defaultShadow, ...this.props.value[key] } : {},
-    };
-    this.props.onChange && this.props.onChange('shadow', value);
-    this.setState({
-      open: {
-        ...open,
-        [key]: e,
-      },
-      value,
-    });
-  }
 
   getTabs = () => (
     <RadioGroup value={this.state.key} onChange={this.radioChange} size="small">
@@ -102,10 +82,32 @@ export default class EditorShadow extends Component {
     </RadioGroup>
   );
 
+  openChange = (e) => {
+    const { open, key } = this.state;
+    const value = {
+      ...this.state.value,
+      [key]: e ? { ...this.defaultShadow, ...this.props.value[key] } : {},
+    };
+    this.props.onChange('shadow', value);
+    this.setState({
+      open: {
+        ...open,
+        [key]: e,
+      },
+      value,
+    });
+  }
+
+  radioChange = (e) => {
+    this.setState({
+      key: e.target.value,
+    });
+  };
+
   render() {
     const { ...props } = this.props;
     const { key, open, value } = this.state;
-    ['value', 'tags', 'onChange'].map(key => delete props[key]);
+    ['value', 'tags', 'onChange'].map(str => delete props[str]);
     return (<Panel {...props}>
       {this.getTabs()}
       <div key={key} style={{ marginTop: 10 }}>
@@ -123,15 +125,6 @@ export default class EditorShadow extends Component {
           </Col>
           <Col span={10}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
-              style={{ width: '100%' }}
-              size="small"
-              placeholder="offset x"
-              value={open[key] ? value[key].x : ''}
-              onChange={(e) => {
-                this.onChange('x', e);
-              }}
-            /><AutoComplete
               dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
               size="small"

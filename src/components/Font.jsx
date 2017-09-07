@@ -17,7 +17,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 class EditorFont extends Component {
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     header: PropTypes.string,
     font: PropTypes.array,
@@ -39,34 +39,21 @@ class EditorFont extends Component {
       align: 'left',
       decoration: 'none',
     },
+    onChange: () => {
+    },
   };
-
-  font = ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact',
-    'Lucida Console', 'MS Serif', 'Palatino Linotype', 'Papyrus', 'Tahoma', 'Times New Roman',
-    'Helvetica Neue', 'Segoe UI', 'Hiragino Sans GB', 'PingFang SC', 'Microsoft YaHei',
-    'SimSun', 'SimHei', 'Trebuchet MS', 'Verdana'];
-
-  weight = ['bold', 'lighter', 'normal', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
-
-  constructor(props) {
-    super(props);
-    /*this.state = {
-      value: { ...props.value },
-    };*/
-  }
 
   onChange = (key, v) => {
     const value = {
       ...this.props.value,
       [key]: v,
     };
-    this.props.onChange && this.props.onChange('font', value);
-    // this.setState({ value });
+    this.props.onChange('font', value);
   }
 
   getFontFamily = () => (
     this.font.concat(this.props.font).sort().filter((item, pos, ary) => (
-      !pos || item != ary[pos - 1]
+      !pos || item !== ary[pos - 1]
     )).map(key => (
       <Option value={key} key={key} style={{ fontFamily: `${key}, sans-serif` }}>
         {key}
@@ -76,26 +63,32 @@ class EditorFont extends Component {
   getFontAlign = () => {
     let align = this.props.value.align;
     align = align === 'start' ? 'left' : align;
-    align = align === 'end' ? 'right': align;
-    return (<RadioGroup value={align || 'left'} size="small" onChange={(e) => {
-        const target = e.target;
-        this.onChange('align', target.value)
-      }}>
+    align = align === 'end' ? 'right' : align;
+    return (
+      <RadioGroup
+        value={align || 'left'}
+        size="small"
+        onChange={(e) => {
+          const target = e.target;
+          this.onChange('align', target.value);
+        }}
+      >
         {['left', 'center', 'right', 'justify'].map(key => (
           <RadioButton value={key} className={`${this.props.className}-align`} key={key}>
             <div className={key} />
           </RadioButton>
         ))}
       </RadioGroup>
-    )
+    );
   };
 
   getFontDecoration = () => (
     <RadioGroup value={this.props.value.decoration &&
     this.props.value.decoration.split(' ')[0] || 'none'} size="small" onChange={(e) => {
       const target = e.target;
-      this.onChange('decoration', target.value)
-    }}>
+      this.onChange('decoration', target.value);
+    }}
+    >
       {['none', 'underline', 'line-through', 'overline'].map(key => (
         <RadioButton value={key} key={key}>
           <div className="decoration" style={{ textDecoration: key }}>Aa</div>
@@ -103,6 +96,14 @@ class EditorFont extends Component {
       ))}
     </RadioGroup>
   );
+
+  font = ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Georgia', 'Impact',
+    'Lucida Console', 'MS Serif', 'Palatino Linotype', 'Papyrus', 'Tahoma', 'Times New Roman',
+    'Helvetica Neue', 'Segoe UI', 'Hiragino Sans GB', 'PingFang SC', 'Microsoft YaHei',
+    'SimSun', 'SimHei', 'Trebuchet MS', 'Verdana'];
+
+  weight = ['bold', 'lighter', 'normal', '100', '200', '300', '400',
+    '500', '600', '700', '800', '900'];
 
   render() {
     const { ...props } = this.props;
@@ -163,8 +164,9 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.lineHeight}
             onChange={(e) => {
-            this.onChange('lineHeight', e)
-          }} />
+              this.onChange('lineHeight', e);
+            }}
+          />
         </Col>
         <Col span={4}>间距</Col>
         <Col span={8}>
@@ -174,14 +176,15 @@ class EditorFont extends Component {
             size="small"
             value={value.letterSpacing}
             onChange={(e) => {
-              this.onChange('letterSpacing', e)
+              this.onChange('letterSpacing', e);
             }}
           />
         </Col>
       </Row>
       <Color color={value.color} onChange={(e) => {
         this.onChange('color', e);
-      }} />
+      }}
+      />
       <Row>
         <Col span={24} style={{ textAlign: 'center' }}>
           {this.getFontDecoration()}
@@ -192,7 +195,7 @@ class EditorFont extends Component {
           {this.getFontAlign()}
         </Col>
       </Row>
-    </Panel>)
+    </Panel>);
   }
 }
 EditorFont.componentName = 'EditorFont';

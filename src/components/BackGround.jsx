@@ -17,7 +17,7 @@ const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 
 class EditorBg extends Component {
-  static propsTypes = {
+  static propTypes = {
     className: PropTypes.string,
     header: PropTypes.string,
     onChange: PropTypes.func,
@@ -33,9 +33,18 @@ class EditorBg extends Component {
       repeat: 'repeat',
       position: 'center',
       size: 'contain',
-      attachment: 'scroll'
+      attachment: 'scroll',
     },
+    onChange: () => {},
   };
+
+  onChange = (key, v) => {
+    const value = {
+      ...this.props.value,
+      [key]: v,
+    };
+    this.props.onChange('background', value);
+  }
 
   repeat = { repeat: '重复', 'repeat-x': '横向重复', 'repeat-y': '竖向重复', 'no-repeat': '不重复' };
 
@@ -46,26 +55,17 @@ class EditorBg extends Component {
 
   attachment = ['scroll', 'fixed'];
 
-
-  onChange = (key, v) => {
-    if(key === 'image'){
-
-    }
-    const value = {
-      ...this.props.value,
-      [key]: v,
-    };
-    this.props.onChange && this.props.onChange('background', value);
-  }
-
   render() {
     const { ...props } = this.props;
     const { value } = props;
     ['value', 'onChange', 'font'].map(key => delete props[key]);
     return (<Panel {...props}>
-      <Color onChange={(e) => {
-        this.onChange('color', e);
-      }} color={value.color} />
+      <Color
+        onChange={(e) => {
+          this.onChange('color', e);
+        }}
+        color={value.color}
+      />
       <Row gutter={8}>
         <Col span={4}>
           图片
@@ -75,7 +75,7 @@ class EditorBg extends Component {
             value={value.image || ''}
             onChange={(e) => {
               const v = e.target.value;
-              console.log(v)
+              console.log(v);
               this.onChange('image', v);
             }}
             size="small"

@@ -5,18 +5,19 @@ import Col from 'antd/lib/col';
 import Icon from 'antd/lib/icon';
 import Tooltip from 'antd/lib/tooltip';
 
-export default class RowHelp extends React.Component{
-  static propsTypes = {
+export default class RowHelp extends React.Component {
+  static propTypes = {
     title: PropTypes.string,
-    help: PropTypes.string,
+    help: PropTypes.any,
+    children: PropTypes.any,
   };
 
   static defaultProps = {
     title: '',
-    help: ''
+    help: '',
   };
 
-  render(){
+  render() {
     const { ...props } = this.props;
     ['title', 'help'].map(key => delete props[key]);
     return (
@@ -33,6 +34,6 @@ export default class RowHelp extends React.Component{
           </Tooltip>
         </Col>
       </Row>
-    )
+    );
   }
 }

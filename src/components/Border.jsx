@@ -9,7 +9,7 @@ const Panel = Collapse.Panel;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 export default class EditorBorder extends Component {
-  static propsTypes = {
+  static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
@@ -22,6 +22,8 @@ export default class EditorBorder extends Component {
       color: '#000',
       width: null,
       radius: null,
+    },
+    onChange: () => {
     },
   };
 
@@ -39,18 +41,12 @@ export default class EditorBorder extends Component {
     };
   }
 
-  radioChange = (e) => {
-    this.setState({
-      key: e.target.value,
-    });
-  };
-
   onChange = (e) => {
     const value = {
       ...this.props.value,
-      [this.state.key]: e
+      [this.state.key]: e,
     };
-    this.props.onChange && this.props.onChange('border', value);
+    this.props.onChange('border', value);
   }
 
   getTabs = () => (
@@ -63,11 +59,17 @@ export default class EditorBorder extends Component {
     </RadioGroup>
   )
 
+  radioChange = (e) => {
+    this.setState({
+      key: e.target.value,
+    });
+  };
+
   render() {
     const { ...props } = this.props;
     const { value } = props;
     const key = this.state.key;
-    ['value', 'onChange'].map(key => delete props[key]);
+    ['value', 'onChange'].map(str => delete props[str]);
     return (<Panel {...props}>
       {this.getTabs()}
       <BoxModel

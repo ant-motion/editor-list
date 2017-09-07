@@ -13,8 +13,9 @@ const Panel = Collapse.Panel;
 
 const TweenOneGroup = TweenOne.TweenOneGroup;
 
-const nameSource = ['all', 'transform', 'background', 'border', 'color', 'opacity', 'width', 'height',
-  'margin', 'padding', 'top', 'right', 'bottom', 'left', 'box-shadow', 'text-shadow'];
+const nameSource = ['all', 'transform', 'background', 'border', 'color',
+  'opacity', 'width', 'height', 'margin', 'padding', 'top', 'right',
+  'bottom', 'left', 'box-shadow', 'text-shadow'];
 
 const easeSource = {
   ease: '缓动',
@@ -23,12 +24,12 @@ const easeSource = {
   'ease-in-out': '前后',
   'cubic-bezier(0.08, 0.82, 0.17, 1)': 'circ 后',
   'cubic-bezier(0.6, 0.04, 0.98, 0.34)': 'circ 前',
-  'cubic-bezier(0.78, 0.14, 0.15, 0.86)': 'circ 前后'
+  'cubic-bezier(0.78, 0.14, 0.15, 0.86)': 'circ 前后',
 };
 
 export default class EditorTransition extends Component {
-  static propsTypes = {
-    value: PropTypes.object,
+  static propTypes = {
+    value: PropTypes.string,
     onChange: PropTypes.func,
     header: PropTypes.string,
   };
@@ -36,6 +37,7 @@ export default class EditorTransition extends Component {
   static defaultProps = {
     header: '过渡',
     value: '',
+    onChange: () => {},
   };
 
   constructor(props) {
@@ -50,26 +52,7 @@ export default class EditorTransition extends Component {
     data = data.length ? data : [{ key: getRandomKey() }];
     this.state = {
       data,
-    }
-  }
-
-  setData = (data) => {
-    this.setState({
-      data,
-    }, () => {
-      let value = '';
-      data.forEach(d => {
-        if (d.name) {
-          value += `${value ? ', ' : ''}${removeMultiEmpty(
-            `${d.name} ${d.duration || '0s'} ${d.ease || 'ease'}${d.delay ? ` ${d.delay}` : ''}`
-          )}`;
-        }
-      });
-      if (value) {
-        value += ';';
-      }
-      this.props.onChange && this.props.onChange('transition', value);
-    });
+    };
   }
 
   onClick = () => {
@@ -87,10 +70,23 @@ export default class EditorTransition extends Component {
     this.setData(data);
   }
 
-  removeClick = (i) => {
-    const data = this.state.data;
-    data.splice(i, 1);
-    this.setData(data);
+  setData = (data) => {
+    this.setState({
+      data,
+    }, () => {
+      let value = '';
+      data.forEach(d => {
+        if (d.name) {
+          value += `${value ? ', ' : ''}${removeMultiEmpty(
+            `${d.name} ${d.duration || '0s'} ${d.ease || 'ease'}${d.delay ? ` ${d.delay}` : ''}`
+          )}`;
+        }
+      });
+      if (value) {
+        value += ';';
+      }
+      this.props.onChange('transition', value);
+    });
   }
 
   getChildren = () => (
@@ -106,7 +102,8 @@ export default class EditorTransition extends Component {
             dropdownMatchSelectWidth={false}
             onChange={(e) => {
               this.onChange('name', i, e);
-            }}>
+            }}
+          >
             {getOptionArray(nameSource)}
           </SelectInput>
         </Col>
@@ -132,7 +129,8 @@ export default class EditorTransition extends Component {
             dropdownStyle={{ width: 88 }}
             onChange={(e) => {
               this.onChange('ease', i, e);
-            }}>
+            }}
+          >
             {getOption(easeSource)}
           </SelectInput>
         </Col>
@@ -164,9 +162,14 @@ export default class EditorTransition extends Component {
     ))
   );
 
+  removeClick = (i) => {
+    const data = this.state.data;
+    data.splice(i, 1);
+    this.setData(data);
+  }
+
   render() {
     const { ...props } = this.props;
-    const { value } = props;
     ['value', 'font'].map(key => delete props[key]);
     return (
       <Panel {...props}>
@@ -180,7 +183,14 @@ export default class EditorTransition extends Component {
         </Row>
         <TweenOneGroup
           appear={false}
-          enter={{ height: 0, marginBottom: 0, opacity: 0, type: 'from', duration: 300, ease: 'easeOutCirc' }}
+          enter={{
+            height: 0,
+            marginBottom: 0,
+            opacity: 0,
+            type: 'from',
+            duration: 300,
+            ease: 'easeOutCirc',
+          }}
           leave={{ height: 0, marginBottom: 0, opacity: 0, duration: 300, ease: 'easeOutCirc' }}
           className="editor-transition-tween"
         >
@@ -188,7 +198,7 @@ export default class EditorTransition extends Component {
         </TweenOneGroup>
         <a onClick={this.onClick} className="add-button"><Icon type="plus" /></a>
       </Panel>
-    )
+    );
   }
 }
 

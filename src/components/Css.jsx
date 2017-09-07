@@ -14,15 +14,18 @@ import CodeMirror from './common/CodeMirror';
 const Panel = Collapse.Panel;
 
 export default class EditorCss extends Component {
-  static propsTypes = {
-    value: PropTypes.object,
+  static propTypes = {
+    value: PropTypes.string,
     onChange: PropTypes.func,
+    cssName: PropTypes.string,
     header: PropTypes.string,
   };
 
   static defaultProps = {
     header: '样式编辑',
     value: '',
+    onChange: () => {
+    },
   };
 
   onChange = (value, cssName) => {
@@ -31,7 +34,7 @@ export default class EditorCss extends Component {
       value.replace(reg, `.${cssName}{`) : value;
     const cssNameMatch = value.match(reg);
     const currentCssName = cssNameMatch && (cssNameMatch[1].split(':')[0].trim());
-    this.props.onChange && this.props.onChange(currentValue, cssName !== this.props.cssName ? cssName : currentCssName);
+    this.props.onChange(currentValue, cssName !== this.props.cssName ? cssName : currentCssName);
   };
 
   onKeyUp = (cm, event) => {
@@ -52,16 +55,21 @@ export default class EditorCss extends Component {
       <Row gutter={8}>
         <Col span={8}>自定义名称</Col>
         <Col span={13}>
-          <Input size="small" value={cssName} onChange={(e) => {
-            const css = e.target.value;
-            this.onChange(value, css);
-          }} placeholder="editor-css" />
+          <Input
+            size="small"
+            value={cssName}
+            onChange={(e) => {
+              const css = e.target.value;
+              this.onChange(value, css);
+            }}
+            placeholder="editor-css"
+          />
         </Col>
         <Col span={3}>
           <Tooltip
             placement="topRight"
             arrowPointAtCenter
-            title={<span>样式会自动加 !important; 请不要手动增加; <br/>样式名称请不要随意更改，尽量保持唯一样式名。</span>}
+            title={<span>样式会自动加 !important; 请不要手动增加; <br />样式名称请不要随意更改，尽量保持唯一样式名。</span>}
           >
             <Icon type="question-circle" />
           </Tooltip>
@@ -70,7 +78,7 @@ export default class EditorCss extends Component {
       <CodeMirror
         value={value}
         options={{
-          mode: { name: "css", globalVars: true },
+          mode: { name: 'css', globalVars: true },
           theme: 'ambiance',
         }}
         onKeyUp={this.onKeyUp}

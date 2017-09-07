@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import AntAutoComplete from 'antd/lib/auto-complete';
 
 export default class AutoComplete extends React.Component {
-  static propsTypes = {
+  static propTypes = {
     onSearch: PropTypes.func,
     dataSource: PropTypes.array,
     placeholder: PropTypes.string,
@@ -13,7 +13,7 @@ export default class AutoComplete extends React.Component {
     super(props);
     this.state = {
       dataSource: [],
-    }
+    };
   }
 
   onSearch = (value) => {

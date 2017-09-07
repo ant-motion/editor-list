@@ -31,22 +31,13 @@ export default class InputGroup extends React.Component {
     });
   }
 
-  getValues = (props) => {
-    const values = {};
-    toArrayChildren(props.children).forEach(item => {
-      const key = item.key;
-      values[key] = item.props.defaultValue || item.props.value || item.props.color;
-    });
-    return values;
-  }
-
   onChange = (key, e) => {
     const values = this.state.values;
     const value = e && e.target ? e.target.value : e;
     if (key === 'center') {
       this.props.onChange(value);
-      Object.keys(values).forEach(key => {
-        values[key] = value;
+      Object.keys(values).forEach(cKey => {
+        values[cKey] = value;
       });
     } else {
       values[key] = value;
@@ -56,6 +47,15 @@ export default class InputGroup extends React.Component {
     this.setState({
       values,
     });
+  }
+
+  getValues = (props) => {
+    const values = {};
+    toArrayChildren(props.children).forEach(item => {
+      const key = item.key;
+      values[key] = item.props.defaultValue || item.props.value || item.props.color;
+    });
+    return values;
   }
 
   render() {

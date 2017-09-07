@@ -12,7 +12,7 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 export default class EditorState extends Component {
-  static propsTypes = {
+  static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
@@ -21,6 +21,8 @@ export default class EditorState extends Component {
   static defaultProps = {
     header: '状态',
     value: '',
+    onChange: () => {
+    },
   };
 
   render() {
@@ -47,7 +49,7 @@ export default class EditorState extends Component {
             size="small"
             checked={value.cursor}
             onChange={(e) => {
-              this.props.onChange && this.props.onChange('cursor', e);
+              this.props.onChange('cursor', e);
             }}
           />
         </Col>
@@ -57,12 +59,13 @@ export default class EditorState extends Component {
       </Row>
       <Row gutter={8} style={{ textAlign: 'center' }}>
         <RadioGroup defaultValue={value.classState} size="small" onChange={(e) => {
-          this.props.onChange && this.props.onChange('classState', e.target.value)
-        }}>
+          this.props.onChange('classState', e.target.value);
+        }}
+        >
           {childrenToRender}
         </RadioGroup>
       </Row>
-    </Panel>)
+    </Panel>);
   }
 }
 
