@@ -10,9 +10,6 @@ React EditorList Component
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc-editor-list)](https://saucelabs.com/u/rc-editor-list)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-editor-list.svg)](https://saucelabs.com/u/rc-editor-list)
 
 [npm-image]: http://img.shields.io/npm/v/rc-editor-list.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-editor-list
