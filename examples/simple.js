@@ -19,6 +19,10 @@ class Demo extends React.Component {
     });
   }
 
+  onChange = (e) => {
+    console.log(e);
+  }
+
   render() {
     return (<div>
       <div onClick={this.onClick} className="a c editor-user-css">
@@ -30,6 +34,7 @@ class Demo extends React.Component {
         <EditorList
           style={{ width: 230, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
           editorElem={this.state.editorDom}
+          onChange={this.onChange}
         />)}
     </div>);
   }

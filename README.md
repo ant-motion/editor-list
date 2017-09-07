@@ -13,12 +13,12 @@ React EditorList Component
 
 [npm-image]: http://img.shields.io/npm/v/rc-editor-list.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-editor-list
-[travis-image]: https://img.shields.io/travis/ant-moiton/editor-list.svg?style=flat-square
-[travis-url]: https://travis-ci.org/ant-moiton/editor-list
-[coveralls-image]: https://img.shields.io/coveralls/ant-moiton/editor-list.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/ant-moiton/editor-list?branch=master
-[gemnasium-image]: http://img.shields.io/gemnasium/ant-moiton/editor-list.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/ant-moiton/editor-list
+[travis-image]: https://img.shields.io/travis/ant-motion/editor-list.svg?style=flat-square
+[travis-url]: https://travis-ci.org/ant-motion/editor-list
+[coveralls-image]: https://img.shields.io/coveralls/ant-motion/editor-list.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/ant-motion/editor-list?branch=master
+[gemnasium-image]: http://img.shields.io/gemnasium/ant-motion/editor-list.svg?style=flat-square
+[gemnasium-url]: https://gemnasium.com/ant-motion/editor-list
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/rc-editor-list.svg?style=flat-square
@@ -43,7 +43,7 @@ npm start
 http://localhost:8022/examples/
 
 
-online example: http://ant-moiton.github.io/editor-list/
+online example: http://ant-motion.github.io/editor-list/
 
 
 ## Feature
