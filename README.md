@@ -16,12 +16,12 @@ React EditorList Component
 
 [npm-image]: http://img.shields.io/npm/v/rc-editor-list.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-editor-list
-[travis-image]: https://img.shields.io/travis/react-component/editor-list.svg?style=flat-square
-[travis-url]: https://travis-ci.org/react-component/editor-list
-[coveralls-image]: https://img.shields.io/coveralls/react-component/editor-list.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/editor-list?branch=master
-[gemnasium-image]: http://img.shields.io/gemnasium/react-component/editor-list.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/react-component/editor-list
+[travis-image]: https://img.shields.io/travis/ant-moiton/editor-list.svg?style=flat-square
+[travis-url]: https://travis-ci.org/ant-moiton/editor-list
+[coveralls-image]: https://img.shields.io/coveralls/ant-moiton/editor-list.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/ant-moiton/editor-list?branch=master
+[gemnasium-image]: http://img.shields.io/gemnasium/ant-moiton/editor-list.svg?style=flat-square
+[gemnasium-url]: https://gemnasium.com/ant-moiton/editor-list
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/rc-editor-list.svg?style=flat-square
@@ -33,11 +33,6 @@ React EditorList Component
 |![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)|
 | --- | --- | --- | --- | --- |
 | IE 8+ ✔ | Chrome 31.0+ ✔ | Firefox 31.0+ ✔ | Opera 30.0+ ✔ | Safari 7.0+ ✔ |
-
-## Screenshots
-
-<img src="" width="288"/>
-
 
 ## Development
 
@@ -51,7 +46,7 @@ npm start
 http://localhost:8022/examples/
 
 
-online example: http://react-component.github.io/editor-list/
+online example: http://ant-moiton.github.io/editor-list/
 
 
 ## Feature
@@ -79,33 +74,14 @@ React.render(<EditorList />, container);
 
 ### props
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th style="width: 100px;">name</th>
-        <th style="width: 50px;">type</th>
-        <th style="width: 50px;">default</th>
-        <th>description</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>className</td>
-          <td>String</td>
-          <td></td>
-          <td>additional css class of root dom node</td>
-        </tr>
-    </tbody>
-</table>
+- extends ant design Collapse
 
+| name        |type             |default     |description           |
+|------------|----------------|---------|----------------|
+| editorElem | DOMElement     | null    | editor dom |
+| onChange   | func           | null    | change callback |
+| useClassName | bool   | true   |  use className or style |
 
-## Test Case
-
-http://localhost:8022/tests/runner.html?coverage
-
-## Coverage
-
-http://localhost:8022/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8022/tests/runner.html?coverage
 
 ## License
 

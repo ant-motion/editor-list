@@ -29,7 +29,6 @@ class EditorList extends Component {
   static propTypes = {
     className: PropTypes.string,
     defaultActiveKey: PropTypes.any,
-    select: PropTypes.array,
     editorElem: PropTypes.any,
     onChange: PropTypes.func,
     useClassName: PropTypes.bool,
@@ -290,7 +289,7 @@ class EditorList extends Component {
 
   render() {
     const { ...props } = this.props;
-    ['select', 'useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
+    ['useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
     return (<Collapse bordered={false} {...props}>
       {this.getChildren(props)}
     </Collapse>);
