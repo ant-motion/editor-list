@@ -35,6 +35,7 @@
     "eslint-fix": "rc-tools run lint --fix",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
+    "test": "rc-tools run lint",
     "chrome-test": "rc-tools run chrome-test",
     "coverage": "rc-tools run coverage"
   },
@@ -54,5 +55,8 @@
     "prop-types": "^15.5.0",
     "rc-tween-one": "^1.4.4",
     "react-color": "^2.13.4"
-  }
+  },
+  "pre-commit": [
+    "lint"
+  ]
 }
