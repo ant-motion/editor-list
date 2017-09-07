@@ -48,6 +48,9 @@ class EditorBg extends Component {
 
 
   onChange = (key, v) => {
+    if(key === 'image'){
+
+    }
     const value = {
       ...this.props.value,
       [key]: v,
@@ -69,9 +72,10 @@ class EditorBg extends Component {
         </Col>
         <Col span={20}>
           <Input
-            value={value.image}
+            value={value.image || ''}
             onChange={(e) => {
               const v = e.target.value;
+              console.log(v)
               this.onChange('image', v);
             }}
             size="small"
@@ -100,7 +104,7 @@ class EditorBg extends Component {
       <RowHelp title="位置" help={<div>可设置自定义值(x, y)<br />如: 50px 100px</div>}>
         <SelectInput
           style={{ width: '100%' }}
-          value={value.position}
+          value={value.position || ''}
           size="small"
           onChange={(e) => {
             this.onChange('position', e);
@@ -112,7 +116,7 @@ class EditorBg extends Component {
       <RowHelp title="尺寸" help={<div>可设置自定义值(x, y)<br />如: 50px 100px</div>}>
         <SelectInput
           style={{ width: '100%' }}
-          value={value.size}
+          value={value.size || ''}
           size="small"
           onChange={(e) => {
             this.onChange('size', e);

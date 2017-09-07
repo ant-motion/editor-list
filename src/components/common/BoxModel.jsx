@@ -13,6 +13,7 @@ export default class BoxModel extends Component {
     onChange: PropTypes.func,
     keys: PropTypes.array,
     name: PropTypes.string,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -23,7 +24,6 @@ export default class BoxModel extends Component {
     super(props);
     this.radioKeys = ['top-left', 'top-right', 'bottom-right', 'bottom-left', 'center'];
     const value = typeof props.value === 'string' ? props.value : { ...props.value };
-    console.log(props.value)
     this.state = {
       value,
     };
@@ -38,7 +38,6 @@ export default class BoxModel extends Component {
 
   getInput = (isRadius) => {
     const { value } = this.state;
-    console.log(value)
     return ((isRadius ? this.radioKeys : this.props.keys).map(key => {
       const v = (value && value[key]) ||
         (typeof value === 'string' ? value : null);
@@ -50,6 +49,7 @@ export default class BoxModel extends Component {
           size="small"
           value={v}
           className={key}
+          disabled={this.props.disabled}
         />
       );
     }));

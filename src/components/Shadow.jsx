@@ -33,8 +33,22 @@ export default class EditorShadow extends Component {
       boxShadow: '边框阴影',
       textShadow: '文字阴影',
     };
+    this.defaultShadow = {
+      x: '5px',
+      y: '5px',
+      blur: '5px',
+      color: 'rgba(0,0,0,0.35)',
+    };
     this.state = {
       key: 'boxShadow',
+      open: {
+        boxShadow: !!Object.keys(props.value.boxShadow).length,
+        textShadow: !!Object.keys(props.value.textShadow).length,
+      },
+      value: {
+        ...props.value,
+
+      },
     };
   }
 
@@ -46,13 +60,37 @@ export default class EditorShadow extends Component {
 
   onChange = (key, v) => {
     const keyValue = {
-      ...this.props.value[this.state.key],
+      ...this.defaultShadow,
+      ...this.state.value[this.state.key],
       [key]: v,
     };
     const value = this.props.value;
     value[this.state.key] = keyValue;
     this.props.onChange && this.props.onChange('shadow', value);
+    this.setState({
+      open: {
+        ...this.state.open,
+        [this.state.key]: true,
+      },
+      value,
+    });
   };
+
+  openChange = (e) => {
+    const { open, key } = this.state;
+    const value = {
+      ...this.state.value,
+      [key]: e ? { ...this.defaultShadow, ...this.props.value[key] } : {},
+    };
+    this.props.onChange && this.props.onChange('shadow', value);
+    this.setState({
+      open: {
+        ...open,
+        [key]: e,
+      },
+      value,
+    });
+  }
 
   getTabs = () => (
     <RadioGroup value={this.state.key} onChange={this.radioChange} size="small">
@@ -66,12 +104,19 @@ export default class EditorShadow extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
-    const key = this.state.key;
+    const { key, open, value } = this.state;
     ['value', 'tags', 'onChange'].map(key => delete props[key]);
     return (<Panel {...props}>
       {this.getTabs()}
       <div key={key} style={{ marginTop: 10 }}>
+        <Row gutter={8}>
+          <Col span={4}>
+            开启
+          </Col>
+          <Col span={20}>
+            <Switch size="small" checked={!!open[key]} onChange={this.openChange} />
+          </Col>
+        </Row>
         <Row gutter={8}>
           <Col span={4}>
             偏移
@@ -82,7 +127,16 @@ export default class EditorShadow extends Component {
               style={{ width: '100%' }}
               size="small"
               placeholder="offset x"
-              value={value[key].x}
+              value={open[key] ? value[key].x : ''}
+              onChange={(e) => {
+                this.onChange('x', e);
+              }}
+            /><AutoComplete
+              dataSource={['px', 'rem', 'em']}
+              style={{ width: '100%' }}
+              size="small"
+              placeholder="offset x"
+              value={open[key] ? value[key].x : ''}
               onChange={(e) => {
                 this.onChange('x', e);
               }}
@@ -94,7 +148,7 @@ export default class EditorShadow extends Component {
               style={{ width: '100%' }}
               size="small"
               placeholder="offset y"
-              value={value[key].y}
+              value={open[key] ? value[key].y : ''}
               onChange={(e) => {
                 this.onChange('y', e);
               }}
@@ -111,7 +165,7 @@ export default class EditorShadow extends Component {
               style={{ width: '100%' }}
               size="small"
               placeholder="blur"
-              value={value[key].blur}
+              value={open[key] ? value[key].blur : ''}
               onChange={(e) => {
                 this.onChange('blur', e);
               }}
@@ -129,7 +183,7 @@ export default class EditorShadow extends Component {
                 style={{ width: '100%' }}
                 size="small"
                 placeholder="spread"
-                value={value[key].spread}
+                value={open[key] ? value[key].spread : ''}
                 onChange={(e) => {
                   this.onChange('spread', e);
                 }}
@@ -139,15 +193,22 @@ export default class EditorShadow extends Component {
               内阴影
             </Col>
             <Col span={6}>
-              <Switch size="small" checked={!!value[key].inset} onChange={(e) => {
-                this.onChange('inset', e ? 'inset' : null);
-              }} />
+              <Switch
+                size="small"
+                checked={open[key] ? !!value[key].inset : false}
+                onChange={(e) => {
+                  this.onChange('inset', e ? 'inset' : null);
+                }}
+              />
             </Col>
           </Row>
         )}
-        <Color color={value[key].color} onChange={(e) => {
-          this.onChange('color', e);
-        }}/>
+        <Color
+          color={open[key] ? value[key].color : ''}
+          onChange={(e) => {
+            this.onChange('color', e);
+          }}
+        />
       </div>
     </Panel>);
   }

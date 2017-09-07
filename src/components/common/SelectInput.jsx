@@ -59,6 +59,7 @@ export default class SelectInput extends React.Component {
       <div className="select-input">
         <Select
           mode="combobox"
+          {...this.props}
           defaultActiveFirstOption={false}
           style={{ width: '100%' }}
           placeholder={this.props.placeholder || '--'}

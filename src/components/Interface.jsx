@@ -54,7 +54,6 @@ export default class EditorInterface extends Component {
   render() {
     const { ...props } = this.props;
     const { value } = props;
-    console.log(value);
     ['value', 'font'].map(key => delete props[key]);
     return (
       <Panel {...props}>
@@ -177,20 +176,24 @@ export default class EditorInterface extends Component {
             <Tooltip
               placement="topRight"
               arrowPointAtCenter
-              title="如果 4 个都有值，以 top left 为准;"
+              title={<span>1. 如需设定位置，请先设置定位; <br/> 2. 如果 4 个都有值，以 top left 为准;</span>}
             >
-              <Icon type="question-circle" style={{ marginLeft: 5 }}/>
+              <Icon type="question-circle" style={{ marginLeft: 5 }} />
             </Tooltip>
           </Col>
         </Row>
-        <BoxModel keys={['top', 'right', 'bottom', 'left']} value={{
-          top: value.top,
-          right: value.right,
-          bottom: value.bottom,
-          left: value.left,
-        }} onChange={(e) => {
-          this.onChange('offset', e);
-        }} />
+        <BoxModel keys={['top', 'right', 'bottom', 'left']}
+          value={{
+            top: value.top,
+            right: value.right,
+            bottom: value.bottom,
+            left: value.left,
+          }}
+          onChange={(e) => {
+            this.onChange('offset', e);
+          }}
+          disabled={!value.position || value.position === 'static'}
+        />
       </Panel>
     );
   }

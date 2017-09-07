@@ -5,7 +5,6 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
 import Radio from 'antd/lib/radio';
-import InpurtNumber from 'antd/lib/input-number';
 import AutoComplete from './common/AutoComplete';
 import SelectInput from './common/SelectInput';
 import Color from './common/Color';
@@ -78,7 +77,7 @@ class EditorFont extends Component {
     let align = this.props.value.align;
     align = align === 'start' ? 'left' : align;
     align = align === 'end' ? 'right': align;
-    return (<RadioGroup value={align} size="small" onChange={(e) => {
+    return (<RadioGroup value={align || 'left'} size="small" onChange={(e) => {
         const target = e.target;
         this.onChange('align', target.value)
       }}>
@@ -92,7 +91,8 @@ class EditorFont extends Component {
   };
 
   getFontDecoration = () => (
-    <RadioGroup value={this.props.value.decoration || 'none'} size="small" onChange={(e) => {
+    <RadioGroup value={this.props.value.decoration &&
+    this.props.value.decoration.split(' ')[0] || 'none'} size="small" onChange={(e) => {
       const target = e.target;
       this.onChange('decoration', target.value)
     }}>

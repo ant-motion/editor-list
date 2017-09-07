@@ -42,7 +42,7 @@ export default class InputGroup extends React.Component {
 
   onChange = (key, e) => {
     const values = this.state.values;
-    const value = e.target ? e.target.value : e;
+    const value = e && e.target ? e.target.value : e;
     if (key === 'center') {
       this.props.onChange(value);
       Object.keys(values).forEach(key => {

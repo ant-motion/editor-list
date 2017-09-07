@@ -11,6 +11,7 @@
   display: block;
   transition: box-shadow .3s, border .3s;
   border: 1px solid #A4A7A8;
+
   &-picker-wrapper {
     position: absolute;
     top: 0;
@@ -57,5 +58,29 @@
     border-color: @input-line-color-hover;
     box-shadow: 0 0 4px @input-line-color-hover;
   }
-
+ &-wrapper{
+   &:hover{
+     .color-close{
+       opacity: 1;
+     }
+   }
+   .color-close{
+     position: absolute;
+     line-height: 12px;
+     text-align: center;
+     width: 12px;
+     height: 12px;
+     top: -5px;
+     left: -5px;
+     border-radius: 100%;
+     background: #ff0000;
+     color: #fff;
+     opacity: 0;
+     cursor: pointer;
+     transition: opacity .3s @ease-out;
+     .anticon-close{
+       transform: scale(.8);
+     }
+   }
+ }
 }

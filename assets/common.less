@@ -15,6 +15,10 @@
     background: transparent;
     border-color: @input-line-color;
     color: @text-color;
+    &.ant-input-disabled {
+      color: fade(@text-color, 10);
+      border-color: fade(@input-line-color, 10);
+    }
     input {
       background: transparent !important;
       color: @text-color;
@@ -113,8 +117,40 @@
       z-index: 2;
     }
   }
-  .ant-switch-checked{
+  .ant-switch-checked {
     background-color: @input-line-color;
+  }
+  .add-button {
+    display: block;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    background: @heiColor;
+    border-radius: 4px;
+    text-align: center;
+    color: @text-color;
+    font-size: 24px;
+    box-shadow: 0 0 0 fade(#000, 0);
+    transition: transform .3s @ease-out, box-shadow .3s @ease-out, color .3s @ease-out, background .3s @ease-out;
+    &:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 2px 3px fade(#000, 35);
+      color: @text-color-hover;
+      background: @huiColor;
+    }
+    &:active {
+      transform: translateY(-1px) scale(1.005);
+      box-shadow: 0 1px 3px fade(#000, 35);
+    }
+  }
+  .icon-button {
+    cursor: pointer;
+    display: block;
+  }
+  .editor-transition-tween {
+    .ant-row {
+      overflow: hidden;
+    }
   }
 }
 

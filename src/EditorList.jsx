@@ -8,6 +8,8 @@ import Interface from './components/Interface';
 import Margin from './components/Margin';
 import Shadow from './components/Shadow';
 import Css from './components/Css';
+import Transition from './components/Transition';
+import State from './components/State';
 import {
   toArrayChildren,
   getComputedStyle,
@@ -15,8 +17,13 @@ import {
   convertDefaultData,
   convertBorderData,
   convertShadowData,
-  toCss
+  toCss,
+  getRandomKey,
+  removeMultiEmpty,
+  getDomCssRule
 } from './utils';
+
+const stateSort = { hover: 0, focus: 1, active: 2 };
 
 class EditorList extends Component {
   static propsTypes = {
@@ -25,26 +32,71 @@ class EditorList extends Component {
     select: PropTypes.array,
     editorElem: PropTypes.any,
     onChange: PropTypes.func,
+    useClassName: PropTypes.bool,
   };
 
   static defaultProps = {
     className: 'editor-list',
-    defaultActiveKey: ['EditorFont'],
+    defaultActiveKey: ['EditorState'],
+    useClassName: true,
   };
 
   select = {};
 
   constructor(props) {
     super(props);
-    const style = getComputedStyle(props.editorElem);
-    const value = this.getDefaultData(style);
-    this.state = {
-      value,
+    this.state = this.setDefaultState(props.editorElem);
+    this.setEditorElemClassName();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.editorElem !== nextProps.editorElem) {
+      this.setState(this.setDefaultState(nextProps.editorElem));
     }
   }
 
-  getDefaultData = (style) => {
+  setDefaultState = (dom) =>{
+    this.ownerDocument = dom.ownerDocument;
+    this.domStyle = getComputedStyle(dom);
+    const value = this.getDefaultData(this.domStyle);
+    this.defaultData = value;
+    const cssName = this.getClassName();
     return {
+      value,
+      css: {
+        default: `.${cssName} {\n\n}`,
+        hover: `.${cssName}:hover {\n\n}`,
+        active: `.${cssName}:active {\n\n}`,
+        focus: `.${cssName}:focus {\n\n}`,
+      },
+      cssName,
+      classState: 'default',
+    };
+  }
+
+  getClassName = () => {
+    const classNameArray = this.props.editorElem.className &&
+      this.props.editorElem.className.split(' ');
+    const lastClassName = classNameArray[classNameArray.length-1];
+    const lastStyle = this.ownerDocument.querySelector(`#${lastClassName}`);
+    const editorClassName = lastStyle && lastStyle.tagName === 'STYLE' ? lastClassName :
+      classNameArray.filter(css => (css.indexOf('editor_css') > 0 ))[0] ||
+      `editor_css-${getRandomKey()}`;
+    return this.props.useClassName ? editorClassName : ''
+  };
+
+  setEditorElemClassName = () => {
+    const dom = this.props.editorElem;
+    const domClassName = dom.className.replace(this.state.cssName, '');
+    dom.className = removeMultiEmpty(`${domClassName ? `${domClassName} ` : ''}${this.state.cssName}`);
+  }
+
+  getDefaultData = (style) => {
+    const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
+    return {
+      state: {
+        cursor: style.cursor === 'pointer',
+      },
       font: {
         family: style.fontFamily,
         size: style.fontSize,
@@ -79,9 +131,9 @@ class EditorList extends Component {
       },
       border: {
         style: convertBorderData(style.borderStyle, style.borderWidth),
-        color: convertBorderData(style.borderColor, style.borderWidth),
+        color: borderBool && convertBorderData(style.borderColor, style.borderWidth),
         width: convertBorderData(style.borderWidth),
-        radius: convertBorderData(style.borderRadius),
+        radius: convertBorderData(style.borderRadius, null, true),
       },
       margin: {
         margin: convertBorderData(style.margin),
@@ -90,14 +142,16 @@ class EditorList extends Component {
       shadow: {
         boxShadow: convertShadowData(style.boxShadow),
         textShadow: convertShadowData(style.textShadow)
-      }
-    }
-  }
+      },
+      transition: style.transition,
+    };
+  };
 
   getChildren = (props) => {
-    const { value } = this.state;
-    console.log(value)
+    const { value, css, cssName, classState } = this.state;
+    const stateValue = { cursor: value.state.cursor, classState };
     if (props.children) {
+      this.select = {};
       return toArrayChildren(props.children).map(item => {
         const { ...itemProps } = item.props;
         const key = item.type.componentName;
@@ -105,39 +159,139 @@ class EditorList extends Component {
           return console.warn(`child(${key}) component is repeat.`);
         }
         this.select[key] = true;
-        itemProps.onChange = this.onChange;
         itemProps.key = itemProps.key || key;
+        if (key === 'EditorCss') {
+          itemProps.value = css;
+          itemProps.cssName = cssName;
+          itemProps.onChange = this.onCssChange;
+        } else if (key === 'EditorState') {
+          itemProps.showClassState = false;
+          itemProps.value = stateValue;
+          itemProps.onChange = this.onStateChange;
+        } else {
+          itemProps.onChange = this.onChange;
+          itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
+        }
         return cloneElement(item, itemProps);
       });
     }
     return [
+      <State onChange={this.onStateChange}
+        key="EditorState"
+        showClassState={this.props.useClassName}
+        value={stateValue}
+      />,
       <Font onChange={this.onChange} key="EditorFont" value={value.font} />,
       <Interface onChange={this.onChange} key="EditorInterface" value={value.interface} />,
       <BackGround onChange={this.onChange} key="EditorBackGround" value={value.background} />,
       <Border onChange={this.onChange} key="EditorBorder" value={value.border} />,
       <Margin onChange={this.onChange} key="EditorMargin" value={value.margin} />,
       <Shadow onChange={this.onChange} key="EditorShadow" value={value.shadow} />,
-      <Css onChange={this.onChange} key="EditorCss" value={toCss(value)}/>,
+      <Transition onChange={this.onChange} key="EditorTransition" value={value.transition} />,
+      <Css onChange={this.onCssChange} key="EditorCss" value={css[classState]} cssName={cssName} />,
     ];
   }
-  onChange = (key, data) => {
+
+  createStyle = () => {
+    const style = this.ownerDocument.createElement('style');
+    style.id = this.state.cssName;
+    this.ownerDocument.head.appendChild(style);
+    return style;
+  }
+
+  setClassNameToDom = () => {
+    const { css } = this.state;
+    const cssStr = Object.keys(css).sort((a, b) => (
+      stateSort[a] > stateSort[b]
+    )).map(key => {
+      return css[key].replace(/;/g, ' !important;');
+    }).join('\n');
+    const style = this.ownerDocument.querySelector(`#${this.state.cssName}`) || this.createStyle();
+    style.innerHTML = cssStr;
+  }
+
+  setCssToDom = () => {
+    const { css, cssName } = this.state;
+    const { editorElem } = this.props;
+    if (cssName) {
+      this.setClassNameToDom();
+      this.setEditorElemClassName();
+    } else {
+      editorElem.style.cssText = css;
+    }
+  }
+
+  changeCss = () => {
+    const dom = this.props.editorElem;
+    this.setCssToDom();
+    this.domStyle = getDomCssRule(dom, this.state.classState === 'default' ? null : this.state.classState);
+    const value = this.getDefaultData(this.domStyle);
     this.setState({
-      value: {
-        ...this.state.value,
-        [key]: data,
+      value,
+    });
+    this.props.onChange && this.props.onChange({ value, css: this.state.css });
+  }
+
+  onStateChange = (key, data) => {
+    if (key === 'cursor') {
+      const value = {
+        cursor: data,
+      };
+      this.onChange('state', value);
+    } else {
+      this.setState({
+        classState: data,
+      }, this.changeCss);
+    }
+  }
+
+  onCssChange = (cssValue, cssNameValue) => {
+    const dom = this.props.editorElem;
+    const { css, cssName, classState } = this.state;
+    if (cssNameValue !== cssName) {
+      const styleDom = this.ownerDocument.querySelector(`#${cssName}`);
+      styleDom && styleDom.remove();
+      Object.keys(css).forEach(key => {
+        css[key] = css[key].replace(cssName, cssNameValue);
+      });
+      dom.className = dom.className.replace(cssName, '');
+    }
+    this.setState({
+      css: {
+        ...css,
+        [classState]: cssValue,
       },
-    })
+      cssName: cssNameValue,
+    }, (cssValue !== css[classState] || cssNameValue !== cssName) && this.changeCss);
+  }
+
+  onChange = (key, data) => {
+    const { value, classState, cssName, css } = this.state;
+    const v = {
+      ...value,
+      [key]: data,
+    };
+    const state = {
+      value: v,
+      css: {
+        ...css,
+        [classState]: `.${cssName}${classState === 'default'
+          ? '' : `:${classState}`} {\n  ${toCss(v, this.defaultData).replace(/\n/g, '\n  ')}\n}`,
+      },
+    };
+    this.setState(state, this.setCssToDom);
+    this.props.onChange && this.props.onChange(state);
   };
 
   render() {
     const { ...props } = this.props;
-    ['select'].map(key => delete props[key]);
+    ['select', 'useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
     return (<Collapse bordered={false} {...props}>
       {this.getChildren(props)}
     </Collapse>)
   }
 }
-
+EditorList.State = State;
 EditorList.Font = Font;
 EditorList.BackGround = BackGround;
 EditorList.Border = Border;
@@ -145,4 +299,5 @@ EditorList.Interface = Interface;
 EditorList.Margin = Margin;
 EditorList.Shadow = Shadow;
 EditorList.Css = Css;
+EditorList.Transition = Transition;
 export default EditorList;
