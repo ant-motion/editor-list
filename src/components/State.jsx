@@ -5,6 +5,8 @@ import Radio from 'antd/lib/radio';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Switch from 'antd/lib/switch';
+import Tooltip from 'antd/lib/tooltip';
+import Icon from 'antd/lib/icon';
 
 const Panel = Collapse.Panel;
 
@@ -16,6 +18,7 @@ export default class EditorState extends Component {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    showClassState: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -27,7 +30,7 @@ export default class EditorState extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, showClassState } = props;
     ['value', 'onChange'].map(key => delete props[key]);
     const childrenToRender = [
       { value: 'default', content: '无' },
@@ -54,17 +57,28 @@ export default class EditorState extends Component {
           />
         </Col>
       </Row>
-      <Row gutter={8}>
-        样式状态
-      </Row>
-      <Row gutter={8} style={{ textAlign: 'center' }}>
-        <RadioGroup defaultValue={value.classState} size="small" onChange={(e) => {
-          this.props.onChange('classState', e.target.value);
-        }}
-        >
-          {childrenToRender}
-        </RadioGroup>
-      </Row>
+      {showClassState && [
+        <Row gutter={8} key="0">
+          样式状态
+          <Tooltip
+            placement="topRight"
+            arrowPointAtCenter
+            title={<span>由于启用 !important, 所以在编辑后所有默认状态的样式将失效，请选择状态再编辑</span>}
+          >
+            <Icon type="question-circle" style={{ marginLeft: 5 }} />
+          </Tooltip>
+        </Row>,
+        <Row gutter={8} style={{ textAlign: 'center' }} key="1">
+          <RadioGroup
+            defaultValue={value.classState}
+            size="small"
+            onChange={(e) => {
+              this.props.onChange('classState', e.target.value);
+            }}
+          >
+            {childrenToRender}
+          </RadioGroup>
+        </Row>]}
     </Panel>);
   }
 }
