@@ -12,7 +12,6 @@ import Transition from './components/Transition';
 import State from './components/State';
 import {
   toArrayChildren,
-  getComputedStyle,
   convertData,
   convertDefaultData,
   convertBorderData,
@@ -139,7 +138,7 @@ class EditorList extends Component {
 
   setDefaultState = (dom) => {
     this.ownerDocument = dom.ownerDocument;
-    this.domStyle = getComputedStyle(dom);
+    this.domStyle = getDomCssRule(dom);
     const value = this.getDefaultData(this.domStyle);
     this.defaultData = value;
     const cssName = this.getClassName();

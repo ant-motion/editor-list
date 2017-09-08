@@ -146,10 +146,10 @@ function toCssLowerCase(d) {
 }
 
 /*
-function toStyleUpperCase(d) {
-  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
-}
-*/
+ function toStyleUpperCase(d) {
+ return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+ }
+ */
 
 function fontToCss(d, current) {
   return Object.keys(d).map(key => {
@@ -254,6 +254,7 @@ function marginToCss(d, current) {
     return cssUnique(Object.keys(obj).map(key => (key === 'center' ? null : obj[key] || 0)))
       .join(' ');
   }
+
   return Object.keys(d).map(key => {
     const style = `${key}: `;
     const data = d[key];
@@ -284,7 +285,7 @@ function shadowToCss(d, current) {
       return null;
     }
     return removeMultiEmpty(`${toCssLowerCase(key)}: ${data.x || 0} ${data.y || 0} ${
-      data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
+    data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
   }).filter(item => item).join('\n');
 }
 
@@ -354,11 +355,11 @@ ${addCss}` : addCss;
 function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
   let style = '';
   dom.className.split(' ').forEach(css => {
-    const rule = `.${css}:${state}`;
+    const rule = state ? `\\.${css}:${state}` : new RegExp(`\\.(${css}$|${css},)`, 'g');
     Array.prototype.slice.call(document.styleSheets).forEach(item => {
       Array.prototype.slice.call(item.cssRules).forEach(cssStyle => {
         const select = cssStyle.selectorText;
-        if (select && select.indexOf(rule) >= 0) {
+        if (select && select.match(rule)) {
           const isCurrentDom = select.split(',').filter(str => {
             return ownerDocument.querySelector(str.split(':')[0]) === dom;
           }).length;
@@ -374,15 +375,12 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
 }
 
 export function getDomCssRule(dom, state) {
-  if (state) {
-    const ownerDocument = dom.ownerDocument;
-    const style = getCssPropertyForRuleToCss(dom, ownerDocument, state);
-    const div = ownerDocument.createElement('div');
-    div.style = style;
-    ownerDocument.body.appendChild(div);
-    const s = { ...getComputedStyle(div) };
-    div.remove();
-    return s;
-  }
-  return getComputedStyle(dom);
+  const ownerDocument = dom.ownerDocument;
+  const style = getCssPropertyForRuleToCss(dom, ownerDocument, state);
+  const div = ownerDocument.createElement('div');
+  div.style = style;
+  ownerDocument.body.appendChild(div);
+  const s = { ...getComputedStyle(div) };
+  div.remove();
+  return s;
 }
