@@ -7,7 +7,7 @@ notifications:
   - 155259966@qq.com
 
 node_js:
-- 4.0.0
+- 6.0.0
 
 before_install:
 - |
@@ -26,10 +26,9 @@ script:
     fi
 env:
   matrix:
-  - TEST_TYPE=lint
-  - TEST_TYPE=browser-test
-  - TEST_TYPE=browser-test-cover
-  - TEST_TYPE=saucelabs
+    - TEST_TYPE=lint
+    - TEST_TYPE=test
+    - TEST_TYPE=coverage
 
 
 matrix:
