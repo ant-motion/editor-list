@@ -3351,8 +3351,8 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
   var style = '';
   dom.className.split(' ').forEach(function (css) {
     var rule = state ? '\\.' + css + ':' + state : new RegExp('\\.(' + css + '$|' + css + ',)', 'g');
-    Array.prototype.slice.call(document.styleSheets).forEach(function (item) {
-      Array.prototype.slice.call(item.cssRules).forEach(function (cssStyle) {
+    Array.prototype.slice.call(document.styleSheets || []).forEach(function (item) {
+      Array.prototype.slice.call(item.cssRules || []).forEach(function (cssStyle) {
         var select = cssStyle.selectorText;
         if (select && select.match(rule)) {
           var isCurrentDom = select.split(',').filter(function (str) {
