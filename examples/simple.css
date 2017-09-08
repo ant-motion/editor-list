@@ -8780,7 +8780,7 @@ li.CodeMirror-hint-active {
 body .editor-user-css {
   width: 300px;
   height: 300px;
-  background: #000;
+  background: #ff0000;
 }
 body .editor-user-css:hover {
   background: #fff000;
