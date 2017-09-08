@@ -356,8 +356,8 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
   let style = '';
   dom.className.split(' ').forEach(css => {
     const rule = state ? `\\.${css}:${state}` : new RegExp(`\\.(${css}$|${css},)`, 'g');
-    Array.prototype.slice.call(document.styleSheets).forEach(item => {
-      Array.prototype.slice.call(item.cssRules).forEach(cssStyle => {
+    Array.prototype.slice.call(document.styleSheets || []).forEach(item => {
+      Array.prototype.slice.call(item.cssRules || []).forEach(cssStyle => {
         const select = cssStyle.selectorText;
         if (select && select.match(rule)) {
           const isCurrentDom = select.split(',').filter(str => {
