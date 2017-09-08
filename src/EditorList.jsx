@@ -207,7 +207,7 @@ class EditorList extends Component {
       },
       border: {
         style: convertBorderData(style.borderStyle, style.borderWidth),
-        color: borderBool && convertBorderData(style.borderColor, style.borderWidth),
+        color: borderBool && convertBorderData(style.borderColor, style.borderWidth) || null,
         width: convertBorderData(style.borderWidth),
         radius: convertBorderData(style.borderRadius, null, true),
       },
