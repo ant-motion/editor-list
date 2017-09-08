@@ -35,7 +35,7 @@
     "eslint-fix": "rc-tools run lint --fix",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
-    "test": "rc-tools run lint",
+    "test": "rc-tools run test",
     "chrome-test": "rc-tools run chrome-test",
     "coverage": "rc-tools run coverage"
   },
