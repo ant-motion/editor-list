@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-editor-list@0.1.2</title>
+  <title>simple.js - example - rc-editor-list@1.0.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-editor-list@0.1.2</h1>
+      <h1>rc-editor-list@1.0.0</h1>
 
       <p>editor-list ui component for react</p>
     </div>
@@ -280,18 +280,25 @@ class Demo extends React.Component {
     super(props);
     this.state = {
       editorDom: null,
+      state: 'web',
     };
   }
 
   onClick = (e) =&gt; {
     const dom = e.target;
     this.setState({
-      editorDom: dom,
+      editorDom: this.state.editorDom ? null : dom,
     });
   }
 
   onChange = (e) =&gt; {
     console.log(e);
+  }
+
+  onSwicth = () =&gt; {
+    this.setState({
+      state: this.state.state === 'web' ? 'mobile' : 'web',
+    });
   }
 
   render() {
@@ -300,12 +307,14 @@ class Demo extends React.Component {
         测试测试测试测试测试测试测试&lt;br /&gt;
         ---------请点击---------
       &lt;/div&gt;
+      &lt;button onClick={this.onSwicth}&gt;{this.state.state}&lt;/button&gt;
 
       {this.state.editorDom &amp;&amp; (
         &lt;EditorList
-          style={{ width: 230, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
+          style={{ width: 280, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
           editorElem={this.state.editorDom}
           onChange={this.onChange}
+          isMobile={this.state.state === 'mobile'}
         /&gt;)}
     &lt;/div&gt;);
   }
