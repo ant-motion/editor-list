@@ -73,11 +73,12 @@ React.render(<EditorList />, container);
 
 - extends ant design Collapse
 
-| name        |type             |default     |description           |
+| name       |type            |default  |description     |
 |------------|----------------|---------|----------------|
-| editorElem | DOMElement     | null    | editor dom |
+| editorElem | DOMElement     | null    | editor dom   |
 | onChange   | func           | null    | change callback |
 | useClassName | bool   | true   |  use className or style |
+| isMobile   | bool  | false | edit mobile style |
 
 
 ## License
