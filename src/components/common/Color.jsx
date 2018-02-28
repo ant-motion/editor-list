@@ -8,7 +8,7 @@ import Icon from 'antd/lib/icon';
 import TweenOne from 'rc-tween-one';
 import classnames from 'classnames';
 import { SketchPicker } from 'react-color';
-import { alphaBg, isColor } from '../../utils';
+import { alphaBg, isColor, currentScrollTop } from '../../utils';
 
 const TweenOneGroup = TweenOne.TweenOneGroup;
 
@@ -51,7 +51,7 @@ class Color extends React.Component {
     const windowRect = {
       width: document.body.scrollWidth,
       height: document.body.scrollHeight,
-      scrollTop: document.body.scrollTop,
+      scrollTop: currentScrollTop(),
     };
     this.renderPickerComponent({ windowRect, colorRect });
   }
@@ -73,11 +73,10 @@ class Color extends React.Component {
     const c = rect.colorRect;
     let top = w.scrollTop + c.top + 20;
     let left = c.left - r.w / 2 + c.width / 2;
-    let transformOrigin = '50% 0';
+    const transformOrigin = '50% 0';
     left = left < 10 ? 10 : left;
     if (c.top + r.h > w.height) {
       top = c.top - r.h - 10;
-      transformOrigin = '50% 100%';
     }
     if (left + r.w > w.width) {
       left = w.width - r.w - 10;
@@ -101,14 +100,13 @@ class Color extends React.Component {
       left: style.left,
     };
     const origin = style.transformOrigin;
-    const rotateX = origin === '50% 100%' ? 45 : -45;
     return (
       <div className={className}>
         <div className="editor-color-mask" onClick={this.closeColorPicker} />
         <TweenOneGroup
           className="editor-color-picker"
-          enter={{ rotateX, opacity: 0, type: 'from', duration: 300, ease: 'easeOutCirc' }}
-          leave={{ rotateX, opacity: 0, duration: 300, ease: 'easeInOutCirc' }}
+          enter={{ scaleY: 0.8, opacity: 0, type: 'from', duration: 300, ease: 'easeOutCirc' }}
+          leave={{ scaleY: 0.8, opacity: 0, duration: 300, ease: 'easeInOutCirc' }}
           style={pos}
         >
           {this.state.showPicker &&
@@ -186,6 +184,7 @@ class Color extends React.Component {
   }
 
   renderPickerComponent = (rect) => {
+    // 后期改用 React createPortal;
     ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getColorPicker(rect), this.container);
   }
 

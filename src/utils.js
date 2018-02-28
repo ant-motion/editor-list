@@ -8,6 +8,7 @@ const RadioButton = Radio.Button;
 
 const colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
 
+export const mobileTitle = '@media screen and (max-width: 767px) {';
 
 export function toArrayChildren(children) {
   const ret = [];
@@ -285,7 +286,7 @@ function shadowToCss(d, current) {
       return null;
     }
     return removeMultiEmpty(`${toCssLowerCase(key)}: ${data.x || 0} ${data.y || 0} ${
-    data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
+      data.blur || 0} ${data.spread || ''} ${data.color} ${data.inset || ''};`).trim();
   }).filter(item => item).join('\n');
 }
 
@@ -317,7 +318,8 @@ export function toCss(newData, currentData) {
     let addCss;
     switch (key) {
       case 'state':
-        addCss = newData[key].cursor ? 'cursor: pointer;' : '';
+        addCss = newData[key] && newData[key].cursor !== currentData[key].cursor ?
+          `cursor: ${newData[key].cursor};` : '';
         break;
       case 'font':
         addCss = fontToCss(newData[key], currentData[key]);
@@ -339,7 +341,7 @@ export function toCss(newData, currentData) {
         break;
       case 'transition':
         addCss = newData[key] && currentData[key] !== newData[key]
-        && newData[key] !== 'all 0s ease 0s' ? `transition: ${newData[key]}` : '';
+          && newData[key] !== 'all 0s ease 0s' ? `transition: ${newData[key]}` : '';
         break;
       default:
         break;
@@ -352,35 +354,67 @@ ${addCss}` : addCss;
   return css;
 }
 
-function getCssPropertyForRuleToCss(dom, ownerDocument, state) {
+function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   let style = '';
-  dom.className.split(' ').forEach(css => {
-    const rule = state ? `\\.${css}:${state}` : new RegExp(`\\.(${css}$|${css},)`, 'g');
-    Array.prototype.slice.call(document.styleSheets || []).forEach(item => {
-      Array.prototype.slice.call(item.cssRules || []).forEach(cssStyle => {
-        const select = cssStyle.selectorText;
-        if (select && select.match(rule)) {
-          const isCurrentDom = select.split(',').filter(str => {
-            return ownerDocument.querySelector(str.split(':')[0]) === dom;
-          }).length;
-          if (isCurrentDom) {
-            style += cssStyle.cssText.match(/{.*}/)[0].replace(/[\{|\}]/g, '');
-          }
+  function cssRulesForEach(item, rule) {
+    item.forEach(cssStyle => {
+      if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
+        return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), rule);
+      }
+      const select = cssStyle.selectorText;
+      if (select && select.match(rule)) {
+        const isCurrentDom = select.split(',').filter(str => {
+          return ownerDocument.querySelector(str.split(':')[0]) === dom;
+        }).length;
+        if (isCurrentDom) {
+          style += cssStyle.style.cssText;
         }
-      });
+      }
+    });
+  }
+  dom.className.split(' ').forEach(css => {
+    const str = `\\.(${state ? `${css}\\:${state}|` : ''}${css}$|${css},)`;
+    const rule = new RegExp(str, 'g');
+    Array.prototype.slice.call(document.styleSheets || []).forEach(item => {
+      if (item.href) {
+        const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
+        if (host !== location.host) {
+          return;
+        }
+      }
+      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), rule);
     });
   });
   style += 'display: none;';
   return style;
 }
 
-export function getDomCssRule(dom, state) {
+export function getDomCssRule(dom, isMobile, state) {
   const ownerDocument = dom.ownerDocument;
-  const style = getCssPropertyForRuleToCss(dom, ownerDocument, state);
-  const div = ownerDocument.createElement('div');
+  const style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
+  const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   div.style = style;
   ownerDocument.body.appendChild(div);
   const s = { ...getComputedStyle(div) };
   div.remove();
   return s;
+}
+
+export function getParentClassName(dom, useTagName = true) {
+  let className = '';
+  function getParentClass(d) {
+    let p = d.className;
+    const tagName = useTagName ? d.tagName.toLocaleLowerCase() : null;
+    p = p ? `.${p}` : tagName;
+    className = p ? `${p} ${className}`.trim() : className;
+    if (d.parentNode.tagName.toLocaleLowerCase() !== 'html') {
+      getParentClass(d.parentNode);
+    }
+  }
+  getParentClass(dom.parentNode);
+  return className;
+}
+
+export function currentScrollTop() {
+  return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
 }

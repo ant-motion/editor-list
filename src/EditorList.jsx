@@ -10,6 +10,7 @@ import Shadow from './components/Shadow';
 import Css from './components/Css';
 import Transition from './components/Transition';
 import State from './components/State';
+import ClassName from './components/ClassName';
 import {
   toArrayChildren,
   convertData,
@@ -20,6 +21,8 @@ import {
   getRandomKey,
   removeMultiEmpty,
   getDomCssRule,
+  getParentClassName,
+  mobileTitle,
 } from './utils';
 
 const stateSort = { hover: 0, focus: 1, active: 2 };
@@ -31,20 +34,23 @@ class EditorList extends Component {
     editorElem: PropTypes.any,
     onChange: PropTypes.func,
     useClassName: PropTypes.bool,
+    isMobile: PropTypes.bool,
   };
 
   static defaultProps = {
     className: 'editor-list',
-    defaultActiveKey: ['EditorState'],
+    defaultActiveKey: ['EditorClassName'],
     useClassName: true,
     onChange: () => {
     },
+    isMobile: false,
   };
 
   constructor(props) {
     super(props);
     this.select = {};
     this.state = this.setDefaultState(props.editorElem);
+    this.defaultDomClass = props.editorElem.className || '';
     this.setEditorElemClassName();
   }
 
@@ -52,125 +58,209 @@ class EditorList extends Component {
     if (this.props.editorElem !== nextProps.editorElem) {
       this.setState(this.setDefaultState(nextProps.editorElem));
     }
+    if (this.props.isMobile !== nextProps.isMobile) {
+      this.domStyle = getDomCssRule(nextProps.editorElem, nextProps.isMobile,
+        this.state.classState === 'default' ?
+          null : this.state.classState);
+      const value = this.getDefaultData(this.domStyle);
+      this.defaultData = value;
+      this.setState({ value });
+    }
   }
 
   onStateChange = (key, data) => {
     if (key === 'cursor') {
       const value = {
-        cursor: data,
+        cursor: data === 'auto' ? null : data,
       };
       this.onChange('state', value);
     } else {
-      this.setState({
-        classState: data,
-      }, this.changeCss);
+      this.onChangeCssState(data);
     }
   }
 
-  onCssChange = (cssValue, cssNameValue) => {
+  onChangeCssState = (classState) => {
     const dom = this.props.editorElem;
-    const { css, cssName, classState } = this.state;
-    if (cssNameValue !== cssName) {
-      const styleDom = this.ownerDocument.querySelector(`#${cssName}`);
-      if (styleDom) {
-        styleDom.remove();
-      }
-      Object.keys(css).forEach(key => {
-        css[key] = css[key].replace(cssName, cssNameValue);
-      });
-      dom.className = dom.className.replace(cssName, '');
+    this.domStyle = getDomCssRule(dom, this.props.isMobile, classState === 'default' ?
+      null : classState);
+    const value = this.getDefaultData(this.domStyle);
+    this.defaultData = value;
+    this.setState({
+      value,
+      classState,
+    });
+    const { cssName, css, mobileCss } = this.state;
+    this.props.onChange({
+      cssName,
+      value,
+      css,
+      mobileCss,
+    });
+  }
+
+  onClassNameChange = (cssNameValue) => {
+    const styleDom = this.ownerDocument.head.querySelector(`#${this.dataId}`);
+    if (styleDom) {
+      styleDom.remove();
     }
     this.setState({
-      css: {
-        ...css,
+      cssName: cssNameValue,
+    }, this.setCssToDom);
+  }
+
+  onCssChange = (cssValue) => {
+    const dom = this.props.editorElem;
+    const { css, classState, mobileCss } = this.state;
+    const myCss = this.props.isMobile ? mobileCss : css;
+    this.setState({
+      [this.props.isMobile ? 'mobileCss' : 'css']: {
+        ...myCss,
         [classState]: cssValue,
       },
-      cssName: cssNameValue,
-    }, (cssValue !== css[classState] || cssNameValue !== cssName) && this.changeCss);
+    }, () => {
+      this.setCssToDom();
+      // 关联编辑器里的参性, 吃性能;
+      this.domStyle = getDomCssRule(dom, this.props.isMobile, classState === 'default' ?
+        null : classState);
+      const value = this.getDefaultData(this.domStyle);
+      this.setState({
+        value,
+      });
+    });
   }
 
   onChange = (key, data) => {
-    const { value, classState, cssName, css } = this.state;
+    const { value, classState, css, mobileCss } = this.state;
+    const myCss = this.props.isMobile ? mobileCss : css;
     const v = {
       ...value,
       [key]: data,
     };
+    let newCss = `  ${toCss(v, this.defaultData).replace(/\n/g, '\n  ')}`;
+    const currentCss = newCss.split('\n')
+      .filter(c => c).map(c => c.trim());
+    const stateCss = myCss[classState];
+    if (stateCss) {
+      const stateCssArray = stateCss.split('\n').map(c => c.trim()).filter(c => c);
+      const currentCssName = currentCss.map(str => str.split(':')[0].trim());
+      const stateNewCss = stateCssArray.map(str =>
+        currentCssName.indexOf(str.split(':')[0].trim()) >= 0 ? null : str
+      ).filter(c => c);
+      newCss = `  ${`${currentCss.join('\n  ')}\n  ${stateNewCss.join('\n  ')}`.trim()}`;
+    }
+
     const state = {
       value: v,
-      css: {
-        ...css,
-        [classState]: `.${cssName}${classState === 'default'
-          ? '' : `:${classState}`} {\n  ${toCss(v, this.defaultData).replace(/\n/g, '\n  ')}\n}`,
+      [this.props.isMobile ? 'mobileCss' : 'css']: {
+        ...myCss,
+        [classState]: newCss,
       },
     };
     this.setState(state, this.setCssToDom);
-    this.props.onChange(state);
   };
 
   setCssToDom = () => {
-    const { css, cssName } = this.state;
+    const { css, cssName, value, mobileCss } = this.state;
     const { editorElem } = this.props;
     if (cssName) {
-      this.setClassNameToDom();
+      this.setClassToDom();
       this.setEditorElemClassName();
     } else {
-      editorElem.style.cssText = css;
+      const str = css.default;
+      editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
+    this.props.onChange({
+      css, cssName, value, mobileCss,
+    });
   }
 
-  setClassNameToDom = () => {
-    const { css } = this.state;
-    const cssStr = Object.keys(css).sort((a, b) => (
-      stateSort[a] > stateSort[b]
-    )).map(key => {
-      return css[key].replace(/;/g, ' !important;');
-    }).join('\n');
-    const style = this.ownerDocument.querySelector(`#${this.state.cssName}`) || this.createStyle();
+  setClassToDom = () => {
+    const { css, mobileCss, cssName } = this.state;
+    let cssStr = this.cssObjectToString(css, cssName);
+    cssStr += `\n${mobileTitle}\n`;
+    cssStr += this.cssObjectToString(mobileCss, cssName);
+    cssStr += '\n}';
+    const style = this.ownerDocument.head.querySelector(`#${this.dataId}`) || this.createStyle();
     style.innerHTML = cssStr;
   }
 
   setEditorElemClassName = () => {
     const dom = this.props.editorElem;
-    const domClassName = dom.className.replace(this.state.cssName, '');
-    dom.className = removeMultiEmpty(`${domClassName ?
-      `${domClassName} ` : ''}${this.state.cssName}`);
+    if (this.defaultDomClass.indexOf(this.state.cssName) === -1) {
+      dom.className = removeMultiEmpty(`${this.defaultDomClass} ${this.state.cssName}`).trim();
+    }
   }
 
   setDefaultState = (dom) => {
     this.ownerDocument = dom.ownerDocument;
-    this.domStyle = getDomCssRule(dom);
+    this.domStyle = getDomCssRule(dom, this.props.isMobile);
     const value = this.getDefaultData(this.domStyle);
     this.defaultData = value;
     const cssName = this.getClassName();
+    const css = this.getDefaultCssData(cssName);
     return {
       value,
-      css: {
-        default: `.${cssName} {\n\n}`,
-        hover: `.${cssName}:hover {\n\n}`,
-        active: `.${cssName}:active {\n\n}`,
-        focus: `.${cssName}:focus {\n\n}`,
-      },
+      css: css.css,
+      mobileCss: css.mobileCss,
       cssName,
       classState: 'default',
     };
   }
 
   getClassName = () => {
-    const classNameArray = this.props.editorElem.className &&
-      this.props.editorElem.className.split(' ');
-    const lastClassName = classNameArray[classNameArray.length - 1];
-    const lastStyle = this.ownerDocument.querySelector(`#${lastClassName}`);
-    const editorClassName = lastStyle && lastStyle.tagName === 'STYLE' ? lastClassName :
-      (classNameArray.filter(css => (css.indexOf('editor_css') > 0))[0] ||
-      `editor_css-${getRandomKey()}`);
+    const { editorElem } = this.props;
+    const random = getRandomKey();
+    this.dataId = editorElem.getAttribute('data-edit_css_id') || `edit_css-${random}`;
+    editorElem.setAttribute('data-edit_css_id', this.dataId);
+    const classNameArray = editorElem.className &&
+      editorElem.className.split(' ');
+    this.parentClassName = getParentClassName(editorElem);
+    const editorClassName = classNameArray ? classNameArray[0] : `editor_css-${random}`;
     return this.props.useClassName ? editorClassName : '';
   };
+  getDefaultCssData = () => {
+    const css = {
+      css: {
+        default: '',
+        hover: '',
+        active: '',
+        focus: '',
+      },
+      mobileCss: {
+        default: '',
+        active: '',
+        focus: '',
+      },
+    };
+    if (this.props.useClassName) {
+      const setCssDataToDefault = (content, currentCss) => {
+        content.split('}').filter(c => c.trim()).forEach(c => {
+          const cssContentArray = c.split('{');
+          const state = cssContentArray[0].split(':')[1];
+          const key = state ? state.trim() : 'default';
+          const cssContent = cssContentArray[1].trim();
+          if (cssContent) {
+            currentCss[key] = `  ${cssContent.split(';').filter(b => b)
+              .map(d => `${d.trim()};`).join('\n  ').trim()}`;
+          }
+        });
+      };
+      const defaultClass = this.ownerDocument.head.querySelector(`#${this.dataId}`);
+      if (defaultClass && defaultClass.tagName === 'STYLE') {
+        const content = defaultClass.innerText;
+        content.split(mobileTitle).forEach((item, i) => {
+          setCssDataToDefault(item, css[i ? 'mobileCss' : 'css']);
+        });
+      }
+    }
+    return css;
+  }
 
   getDefaultData = (style) => {
     const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
     return {
       state: {
-        cursor: style.cursor === 'pointer',
+        cursor: style.cursor,
       },
       font: {
         family: style.fontFamily,
@@ -223,8 +313,10 @@ class EditorList extends Component {
   };
 
   getChildren = (props) => {
-    const { value, css, cssName, classState } = this.state;
+    const { value, css, mobileCss, cssName, classState } = this.state;
+    const myCss = props.isMobile ? mobileCss : css;
     const stateValue = { cursor: value.state.cursor, classState };
+    const classNameArray = this.defaultDomClass.split(' ');
     if (props.children) {
       this.select = {};
       return toArrayChildren(props.children).map(item => {
@@ -236,25 +328,45 @@ class EditorList extends Component {
         this.select[key] = true;
         itemProps.key = itemProps.key || key;
         if (key === 'EditorCss') {
-          itemProps.value = css;
+          if (!this.props.useClassName) {
+            return null;
+          }
+          itemProps.value = myCss[classState];
           itemProps.cssName = cssName;
           itemProps.onChange = this.onCssChange;
         } else if (key === 'EditorState') {
-          itemProps.showClassState = false;
+          itemProps.showClassState = this.props.useClassName;
           itemProps.value = stateValue;
           itemProps.onChange = this.onStateChange;
+          itemProps.isMobile = this.props.isMobile;
+        } else if (key === 'EditorClassName') {
+          if (!this.props.useClassName) {
+            return null;
+          }
+          itemProps.value = cssName;
+          item.classNameArray = classNameArray;
         } else {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
         }
         return cloneElement(item, itemProps);
-      });
+      }).filter(c => c);
     }
     return [
-      <State onChange={this.onStateChange}
+      this.props.useClassName && (
+        <ClassName
+          onChange={this.onClassNameChange}
+          value={cssName}
+          classNameArray={classNameArray}
+          key="EditorClassName"
+        />
+      ),
+      <State
+        onChange={this.onStateChange}
         key="EditorState"
         showClassState={this.props.useClassName}
         value={stateValue}
+        isMobile={this.props.isMobile}
       />,
       <Font onChange={this.onChange} key="EditorFont" value={value.font} />,
       <Interface onChange={this.onChange} key="EditorInterface" value={value.interface} />,
@@ -263,27 +375,34 @@ class EditorList extends Component {
       <Margin onChange={this.onChange} key="EditorMargin" value={value.margin} />,
       <Shadow onChange={this.onChange} key="EditorShadow" value={value.shadow} />,
       <Transition onChange={this.onChange} key="EditorTransition" value={value.transition} />,
-      <Css onChange={this.onCssChange} key="EditorCss" value={css[classState]} cssName={cssName} />,
+      this.props.useClassName && (
+        <Css
+          onChange={this.onCssChange}
+          key="EditorCss"
+          value={myCss[classState]}
+          cssName={cssName}
+        />
+      ),
     ];
   }
 
+  cssObjectToString = (css, cssName) => (
+    Object.keys(css).sort((a, b) => (
+      stateSort[a] > stateSort[b]
+    )).map(key => {
+      switch (key) {
+        case 'default':
+          return `${this.parentClassName} .${cssName} {\n${css[key]}\n}`;
+        default:
+          return `${this.parentClassName} .${cssName}:${key} {\n${css[key]}\n}`;
+      }
+    }).join('\n'))
+
   createStyle = () => {
     const style = this.ownerDocument.createElement('style');
-    style.id = this.state.cssName;
+    style.id = this.dataId;
     this.ownerDocument.head.appendChild(style);
     return style;
-  }
-
-  changeCss = () => {
-    const dom = this.props.editorElem;
-    this.setCssToDom();
-    this.domStyle = getDomCssRule(dom, this.state.classState === 'default' ?
-      null : this.state.classState);
-    const value = this.getDefaultData(this.domStyle);
-    this.setState({
-      value,
-    });
-    this.props.onChange({ value, css: this.state.css });
   }
 
   render() {

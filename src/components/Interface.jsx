@@ -68,7 +68,6 @@ export default class EditorInterface extends Component {
               style={{ width: '100%' }}
               value={value.overflow || 'visible'}
               size="small"
-              transitionName="editor-slide-up"
               onChange={(e) => {
                 this.onChange('overflow', e);
               }}
@@ -83,9 +82,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={8}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               value={value.width}
               onChange={(e) => {
                 this.onChange('width', e);
@@ -94,9 +91,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={6}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="min"
               value={value.minWidth}
               onChange={(e) => {
@@ -106,9 +101,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={6}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="max"
               value={value.maxWidth}
               onChange={(e) => {
@@ -123,9 +116,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={8}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               value={value.height}
               onChange={(e) => {
                 this.onChange('height', e);
@@ -134,9 +125,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={6}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="min"
               value={value.minHeight}
               onChange={(e) => {
@@ -146,9 +135,7 @@ export default class EditorInterface extends Component {
           </Col>
           <Col span={6}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="max"
               value={value.maxHeight}
               onChange={(e) => {
@@ -164,7 +151,6 @@ export default class EditorInterface extends Component {
             style={{ width: '100%' }}
             value={value.position || 'static'}
             size="small"
-            transitionName="editor-slide-up"
             onChange={(e) => {
               this.onChange('position', e);
             }}

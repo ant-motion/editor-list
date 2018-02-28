@@ -9,18 +9,25 @@ class Demo extends React.Component {
     super(props);
     this.state = {
       editorDom: null,
+      state: 'web',
     };
   }
 
   onClick = (e) => {
     const dom = e.target;
     this.setState({
-      editorDom: dom,
+      editorDom: this.state.editorDom ? null : dom,
     });
   }
 
   onChange = (e) => {
     console.log(e);
+  }
+
+  onSwicth = () => {
+    this.setState({
+      state: this.state.state === 'web' ? 'mobile' : 'web',
+    });
   }
 
   render() {
@@ -29,12 +36,14 @@ class Demo extends React.Component {
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
       </div>
+      <button onClick={this.onSwicth}>{this.state.state}</button>
 
       {this.state.editorDom && (
         <EditorList
-          style={{ width: 230, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
+          style={{ width: 280, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
           editorElem={this.state.editorDom}
           onChange={this.onChange}
+          isMobile={this.state.state === 'mobile'}
         />)}
     </div>);
   }

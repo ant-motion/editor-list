@@ -4,14 +4,23 @@ import Collapse from 'antd/lib/collapse';
 import Radio from 'antd/lib/radio';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
-import Switch from 'antd/lib/switch';
-import Tooltip from 'antd/lib/tooltip';
-import Icon from 'antd/lib/icon';
+import Select from 'antd/lib/select';
+import { getOption } from '../utils';
 
 const Panel = Collapse.Panel;
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+
+const cursorState = {
+  auto: '默认光标',
+  pointer: '手型光标',
+  crosshair: '十字线光标',
+  move: '移动光标',
+  text: '文本光标',
+  wait: '加载光标',
+  help: '帮助光标',
+};
 
 export default class EditorState extends Component {
   static propTypes = {
@@ -30,54 +39,61 @@ export default class EditorState extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value, showClassState } = props;
+    const { value, showClassState, isMobile } = props;
     ['value', 'onChange'].map(key => delete props[key]);
     const childrenToRender = [
       { value: 'default', content: '无' },
-      { value: 'active', content: '按下' },
       { value: 'hover', content: '经过' },
+      { value: 'active', content: '按下' },
       { value: 'focus', content: '选中' },
-    ].map(item => (
-      <RadioButton value={item.value} key={item.value} className="ant-radio-button-auto-width">
-        {item.content}
-      </RadioButton>
-    ));
+    ].map(item => {
+      if (isMobile && item.value === 'hover') {
+        return null;
+      }
+      return (
+        <RadioButton value={item.value} key={item.value} className="ant-radio-button-auto-width">
+          {item.content}
+        </RadioButton>
+      );
+    }).filter(c => c);
     return (<Panel {...props} >
       <Row gutter={8}>
-        <Col span={4}>
-          手型
+        <Col span={24}>
+          鼠标光标状态
         </Col>
-        <Col span={20}>
-          <Switch
+      </Row>
+      <Row gutter={8}>
+        <Col span={24}>
+          <Select
+            style={{ width: '100%' }}
+            value={value.cursor || 'auto'}
             size="small"
-            checked={value.cursor}
             onChange={(e) => {
               this.props.onChange('cursor', e);
             }}
-          />
+          >
+            {getOption(cursorState)}
+          </Select>
         </Col>
       </Row>
       {showClassState && [
         <Row gutter={8} key="0">
-          样式状态
-          <Tooltip
-            placement="topRight"
-            arrowPointAtCenter
-            title={<span>由于启用 !important, 所以在编辑后所有默认状态的样式将失效，请选择状态再编辑</span>}
-          >
-            <Icon type="question-circle" style={{ marginLeft: 5 }} />
-          </Tooltip>
+          <Col span={24}>
+            样式状态
+          </Col>
         </Row>,
-        <Row gutter={8} style={{ textAlign: 'center' }} key="1">
-          <RadioGroup
-            defaultValue={value.classState}
-            size="small"
-            onChange={(e) => {
-              this.props.onChange('classState', e.target.value);
-            }}
-          >
-            {childrenToRender}
-          </RadioGroup>
+        <Row gutter={8} key="1">
+          <Col span={24}>
+            <RadioGroup
+              defaultValue={value.classState}
+              size="small"
+              onChange={(e) => {
+                this.props.onChange('classState', e.target.value);
+              }}
+            >
+              {childrenToRender}
+            </RadioGroup>
+          </Col>
         </Row>]}
     </Panel>);
   }

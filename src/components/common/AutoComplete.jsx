@@ -7,7 +7,13 @@ export default class AutoComplete extends React.Component {
     onSearch: PropTypes.func,
     dataSource: PropTypes.array,
     placeholder: PropTypes.string,
+    size: PropTypes.string,
   };
+
+  static defaultProps = {
+    dataSource: ['px', '%', 'rem', 'em'],
+    size: 'small',
+  }
 
   constructor(props) {
     super(props);
@@ -31,7 +37,6 @@ export default class AutoComplete extends React.Component {
       <AntAutoComplete {...this.props}
         dataSource={this.state.dataSource}
         onSearch={this.onSearch}
-        transitionName="editor-slide-up"
         placeholder={this.props.placeholder || '--'}
       />
     );

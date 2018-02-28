@@ -97,7 +97,6 @@ export default class EditorTransition extends Component {
             style={{ width: '100%' }}
             value={data.name || ''}
             size="small"
-            transitionName="editor-slide-up"
             dropdownStyle={{ width: 88 }}
             dropdownMatchSelectWidth={false}
             onChange={(e) => {
@@ -110,7 +109,6 @@ export default class EditorTransition extends Component {
         <Col span={5}>
           <AutoComplete
             dataSource={['s', 'ms']}
-            size="small"
             style={{ width: '100%' }}
             value={data.duration || ''}
             dropdownStyle={{ width: 48 }}
@@ -123,8 +121,6 @@ export default class EditorTransition extends Component {
           <SelectInput
             style={{ width: '100%' }}
             value={data.ease || ''}
-            size="small"
-            transitionName="editor-slide-up"
             dropdownMatchSelectWidth={false}
             dropdownStyle={{ width: 88 }}
             onChange={(e) => {
@@ -137,14 +133,13 @@ export default class EditorTransition extends Component {
         <Col span={5}>
           <AutoComplete
             dataSource={['s', 'ms']}
-            size="small"
             style={{ width: '100%' }}
             value={data.delay || ''}
             dropdownMatchSelectWidth={false}
             dropdownStyle={{ width: 48 }}
             placement="bottomRight"
             onChange={(e) => {
-              this.onChange('ease', i, e);
+              this.onChange('delay', i, e);
             }}
           />
         </Col>

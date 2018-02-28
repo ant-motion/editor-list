@@ -47,10 +47,6 @@ export default class EditorShadow extends Component {
         boxShadow: !!Object.keys(props.value.boxShadow).length,
         textShadow: !!Object.keys(props.value.textShadow).length,
       },
-      value: {
-        ...props.value,
-
-      },
     };
   }
 
@@ -60,15 +56,15 @@ export default class EditorShadow extends Component {
       ...this.state.value[this.state.key],
       [key]: v,
     };
-    const value = this.props.value;
-    value[this.state.key] = keyValue;
-    this.props.onChange('shadow', value);
+    const { value } = this.props;
+    const mValue = { ...value };
+    mValue[this.state.key] = keyValue;
+    this.props.onChange('shadow', mValue);
     this.setState({
       open: {
         ...this.state.open,
         [this.state.key]: true,
       },
-      value,
     });
   };
 
@@ -85,8 +81,8 @@ export default class EditorShadow extends Component {
   openChange = (e) => {
     const { open, key } = this.state;
     const value = {
-      ...this.state.value,
-      [key]: e ? { ...this.defaultShadow, ...this.props.value[key] } : {},
+      ...this.props.value,
+      [key]: e ? { ...this.defaultShadow } : {},
     };
     this.props.onChange('shadow', value);
     this.setState({
@@ -94,7 +90,6 @@ export default class EditorShadow extends Component {
         ...open,
         [key]: e,
       },
-      value,
     });
   }
 
@@ -106,7 +101,8 @@ export default class EditorShadow extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { key, open, value } = this.state;
+    const { value } = props;
+    const { key, open } = this.state;
     ['value', 'tags', 'onChange'].map(str => delete props[str]);
     return (<Panel {...props}>
       {this.getTabs()}
@@ -125,9 +121,7 @@ export default class EditorShadow extends Component {
           </Col>
           <Col span={10}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="offset x"
               value={open[key] ? value[key].x : ''}
               onChange={(e) => {
@@ -137,9 +131,7 @@ export default class EditorShadow extends Component {
           </Col>
           <Col span={10}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="offset y"
               value={open[key] ? value[key].y : ''}
               onChange={(e) => {
@@ -154,9 +146,7 @@ export default class EditorShadow extends Component {
           </Col>
           <Col span={20}>
             <AutoComplete
-              dataSource={['px', 'rem', 'em']}
               style={{ width: '100%' }}
-              size="small"
               placeholder="blur"
               value={open[key] ? value[key].blur : ''}
               onChange={(e) => {
@@ -172,9 +162,7 @@ export default class EditorShadow extends Component {
             </Col>
             <Col span={8}>
               <AutoComplete
-                dataSource={['px', 'rem', 'em']}
                 style={{ width: '100%' }}
-                size="small"
                 placeholder="spread"
                 value={open[key] ? value[key].spread : ''}
                 onChange={(e) => {

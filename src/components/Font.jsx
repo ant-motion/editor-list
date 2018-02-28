@@ -84,10 +84,10 @@ class EditorFont extends Component {
 
   getFontDecoration = () => (
     <RadioGroup value={this.props.value.decoration &&
-    this.props.value.decoration.split(' ')[0] || 'none'} size="small" onChange={(e) => {
-      const target = e.target;
-      this.onChange('decoration', target.value);
-    }}
+      this.props.value.decoration.split(' ')[0] || 'none'} size="small" onChange={(e) => {
+        const target = e.target;
+        this.onChange('decoration', target.value);
+      }}
     >
       {['none', 'underline', 'line-through', 'overline'].map(key => (
         <RadioButton value={key} key={key}>
@@ -118,7 +118,6 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.family}
             size="small"
-            transitionName="editor-slide-up"
             onChange={(e) => {
               this.onChange('family', e);
             }}
@@ -131,9 +130,7 @@ class EditorFont extends Component {
         <Col span={4}>大小</Col>
         <Col span={8}>
           <AutoComplete
-            dataSource={['px', 'rem', 'em']}
             style={{ width: '100%' }}
-            size="small"
             value={value.size}
             onChange={(e) => {
               this.onChange('size', e);
@@ -146,7 +143,6 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.weight || 'normal'}
             size="small"
-            transitionName="editor-slide-up"
             onChange={(e) => {
               this.onChange('weight', e);
             }}
@@ -159,8 +155,6 @@ class EditorFont extends Component {
         <Col span={4}>行距</Col>
         <Col span={8}>
           <AutoComplete
-            dataSource={['px', 'rem', 'em']}
-            size="small"
             style={{ width: '100%' }}
             value={value.lineHeight}
             onChange={(e) => {
@@ -171,9 +165,7 @@ class EditorFont extends Component {
         <Col span={4}>间距</Col>
         <Col span={8}>
           <AutoComplete
-            dataSource={['px', 'rem', 'em']}
             style={{ width: '100%' }}
-            size="small"
             value={value.letterSpacing}
             onChange={(e) => {
               this.onChange('letterSpacing', e);

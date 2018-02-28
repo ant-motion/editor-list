@@ -4,6 +4,10 @@
 
 .@{editor} {
   line-height: 22px;
+  font-size: 12px;
+  .ant-radio-group-small .ant-radio-button-wrapper {
+    padding: 0 12px;
+  }
   .ant-row {
     margin-bottom: 8px;
   }
@@ -51,6 +55,7 @@
     }
     .ant-select-arrow {
       right: 4px;
+      color: @text-color;
     }
     input {
       padding: 0;
@@ -151,77 +156,5 @@
     .ant-row {
       overflow: hidden;
     }
-  }
-}
-
-.motion-common(@duration) {
-  animation-duration: @duration;
-  animation-fill-mode: both;
-}
-
-.motion-common-leave(@duration) {
-  animation-duration: @duration;
-  animation-fill-mode: both;
-}
-
-.make-motion(@className, @keyframeName, @duration) {
-  .@{className}-enter,
-  .@{className}-appear {
-    .motion-common(@duration);
-    animation-play-state: paused;
-  }
-  .@{className}-leave {
-    .motion-common-leave(@duration);
-    animation-play-state: paused;
-  }
-  .@{className}-enter.@{className}-enter-active,
-  .@{className}-appear.@{className}-appear-active {
-    animation-name: ~"@{keyframeName}In";
-    animation-play-state: running;
-  }
-  .@{className}-leave.@{className}-leave-active {
-    animation-name: ~"@{keyframeName}Out";
-    animation-play-state: running;
-    pointer-events: none;
-  }
-}
-
-.editor-slide-motion(@className, @keyframeName) {
-  .make-motion(@className, @keyframeName, .45s);
-  .@{className}-enter,
-  .@{className}-appear {
-    opacity: 0;
-    animation-timing-function: @ease-out-circ;
-  }
-  .@{className}-leave {
-    animation-timing-function: @ease-in-out-circ;
-  }
-}
-
-.editor-slide-motion(editor-slide-up, editorSlideUp);
-
-@keyframes editorSlideUpIn {
-  0% {
-    opacity: 0;
-    transform-origin: 50% 0;
-    transform: perspective(400px) rotateX(-45deg);
-  }
-  100% {
-    opacity: 1;
-    transform-origin: 50% 0;
-    transform: perspective(400px) rotateX(0deg);
-  }
-}
-
-@keyframes editorSlideUpOut {
-  0% {
-    opacity: 1;
-    transform-origin: 50% 0;
-    transform: perspective(400px) rotateX(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform-origin: 50% 0;
-    transform: perspective(400px) rotateX(-45deg);
   }
 }

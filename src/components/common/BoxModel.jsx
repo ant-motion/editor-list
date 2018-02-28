@@ -46,8 +46,6 @@ export default class BoxModel extends Component {
         <AutoComplete
           key={key}
           style={{ width: 50 }}
-          dataSource={['px', 'rem', 'em']}
-          size="small"
           value={v}
           className={key}
           disabled={this.props.disabled}

@@ -75,7 +75,6 @@ class EditorBg extends Component {
             value={value.image || ''}
             onChange={(e) => {
               const v = e.target.value;
-              console.log(v);
               this.onChange('image', v);
             }}
             size="small"
@@ -92,7 +91,6 @@ class EditorBg extends Component {
             style={{ width: '100%' }}
             value={value.repeat || 'repeat'}
             size="small"
-            transitionName="editor-slide-up"
             onChange={(e) => {
               this.onChange('repeat', e);
             }}

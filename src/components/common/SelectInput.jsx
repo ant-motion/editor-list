@@ -75,7 +75,6 @@ export default class SelectInput extends React.Component {
           onChange={this.onChange}
           value={this.props.value}
           size="small"
-          transitionName="editor-slide-up"
         >
           {this.props.children}
         </Select>
