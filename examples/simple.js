@@ -1686,7 +1686,6 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
       }).join(';') + ';';
     }
   });
-  style += 'display:none;';
   return style;
 }
 
@@ -1695,17 +1694,13 @@ function getDomCssRule(dom, isMobile, state) {
   var div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   div.className = dom.className;
   dom.parentNode.appendChild(div);
-  var s = void 0;
-  if (!state) {
-    div.style = dom.style.cssText;
-    s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div));
-    div.remove();
-    return s;
+  var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
+  if (state) {
+    style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
-  var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
-  // console.log(style);
+  style += 'display:none;';
   div.style = '' + style + dom.style.cssText;
-  s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div));
+  var s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div));
   div.remove();
   return s;
 }
@@ -26200,6 +26195,7 @@ var EditorList = function (_Component) {
     _this.select = {};
     _this.defaultDataStyle = {};
     _this.defaultData = {};
+    _this.cssString = '';
     _this.state = _this.setDefaultState(props.editorElem, props);
     _this.setEditorElemClassName();
     return _this;
@@ -26300,10 +26296,11 @@ var _initialiseProps = function _initialiseProps() {
         mobileCss = _state.mobileCss;
 
     onChange({
-      cssName: cssName,
+      cssName: _this3.parentClassName + ' .' + cssName,
       value: value,
       css: css,
       mobileCss: mobileCss,
+      cssString: _this3.cssString,
       classNameCurrency: !!_this3.classNameInDefaultDomClass(cssName, editorDefaultClassName)
     });
   };
@@ -26409,7 +26406,11 @@ var _initialiseProps = function _initialiseProps() {
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
     onChange({
-      css: css, cssName: cssName, value: value, mobileCss: mobileCss,
+      cssName: _this3.parentClassName + ' .' + cssName,
+      value: value,
+      css: css,
+      mobileCss: mobileCss,
+      cssString: _this3.cssString,
       classNameCurrency: !!_this3.classNameInDefaultDomClass(cssName, editorDefaultClassName)
     });
   };
@@ -26425,6 +26426,7 @@ var _initialiseProps = function _initialiseProps() {
     cssStr += '\n' + __WEBPACK_IMPORTED_MODULE_20__utils__["e" /* mobileTitle */] + '\n';
     cssStr += _this3.cssObjectToString(mobileCss, cssName);
     cssStr += '\n}';
+    _this3.cssString = cssStr;
     // 如果是自定义样式或生成的样式插入到 body
     var noDefault = !_this3.classNameInDefaultDomClass(cssName, editorDefaultClassName);
     var style = _this3.ownerDocument.querySelector('#' + _this3.dataId);
@@ -26570,7 +26572,7 @@ var _initialiseProps = function _initialiseProps() {
       },
       background: {
         color: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["j" /* convertDefaultData */])(style.backgroundColor),
-        image: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["i" /* convertData */])(style.backgroundImage),
+        image: (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["i" /* convertData */])(style.backgroundImage) || '').replace(/^url\(|\"|\)?/ig, ''),
         repeat: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["j" /* convertDefaultData */])(style.backgroundRepeat),
         position: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["j" /* convertDefaultData */])(style.backgroundPosition),
         size: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["j" /* convertDefaultData */])(style.backgroundSize),
