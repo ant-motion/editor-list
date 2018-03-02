@@ -11,7 +11,7 @@ export default class AutoComplete extends React.Component {
   };
 
   static defaultProps = {
-    dataSource: ['px', '%', 'rem', 'em'],
+    dataSource: ['px', '%', 'rem', 'em', 'vw', 'vh'],
     size: 'small',
   }
 

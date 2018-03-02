@@ -191,10 +191,10 @@ function toCssLowerCase(d) {
 }
 
 /*
- function toStyleUpperCase(d) {
- return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
- }
- */
+function toStyleUpperCase(d) {
+  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+}
+*/
 
 function fontToCss(d, current) {
   return Object.keys(d).map(key => {
@@ -460,6 +460,19 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   return style;
 }
 
+const removeEmptyStyle = (s) => {
+  const style = { ...s };
+  Object.keys(style).forEach(key => {
+    const value = style[key];
+    if (parseFloat(key) || parseFloat(key) === 0 ||
+      value === 'auto' || value === 'initial' || value === 'normal'
+      || !value) {
+      delete style[key];
+    }
+  });
+  return style;
+};
+
 export function getDomCssRule(dom, isMobile, state) {
   const ownerDocument = dom.ownerDocument;
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
@@ -471,7 +484,11 @@ export function getDomCssRule(dom, isMobile, state) {
   }
   style += 'display:none;';
   div.style = `${style}${dom.style.cssText}`;
-  const s = { ...getComputedStyle(div) };
+  // 获取当前 div 的样式；
+  const styleObject = removeEmptyStyle(div.style);
+  // 获取 div 继承的所有样式；
+  const computedStyle = removeEmptyStyle(getComputedStyle(div));
+  const s = { ...computedStyle, ...styleObject };
   div.remove();
   return s;
 }
