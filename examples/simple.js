@@ -1397,10 +1397,10 @@ function toCssLowerCase(d) {
 }
 
 /*
- function toStyleUpperCase(d) {
- return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
- }
- */
+function toStyleUpperCase(d) {
+  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+}
+*/
 
 function fontToCss(d, current) {
   return Object.keys(d).map(function (key) {
@@ -1689,18 +1689,35 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   return style;
 }
 
+var removeEmptyStyle = function removeEmptyStyle(s) {
+  var style = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, s);
+  Object.keys(style).forEach(function (key) {
+    var value = style[key];
+    if (parseFloat(key) || parseFloat(key) === 0 || value === 'auto' || value === 'initial' || value === 'normal' || !value) {
+      delete style[key];
+    }
+  });
+  return style;
+};
+
 function getDomCssRule(dom, isMobile, state) {
   var ownerDocument = dom.ownerDocument;
   var div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
-  div.className = dom.className;
   dom.parentNode.appendChild(div);
+  // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
   var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
   if (state) {
     style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
   style += 'display:none;';
   div.style = '' + style + dom.style.cssText;
-  var s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div));
+  // 获取当前 div 带 vh 的样式；
+  var styleObject = removeEmptyStyle(div.style);
+  // 再取 className 样式；
+  div.style.cssText = 'display: none';
+  div.className = dom.className;
+  // 生成 div 所有样样；
+  var s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div), styleObject);
   div.remove();
   return s;
 }
@@ -2987,7 +3004,7 @@ AutoComplete.propTypes = {
   size: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.string
 };
 AutoComplete.defaultProps = {
-  dataSource: ['px', '%', 'rem', 'em'],
+  dataSource: ['px', '%', 'rem', 'em', 'vw', 'vh'],
   size: 'small'
 };
 /* harmony default export */ __webpack_exports__["a"] = (AutoComplete);

@@ -8941,12 +8941,13 @@ li.CodeMirror-hint-active {
 }
 body .editor-user-css {
   width: 300px;
-  height: 300px;
+  height: 30vh;
+  color: #fff000;
   background: #ff0000;
   text-align: center;
   margin: auto;
   position: absolute;
-  left: 0;
+  left: 10%;
   right: 0;
   background: url(https://zos.alipayobjects.com/rmsportal/gGlUMYGEIvjDOOw.jpg);
 }
