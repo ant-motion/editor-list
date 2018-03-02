@@ -424,7 +424,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   classNames.forEach(css => {
     const str = `\\.(${state ? `${css}\\:${state}` : `${css}$|${css},`})`;
     const rule = new RegExp(str, 'g');
-    Array.prototype.slice.call(document.styleSheets || []).forEach(item => {
+    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(item => {
       if (item.href) {
         const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
         if (host !== location.host) {
