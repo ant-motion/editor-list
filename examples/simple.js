@@ -1637,7 +1637,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   classNames.forEach(function (css) {
     var str = '\\.(' + (state ? css + '\\:' + state : css + '$|' + css + ',') + ')';
     var rule = new RegExp(str, 'g');
-    Array.prototype.slice.call(document.styleSheets || []).forEach(function (item) {
+    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(function (item) {
       if (item.href) {
         var host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
         if (host !== location.host) {
