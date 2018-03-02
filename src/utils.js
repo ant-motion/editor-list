@@ -476,19 +476,21 @@ const removeEmptyStyle = (s) => {
 export function getDomCssRule(dom, isMobile, state) {
   const ownerDocument = dom.ownerDocument;
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
-  div.className = dom.className;
   dom.parentNode.appendChild(div);
+  // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
   let style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
   if (state) {
     style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
   style += 'display:none;';
   div.style = `${style}${dom.style.cssText}`;
-  // 获取当前 div 的样式；
+  // 获取当前 div 带 vh 的样式；
   const styleObject = removeEmptyStyle(div.style);
-  // 获取 div 继承的所有样式；
-  const computedStyle = removeEmptyStyle(getComputedStyle(div));
-  const s = { ...computedStyle, ...styleObject };
+  // 再取 className 样式；
+  div.style.cssText = 'display: none';
+  div.className = dom.className;
+  // 生成 div 所有样样；
+  const s = { ...getComputedStyle(div), ...styleObject };
   div.remove();
   return s;
 }
