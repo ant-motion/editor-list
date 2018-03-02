@@ -8466,6 +8466,12 @@ li.CodeMirror-hint-active {
   line-height: 22px;
   font-size: 12px;
 }
+.editor-list-dropdown {
+  font-size: 12px;
+}
+.editor-list-dropdown .ant-dropdown-menu-item {
+  font-size: 12px;
+}
 .editor-list .ant-radio-group-small .ant-radio-button-wrapper {
   padding: 0 12px;
 }
@@ -8697,18 +8703,19 @@ li.CodeMirror-hint-active {
   transition: opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 .editor-color-wrapper .color-close .anticon-close {
+  font-size: 12px;
   transform: scale(0.8);
 }
-.ant-collapse {
+.ant-collapse.editor-list {
   background-color: #262626;
 }
-.ant-collapse > .ant-collapse-item {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+.ant-collapse.editor-list > .ant-collapse-item {
+  border-top: 1px solid #000;
 }
-.ant-collapse > .ant-collapse-item:first-child {
+.ant-collapse.editor-list > .ant-collapse-item:first-child {
   border-top: none;
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header {
   height: 32px;
   line-height: 32px;
   text-indent: 10px;
@@ -8717,17 +8724,18 @@ li.CodeMirror-hint-active {
   cursor: pointer;
   position: relative;
   font-weight: normal;
-  border-bottom: 1px solid rgba(18, 18, 18, 0.45);
+  border-bottom: 1px solid transparent;
+  transition: border 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow {
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header .arrow {
   display: inline-block;
   position: absolute;
   right: 20px;
   top: 50%;
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow:after,
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow:before {
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header .arrow:after,
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header .arrow:before {
   content: '';
   display: block;
   position: absolute;
@@ -8736,37 +8744,39 @@ li.CodeMirror-hint-active {
   background: #fff;
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow:after {
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header .arrow:after {
   transform: rotate(45deg) translateX(-2px);
 }
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow:before {
+.ant-collapse.editor-list > .ant-collapse-item > .ant-collapse-header .arrow:before {
   transform: rotate(-45deg) translateX(2px);
 }
-.ant-collapse > .ant-collapse-item-disabled > .ant-collapse-header {
+.ant-collapse.editor-list > .ant-collapse-item-disabled > .ant-collapse-header {
   cursor: not-allowed;
   color: #999;
   background-color: #f3f3f3;
 }
-.ant-collapse-content {
+.ant-collapse.editor-list .ant-collapse-content {
   color: rgba(255, 255, 255, 0.55);
   padding: 1px 16px;
-  box-shadow: 0 0 8px #121212 inset;
   background-color: #262626;
 }
-.ant-collapse-content > .ant-collapse-content-box {
+.ant-collapse.editor-list .ant-collapse-content > .ant-collapse-content-box {
   margin-top: 16px;
   margin-bottom: 16px;
 }
-.ant-collapse-content-inactive {
+.ant-collapse.editor-list .ant-collapse-content-inactive {
   display: none;
 }
-.ant-collapse > .ant-collapse-item-active > .ant-collapse-header .arrow {
+.ant-collapse.editor-list > .ant-collapse-item-active > .ant-collapse-header {
+  border-bottom-color: #000;
+}
+.ant-collapse.editor-list > .ant-collapse-item-active > .ant-collapse-header .arrow {
   transform: translateY(-3px);
 }
-.ant-collapse > .ant-collapse-item-active > .ant-collapse-header .arrow:after {
+.ant-collapse.editor-list > .ant-collapse-item-active > .ant-collapse-header .arrow:after {
   transform: rotate(-45deg) translateX(-2px);
 }
-.ant-collapse > .ant-collapse-item-active > .ant-collapse-header .arrow:before {
+.ant-collapse.editor-list > .ant-collapse-item-active > .ant-collapse-header .arrow:before {
   transform: rotate(45deg) translateX(2px);
 }
 .editor-font-align .left:after,
@@ -8933,12 +8943,14 @@ body .editor-user-css {
   width: 300px;
   height: 300px;
   background: #ff0000;
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 body .editor-user-css:hover {
   background: #fff000;
-}
-.a:hover {
-  position: relative;
 }
 .a:hover,
 .c .a:hover {
