@@ -59,6 +59,7 @@ class EditorList extends Component {
     this.select = {};
     this.defaultDataStyle = {};
     this.defaultData = {};
+    this.cssString = '';
     this.state = this.setDefaultState(props.editorElem, props);
     this.setEditorElemClassName();
   }
@@ -102,10 +103,11 @@ class EditorList extends Component {
     });
     const { cssName, css, mobileCss } = this.state;
     onChange({
-      cssName,
+      cssName: `${this.parentClassName} .${cssName}`,
       value,
       css,
       mobileCss,
+      cssString: this.cssString,
       classNameCurrency: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
     });
   }
@@ -190,7 +192,11 @@ class EditorList extends Component {
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
     onChange({
-      css, cssName, value, mobileCss,
+      cssName: `${this.parentClassName} .${cssName}`,
+      value,
+      css,
+      mobileCss,
+      cssString: this.cssString,
       classNameCurrency: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
     });
   }
@@ -202,6 +208,7 @@ class EditorList extends Component {
     cssStr += `\n${mobileTitle}\n`;
     cssStr += this.cssObjectToString(mobileCss, cssName);
     cssStr += '\n}';
+    this.cssString = cssStr;
     // 如果是自定义样式或生成的样式插入到 body
     const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
     let style = this.ownerDocument.querySelector(`#${this.dataId}`);
@@ -344,7 +351,7 @@ class EditorList extends Component {
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
-        image: convertData(style.backgroundImage),
+        image: (convertData(style.backgroundImage) || '').replace(/^url\(|\"|\)?/ig, ''),
         repeat: convertDefaultData(style.backgroundRepeat),
         position: convertDefaultData(style.backgroundPosition),
         size: convertDefaultData(style.backgroundSize),

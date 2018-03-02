@@ -457,7 +457,6 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
       style += `${newItem.map(c => c.join(':')).join(';')};`;
     }
   });
-  style += 'display:none;';
   return style;
 }
 
@@ -466,17 +465,13 @@ export function getDomCssRule(dom, isMobile, state) {
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   div.className = dom.className;
   dom.parentNode.appendChild(div);
-  let s;
-  if (!state) {
-    div.style = dom.style.cssText;
-    s = { ...getComputedStyle(div) };
-    div.remove();
-    return s;
+  let style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
+  if (state) {
+    style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
-  const style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
-  // console.log(style);
+  style += 'display:none;';
   div.style = `${style}${dom.style.cssText}`;
-  s = { ...getComputedStyle(div) };
+  const s = { ...getComputedStyle(div) };
   div.remove();
   return s;
 }
