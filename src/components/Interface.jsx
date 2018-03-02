@@ -35,17 +35,18 @@ export default class EditorInterface extends Component {
       bottom: null,
       left: null,
     },
-    onChange: () => {},
+    onChange: () => { },
   };
 
   onChange = (key, v) => {
     const value = key === 'offset' ? {
       ...this.props.value,
       ...v,
-    } : {
-      ...this.props.value,
-      [key]: v,
-    };
+    }
+      : {
+        ...this.props.value,
+        [key]: v,
+      };
     this.props.onChange('interface', value);
   }
 
@@ -71,6 +72,8 @@ export default class EditorInterface extends Component {
               onChange={(e) => {
                 this.onChange('overflow', e);
               }}
+              dropdownMatchSelectWidth={false}
+              dropdownClassName="editor-list-dropdown"
             >
               {getOption(this.overflow)}
             </Select>
@@ -154,6 +157,8 @@ export default class EditorInterface extends Component {
             onChange={(e) => {
               this.onChange('position', e);
             }}
+            dropdownMatchSelectWidth={false}
+            dropdownClassName="editor-list-dropdown"
           >
             {getOption(this.pos)}
           </Select>

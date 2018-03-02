@@ -97,8 +97,6 @@ export default class EditorTransition extends Component {
             style={{ width: '100%' }}
             value={data.name || ''}
             size="small"
-            dropdownStyle={{ width: 88 }}
-            dropdownMatchSelectWidth={false}
             onChange={(e) => {
               this.onChange('name', i, e);
             }}
@@ -111,8 +109,6 @@ export default class EditorTransition extends Component {
             dataSource={['s', 'ms']}
             style={{ width: '100%' }}
             value={data.duration || ''}
-            dropdownStyle={{ width: 48 }}
-            dropdownMatchSelectWidth={false}
             onChange={(e) => {
               this.onChange('duration', i, e);
             }}
@@ -121,8 +117,7 @@ export default class EditorTransition extends Component {
           <SelectInput
             style={{ width: '100%' }}
             value={data.ease || ''}
-            dropdownMatchSelectWidth={false}
-            dropdownStyle={{ width: 88 }}
+            dropdownStyle={{ width: 104 }}
             onChange={(e) => {
               this.onChange('ease', i, e);
             }}
@@ -135,8 +130,6 @@ export default class EditorTransition extends Component {
             dataSource={['s', 'ms']}
             style={{ width: '100%' }}
             value={data.delay || ''}
-            dropdownMatchSelectWidth={false}
-            dropdownStyle={{ width: 48 }}
             placement="bottomRight"
             onChange={(e) => {
               this.onChange('delay', i, e);

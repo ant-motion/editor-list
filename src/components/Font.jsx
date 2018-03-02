@@ -146,6 +146,8 @@ class EditorFont extends Component {
             onChange={(e) => {
               this.onChange('weight', e);
             }}
+            dropdownMatchSelectWidth={false}
+            dropdownClassName="editor-list-dropdown"
           >
             {getOptionArray(this.weight)}
           </Select>

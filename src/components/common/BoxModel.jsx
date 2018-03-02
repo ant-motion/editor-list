@@ -24,21 +24,10 @@ export default class BoxModel extends Component {
   constructor(props) {
     super(props);
     this.radioKeys = ['top-left', 'top-right', 'bottom-right', 'bottom-left', 'center'];
-    const value = typeof props.value === 'string' ? props.value : { ...props.value };
-    this.state = {
-      value,
-    };
-  }
-
-  onChange = (e) => {
-    this.props.onChange(e);
-    this.setState({
-      value: e,
-    });
   }
 
   getInput = (isRadius) => {
-    const { value } = this.state;
+    const { value } = this.props;
     return ((isRadius ? this.radioKeys : this.props.keys).map(key => {
       const v = (value && value[key]) ||
         (typeof value === 'string' ? value : null);
@@ -55,7 +44,7 @@ export default class BoxModel extends Component {
   }
 
   getColor = () => {
-    const { value } = this.state;
+    const { value } = this.props;
     return (this.props.keys.map(key => {
       const v = (value && value[key]) ||
         (typeof value === 'string' ? value : null);
@@ -73,7 +62,7 @@ export default class BoxModel extends Component {
 
   getSelect = () => {
     const select = ['none', 'solid', 'dashed', 'dotted', 'double'];
-    const { value } = this.state;
+    const { value } = this.props;
     return (
       this.props.keys.map(key => {
         const v = (value && value[key]) ||
@@ -84,6 +73,8 @@ export default class BoxModel extends Component {
             size="small"
             key={key}
             value={v}
+            dropdownMatchSelectWidth={false}
+            dropdownClassName="editor-list-dropdown"
           >
             {select.map(cKey => (
               <Option value={cKey} key={cKey}>
@@ -109,7 +100,7 @@ export default class BoxModel extends Component {
   render() {
     return (
       <div className="box-model-wrapper">
-        <InputGroup className="box-model" onChange={this.onChange}>
+        <InputGroup className="box-model" onChange={this.props.onChange}>
           {this.getChildrenToBox()}
         </InputGroup>
       </div>

@@ -53,7 +53,6 @@ export default class EditorShadow extends Component {
   onChange = (key, v) => {
     const keyValue = {
       ...this.defaultShadow,
-      ...this.state.value[this.state.key],
       [key]: v,
     };
     const { value } = this.props;

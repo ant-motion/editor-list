@@ -38,6 +38,8 @@ export default class AutoComplete extends React.Component {
         dataSource={this.state.dataSource}
         onSearch={this.onSearch}
         placeholder={this.props.placeholder || '--'}
+        dropdownMatchSelectWidth={false}
+        dropdownClassName="editor-list-dropdown"
       />
     );
   }

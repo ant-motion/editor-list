@@ -75,6 +75,8 @@ export default class SelectInput extends React.Component {
           onChange={this.onChange}
           value={this.props.value}
           size="small"
+          dropdownMatchSelectWidth={false}
+          dropdownClassName="editor-list-dropdown"
         >
           {this.props.children}
         </Select>

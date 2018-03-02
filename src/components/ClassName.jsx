@@ -17,8 +17,8 @@ export default class EditorClassName extends Component {
     onChange: PropTypes.func,
     classNameArray: PropTypes.array,
     header: PropTypes.string,
+    placeholder: PropTypes.string,
   };
-
 
   static defaultProps = {
     header: '样式编辑',
@@ -41,7 +41,7 @@ export default class EditorClassName extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value, classNameArray } = props;
+    const { value, classNameArray, placeholder } = props;
     const menuChild = classNameArray.filter(c => c && c.indexOf('editor_css-') === -1)
       .map(key => <Menu.Item key={key}>{key}</Menu.Item>);
     const menu = (
@@ -56,7 +56,10 @@ export default class EditorClassName extends Component {
         <Row gutter={8}>
           <Col span={4}>名称</Col>
           <Col span={17}>
-            <Dropdown overlay={menu}>
+            <Dropdown
+              overlay={menu}
+              overlayClassName="editor-list-dropdown"
+            >
               <Input
                 size="small"
                 value={value}
@@ -66,7 +69,7 @@ export default class EditorClassName extends Component {
                 }}
                 onMouseEnter={this.onHover}
                 onMouseLeave={this.onLeave}
-                placeholder="editor-css"
+                placeholder={placeholder}
               />
             </Dropdown>
           </Col>

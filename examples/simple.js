@@ -16,7 +16,7 @@ class Demo extends React.Component {
   onClick = (e) => {
     const dom = e.target;
     this.setState({
-      editorDom: this.state.editorDom ? null : dom,
+      editorDom: dom,
     });
   }
 
@@ -29,6 +29,11 @@ class Demo extends React.Component {
       state: this.state.state === 'web' ? 'mobile' : 'web',
     });
   }
+  closeEdit = () => {
+    this.setState({
+      editorDom: null,
+    });
+  }
 
   render() {
     return (<div>
@@ -36,7 +41,12 @@ class Demo extends React.Component {
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
       </div>
-      <button onClick={this.onSwicth}>{this.state.state}</button>
+      <div onClick={this.onClick} className="a c" style={{ background: '#0000ff' }}>
+        bbbbbbbbbbbbbbbbbbbbbb<br />
+        ---------请点击---------
+      </div>
+      <button onClick={this.closeEdit}>关闭</button>
+      <button onClick={this.onSwicth}>切换模式：{this.state.state}</button>
 
       {this.state.editorDom && (
         <EditorList

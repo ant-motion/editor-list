@@ -71,6 +71,8 @@ export default class EditorState extends Component {
             onChange={(e) => {
               this.props.onChange('cursor', e);
             }}
+            dropdownMatchSelectWidth={false}
+            dropdownClassName="editor-list-dropdown"
           >
             {getOption(cursorState)}
           </Select>

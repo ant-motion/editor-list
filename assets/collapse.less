@@ -1,15 +1,13 @@
 @import "custom";
 @prefixCls: ant-collapse;
-.@{prefixCls} {
+.@{prefixCls}.editor-list {
   background-color: @bgColor;
-  & > &-item {
-
-    border-top: 1px solid fade(#fff, 15);
+  >.@{prefixCls}-item {
+    border-top: 1px solid #000;
     &:first-child {
       border-top: none;
     }
-
-    > .@{prefixCls}-header {
+    >.@{prefixCls}-header {
       height: 32px;
       line-height: 32px;
       text-indent: 10px;
@@ -18,13 +16,15 @@
       cursor: pointer;
       position: relative;
       font-weight: normal;
-      border-bottom: 1px solid fade(@heiColor, 45);
+      border-bottom: 1px solid transparent;
+      transition: border .3s @ease-in-out;
       .arrow {
         display: inline-block;
         position: absolute;
         right: 20px;
         top: 50%;
-        &:after, &:before {
+        &:after,
+        &:before {
           content: '';
           display: block;
           position: absolute;
@@ -43,38 +43,34 @@
       }
     }
   }
-
-  & > &-item-disabled > .@{prefixCls}-header {
+  >.@{prefixCls}-item-disabled>.@{prefixCls}-header {
     cursor: not-allowed;
     color: #999;
     background-color: #f3f3f3;
   }
-
-  &-content {
+  .@{prefixCls}-content {
     // overflow: hidden;
     color: @text-color;
-    padding: 1px 16px;
-    box-shadow: 0 0 8px @heiColor inset;
+    padding: 1px 16px; // box-shadow: 0 0 8px @heiColor inset;
     background-color: @bgColor;
-
-    & > &-box {
+    > .@{prefixCls}-content-box {
       margin-top: 16px;
       margin-bottom: 16px;
     }
-
     &-inactive {
       display: none;
     }
   }
-
-  & > &-item-active {
-    > .@{prefixCls}-header {
+  >.@{prefixCls}-item-active {
+    >.@{prefixCls}-header {
+      border-bottom-color: #000;
       .arrow {
         transform: translateY(-3px);
         &:after {
-          transform: rotate(-45deg)  translateX(-2px);;
+          transform: rotate(-45deg) translateX(-2px);
+          ;
         }
-        &:before{
+        &:before {
           transform: rotate(45deg) translateX(2px);
         }
       }

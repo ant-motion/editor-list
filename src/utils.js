@@ -10,6 +10,45 @@ const colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
 
 export const mobileTitle = '@media screen and (max-width: 767px) {';
 
+export const styleInUse = {
+  'background-attachment': 1,
+  'background-color': 1,
+  'background-image': 1,
+  'background-repeat': 1,
+  'background-position': 1,
+  'background-size': 1,
+  'border-color': 1,
+  'border-radius': 1,
+  'border-style': 1,
+  'border-width': 1,
+  'text-align': 1,
+  'text-decoration': 1,
+  'letter-spacing': 1,
+  'line-height': 1,
+  color: 1,
+  'font-size': 1,
+  'font-family': 1,
+  'font-weight': 1,
+  bottom: 1,
+  left: 1,
+  top: 1,
+  right: 1,
+  position: 1,
+  overflow: 1,
+  width: 1,
+  height: 1,
+  'max-height': 1,
+  'max-width': 1,
+  'min-width': 1,
+  'min-height': 1,
+  margin: 1,
+  padding: 1,
+  'box-shadow': 1,
+  'text-shadow': 1,
+  cursor: 1,
+  transition: 1,
+};
+
 export function toArrayChildren(children) {
   const ret = [];
   React.Children.forEach(children, (c) => {
@@ -37,6 +76,9 @@ export function firstUpperCase(str) {
 export function removeMultiEmpty(str) {
   return str.replace(/\s+/g, ' ');
 }
+export const removeEditClassName = (t, reClass) => (
+  t.split(' ').filter(name => name.indexOf(reClass) === -1).join(' ')
+);
 
 export function getBorderDataToStyle(name, d) {
   const key = firstUpperCase(name);
@@ -85,8 +127,10 @@ export function getComputedStyle() {
   return document.defaultView ? document.defaultView.getComputedStyle(...arguments) : {};
 }
 
-export function convertData(d) {
-  if (!d || d.indexOf('none') >= 0 || d === '0px' || d.indexOf('normal') >= 0 || d === 'auto') {
+export function convertData(d, b) {
+  const c = b ? (!d & typeof d !== 'number') || d.indexOf('none') >= 0 || d.indexOf('normal') >= 0 :
+    !d || d.indexOf('none') >= 0 || d === '0px' || d.indexOf('normal') >= 0;
+  if (c) {
     return null;
   }
   return d;
@@ -356,6 +400,7 @@ ${addCss}` : addCss;
 
 function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   let style = '';
+  const styleObj = {};
   function cssRulesForEach(item, rule) {
     item.forEach(cssStyle => {
       if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
@@ -364,16 +409,20 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
       const select = cssStyle.selectorText;
       if (select && select.match(rule)) {
         const isCurrentDom = select.split(',').filter(str => {
-          return ownerDocument.querySelector(str.split(':')[0]) === dom;
+          const doms = Array.prototype.slice.call(ownerDocument.querySelectorAll(str.split(':')[0]))
+            .filter(d => d === dom);
+          return doms.length;
         }).length;
         if (isCurrentDom) {
-          style += cssStyle.style.cssText;
+          // style += cssStyle.style.cssText;
+          styleObj[select] = cssStyle.style.cssText;
         }
       }
     });
   }
-  dom.className.split(' ').forEach(css => {
-    const str = `\\.(${state ? `${css}\\:${state}|` : ''}${css}$|${css},)`;
+  const classNames = dom.className.split(' ');
+  classNames.forEach(css => {
+    const str = `\\.(${state ? `${css}\\:${state}` : `${css}$|${css},`})`;
     const rule = new RegExp(str, 'g');
     Array.prototype.slice.call(document.styleSheets || []).forEach(item => {
       if (item.href) {
@@ -385,28 +434,67 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
       cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), rule);
     });
   });
-  style += 'display: none;';
+  const t = Object.keys(styleObj).sort((a, b) => {
+    const aa = a.replace(/\>/g, ' ').split(/\s+/).filter(c => c);
+    const bb = b.replace(/\>/g, ' ').split(/\s+/).filter(c => c);
+    const c = classNames.indexOf(aa[aa.length - 1].replace('.', ''));
+    const d = classNames.indexOf(bb[bb.length - 1].replace('.', ''));
+    return bb.length - aa.length || d - c;
+  }).map(key => (
+    styleObj[key].replace(/\s+/g, '').split(';').filter(c => c).map(c => c.split(':'))
+  ));
+  t.forEach((item, i) => {
+    if (!i) {
+      style += `${item.map(c => c.join(':')).join(';')};`;
+    } else {
+      const preItem = [];
+      for (let j = 0; j <= i - 1; j++) {
+        preItem.push(t[j].map(c => c[0]).join());
+      }
+      const newItem = item.map((c) => {
+        return c[1].indexOf('!important') >= 0 || preItem.indexOf(c[0]) === -1 ? c : null;
+      }).filter(c => c);
+      style += `${newItem.map(c => c.join(':')).join(';')};`;
+    }
+  });
+  style += 'display:none;';
   return style;
 }
 
 export function getDomCssRule(dom, isMobile, state) {
   const ownerDocument = dom.ownerDocument;
-  const style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
-  div.style = style;
-  ownerDocument.body.appendChild(div);
-  const s = { ...getComputedStyle(div) };
+  div.className = dom.className;
+  dom.parentNode.appendChild(div);
+  let s;
+  if (!state) {
+    div.style = dom.style.cssText;
+    s = { ...getComputedStyle(div) };
+    div.remove();
+    return s;
+  }
+  const style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
+  // console.log(style);
+  div.style = `${style}${dom.style.cssText}`;
+  s = { ...getComputedStyle(div) };
   div.remove();
   return s;
 }
 
-export function getParentClassName(dom, useTagName = true) {
+export function getParentClassName(dom, useTagName = true, length = 50) {
   let className = '';
+  let i = 0;
   function getParentClass(d) {
     let p = d.className;
     const tagName = useTagName ? d.tagName.toLocaleLowerCase() : null;
-    p = p ? `.${p}` : tagName;
-    className = p ? `${p} ${className}`.trim() : className;
+    p = p ? `.${p.split(' ')[0]}` : tagName;
+    className = p ? `${p} > ${className}`.trim() : className;
+    if (useTagName || (!useTagName && d.className)) {
+      i += 1;
+    }
+    if (i >= length) {
+      return;
+    }
     if (d.parentNode.tagName.toLocaleLowerCase() !== 'html') {
       getParentClass(d.parentNode);
     }

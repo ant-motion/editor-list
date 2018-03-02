@@ -1,6 +1,6 @@
 {
   "name": "rc-editor-list",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "editor-list ui component for react",
   "keywords": [
     "react",
@@ -19,12 +19,21 @@
   },
   "files": [
     "lib",
-    "assets/*.css"
+    "assets/*.css",
+    "dist",
+    "es"
   ],
   "licenses": "MIT",
   "main": "./lib/index",
+  "module": "./es/index",
   "config": {
-    "port": 8022
+    "port": 8022,
+    "entry": {
+      "rc-editor-list": [
+        "./assets/index.less",
+        "./src/index.js"
+      ]
+    }
   },
   "scripts": {
     "build": "rc-tools run build",
