@@ -87,7 +87,7 @@ export default class EditorState extends Component {
         <Row gutter={8} key="1">
           <Col span={24}>
             <RadioGroup
-              defaultValue={value.classState}
+              value={value.classState}
               size="small"
               onChange={(e) => {
                 this.props.onChange('classState', e.target.value);
