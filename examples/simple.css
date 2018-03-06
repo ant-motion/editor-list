@@ -5942,6 +5942,12 @@ mark {
 .ant-select-dropdown-menu-item:hover {
   background-color: #e6f7ff;
 }
+.ant-select-dropdown-menu-item:first-child {
+  border-radius: 4px 4px 0 0;
+}
+.ant-select-dropdown-menu-item:last-child {
+  border-radius: 0 0 4px 4px;
+}
 .ant-select-dropdown-menu-item-disabled {
   color: rgba(0, 0, 0, 0.25);
   cursor: not-allowed;
