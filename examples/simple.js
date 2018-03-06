@@ -28601,7 +28601,7 @@ var EditorState = function (_Component) {
             __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
               RadioGroup,
               {
-                defaultValue: value.classState,
+                value: value.classState,
                 size: 'small',
                 onChange: function onChange(e) {
                   _this2.props.onChange('classState', e.target.value);
