@@ -40,6 +40,7 @@ export default class AutoComplete extends React.Component {
         placeholder={this.props.placeholder || '--'}
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
+        getPopupContainer={node => node.parentNode}
       />
     );
   }

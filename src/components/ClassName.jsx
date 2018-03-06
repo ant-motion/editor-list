@@ -59,6 +59,7 @@ export default class EditorClassName extends Component {
             <Dropdown
               overlay={menu}
               overlayClassName="editor-list-dropdown"
+              getPopupContainer={node => node.parentNode}
             >
               <Input
                 size="small"

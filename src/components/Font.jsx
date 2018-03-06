@@ -143,6 +143,7 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.weight || 'normal'}
             size="small"
+            getPopupContainer={node => node.parentNode}
             onChange={(e) => {
               this.onChange('weight', e);
             }}

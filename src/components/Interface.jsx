@@ -72,6 +72,7 @@ export default class EditorInterface extends Component {
               onChange={(e) => {
                 this.onChange('overflow', e);
               }}
+              getPopupContainer={node => node.parentNode}
               dropdownMatchSelectWidth={false}
               dropdownClassName="editor-list-dropdown"
             >
@@ -157,6 +158,7 @@ export default class EditorInterface extends Component {
             onChange={(e) => {
               this.onChange('position', e);
             }}
+            getPopupContainer={node => node.parentNode}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

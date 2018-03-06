@@ -73,6 +73,7 @@ export default class BoxModel extends Component {
             size="small"
             key={key}
             value={v}
+            getPopupContainer={node => node.parentNode}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

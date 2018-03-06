@@ -94,6 +94,7 @@ class EditorBg extends Component {
             onChange={(e) => {
               this.onChange('repeat', e);
             }}
+            getPopupContainer={node => node.parentNode}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

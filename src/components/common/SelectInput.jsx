@@ -74,6 +74,7 @@ export default class SelectInput extends React.Component {
           onFocus={this.onFocus}
           onChange={this.onChange}
           value={this.props.value}
+          getPopupContainer={node => node.parentNode}
           size="small"
           dropdownMatchSelectWidth={false}
           dropdownClassName="editor-list-dropdown"
