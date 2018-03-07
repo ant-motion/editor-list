@@ -5,7 +5,7 @@ import Radio from 'antd/lib/radio';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
-import { getOption } from '../utils';
+import { getOption, getParentNode } from '../utils';
 
 const Panel = Collapse.Panel;
 
@@ -71,7 +71,7 @@ export default class EditorState extends Component {
             onChange={(e) => {
               this.props.onChange('cursor', e);
             }}
-            getPopupContainer={node => node.parentNode}
+            getPopupContainer={node => getParentNode(node, 'editor-list')}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

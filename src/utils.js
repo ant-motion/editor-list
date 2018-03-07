@@ -520,3 +520,12 @@ export function getParentClassName(dom, useTagName = true, length = 50) {
 export function currentScrollTop() {
   return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
 }
+
+export function getParentNode(node, className) {
+  const parent = node.parentNode;
+  const classNameArray = (parent.className || '').split(' ').filter(name => name === className);
+  if (classNameArray.length || parent.tagName.toLocaleLowerCase() === 'body') {
+    return parent;
+  }
+  return getParentNode(parent, className);
+}

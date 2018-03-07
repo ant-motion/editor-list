@@ -8,6 +8,7 @@ import Icon from 'antd/lib/icon';
 import Tooltip from 'antd/lib/tooltip';
 import Dropdown from 'antd/lib/dropdown';
 import Menu from 'antd/lib/menu';
+import { getParentNode } from '../utils';
 
 const Panel = Collapse.Panel;
 
@@ -59,7 +60,7 @@ export default class EditorClassName extends Component {
             <Dropdown
               overlay={menu}
               overlayClassName="editor-list-dropdown"
-              getPopupContainer={node => node.parentNode}
+              getPopupContainer={node => getParentNode(node, 'editor-list')}
             >
               <Input
                 size="small"

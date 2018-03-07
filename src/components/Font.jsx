@@ -8,8 +8,7 @@ import Radio from 'antd/lib/radio';
 import AutoComplete from './common/AutoComplete';
 import SelectInput from './common/SelectInput';
 import Color from './common/Color';
-import { getOptionArray } from '../utils';
-
+import { getOptionArray, getParentNode } from '../utils';
 const Panel = Collapse.Panel;
 const Option = Select.Option;
 
@@ -143,7 +142,7 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.weight || 'normal'}
             size="small"
-            getPopupContainer={node => node.parentNode}
+            getPopupContainer={node => getParentNode(node, 'editor-list')}
             onChange={(e) => {
               this.onChange('weight', e);
             }}

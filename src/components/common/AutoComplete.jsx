@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AntAutoComplete from 'antd/lib/auto-complete';
+import { getParentNode } from '../../utils';
 
 export default class AutoComplete extends React.Component {
   static propTypes = {
@@ -40,7 +41,7 @@ export default class AutoComplete extends React.Component {
         placeholder={this.props.placeholder || '--'}
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
-        getPopupContainer={node => node.parentNode}
+        getPopupContainer={node => getParentNode(node, 'editor-list')}
       />
     );
   }

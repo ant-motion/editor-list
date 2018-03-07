@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'antd/lib/select';
 import PropTypes from 'prop-types';
+import { getParentNode } from '../../utils';
 
 export default class SelectInput extends React.Component {
   static propTypes = {
@@ -74,7 +75,7 @@ export default class SelectInput extends React.Component {
           onFocus={this.onFocus}
           onChange={this.onChange}
           value={this.props.value}
-          getPopupContainer={node => node.parentNode}
+          getPopupContainer={node => getParentNode(node, 'editor-list')}
           size="small"
           dropdownMatchSelectWidth={false}
           dropdownClassName="editor-list-dropdown"

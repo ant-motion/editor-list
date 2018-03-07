@@ -9,7 +9,7 @@ import SelectInput from './common/SelectInput';
 import Color from './common/Color';
 import RowHelp from './common/RowHelp';
 import Radio from 'antd/lib/radio';
-import { getOption, getOptionArray, getRadioButton } from '../utils';
+import { getOption, getOptionArray, getRadioButton, getParentNode } from '../utils';
 
 
 const RadioGroup = Radio.Group;
@@ -94,7 +94,7 @@ class EditorBg extends Component {
             onChange={(e) => {
               this.onChange('repeat', e);
             }}
-            getPopupContainer={node => node.parentNode}
+            getPopupContainer={node => getParentNode(node, 'editor-list')}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

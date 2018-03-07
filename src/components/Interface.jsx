@@ -9,7 +9,7 @@ import Tooltip from 'antd/lib/tooltip';
 import AutoComplete from './common/AutoComplete';
 import RowHelp from './common/RowHelp';
 import BoxModel from './common/BoxModel';
-import { getOption } from '../utils';
+import { getOption, getParentNode } from '../utils';
 
 const Panel = Collapse.Panel;
 
@@ -72,7 +72,7 @@ export default class EditorInterface extends Component {
               onChange={(e) => {
                 this.onChange('overflow', e);
               }}
-              getPopupContainer={node => node.parentNode}
+              getPopupContainer={node => getParentNode(node, 'editor-list')}
               dropdownMatchSelectWidth={false}
               dropdownClassName="editor-list-dropdown"
             >
@@ -158,7 +158,7 @@ export default class EditorInterface extends Component {
             onChange={(e) => {
               this.onChange('position', e);
             }}
-            getPopupContainer={node => node.parentNode}
+            getPopupContainer={node => getParentNode(node, 'editor-list')}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >

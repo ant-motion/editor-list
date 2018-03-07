@@ -2,8 +2,10 @@
 @prefixCls: ant-collapse;
 .@{prefixCls}.editor-list {
   background-color: @bgColor;
+  border-radius: 0;
   >.@{prefixCls}-item {
     border-top: 1px solid #000;
+    border-bottom: none;
     &:first-child {
       border-top: none;
     }
@@ -13,6 +15,7 @@
       text-indent: 10px;
       font-size: 14px;
       color: #fff;
+      padding: 0;
       cursor: pointer;
       position: relative;
       font-weight: normal;
@@ -23,6 +26,7 @@
         position: absolute;
         right: 20px;
         top: 50%;
+        left: auto;
         &:after,
         &:before {
           content: '';

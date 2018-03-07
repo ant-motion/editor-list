@@ -4,6 +4,7 @@ import Select from 'antd/lib/select';
 import AutoComplete from './AutoComplete';
 import Color from './Color';
 import InputGroup from './InputGroup';
+import { getParentNode } from '../../utils';
 
 const Option = Select.Option;
 
@@ -73,7 +74,7 @@ export default class BoxModel extends Component {
             size="small"
             key={key}
             value={v}
-            getPopupContainer={node => node.parentNode}
+            getPopupContainer={node => getParentNode(node, 'editor-list')}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
