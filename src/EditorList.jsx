@@ -110,7 +110,7 @@ class EditorList extends Component {
       css,
       mobileCss,
       cssString: this.cssString,
-      classNameCurrency: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
+      classNameInDefault: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
     });
   }
 
@@ -201,7 +201,7 @@ class EditorList extends Component {
       css,
       mobileCss,
       cssString: this.cssString,
-      classNameCurrency: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
+      classNameInDefault: !!this.classNameInDefaultDomClass(cssName, editorDefaultClassName),
     });
   }
 
