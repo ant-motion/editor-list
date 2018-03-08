@@ -3841,6 +3841,7 @@ var Color = function (_React$Component) {
       left = left < 10 ? 10 : left;
       if (c.top + r.h > w.height) {
         top = c.top - r.h - 10;
+        transformOrigin = '50% 100%';
       }
       if (left + r.w > w.width) {
         left = w.width - r.w - 10;
@@ -26359,7 +26360,9 @@ var _initialiseProps = function _initialiseProps() {
         mobileCss = _state.mobileCss;
 
     onChange({
-      cssName: _this3.parentClassName + ' .' + cssName,
+      className: _this3.parentClassName + ' .' + cssName,
+      parentClassName: _this3.parentClassName,
+      cssName: cssName,
       value: value,
       css: css,
       mobileCss: mobileCss,
@@ -26469,7 +26472,9 @@ var _initialiseProps = function _initialiseProps() {
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
     onChange({
-      cssName: _this3.parentClassName + ' .' + cssName,
+      className: _this3.parentClassName + ' .' + cssName,
+      parentClassName: _this3.parentClassName,
+      cssName: cssName,
       value: value,
       css: css,
       mobileCss: mobileCss,
