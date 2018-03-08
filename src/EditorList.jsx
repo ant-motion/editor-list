@@ -103,7 +103,9 @@ class EditorList extends Component {
     });
     const { cssName, css, mobileCss } = this.state;
     onChange({
-      cssName: `${this.parentClassName} .${cssName}`,
+      className: `${this.parentClassName} .${cssName}`,
+      parentClassName: this.parentClassName,
+      cssName,
       value,
       css,
       mobileCss,
@@ -192,7 +194,9 @@ class EditorList extends Component {
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
     onChange({
-      cssName: `${this.parentClassName} .${cssName}`,
+      className: `${this.parentClassName} .${cssName}`,
+      parentClassName: this.parentClassName,
+      cssName,
       value,
       css,
       mobileCss,

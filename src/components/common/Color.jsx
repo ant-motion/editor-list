@@ -73,10 +73,11 @@ class Color extends React.Component {
     const c = rect.colorRect;
     let top = w.scrollTop + c.top + 20;
     let left = c.left - r.w / 2 + c.width / 2;
-    const transformOrigin = '50% 0';
+    let transformOrigin = '50% 0';
     left = left < 10 ? 10 : left;
     if (c.top + r.h > w.height) {
       top = c.top - r.h - 10;
+      transformOrigin = '50% 100%';
     }
     if (left + r.w > w.width) {
       left = w.width - r.w - 10;
