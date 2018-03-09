@@ -102,10 +102,12 @@ class EditorList extends Component {
       classState,
     });
     const { cssName, css, mobileCss } = this.state;
+    const newCssName = !this.classNameInDefaultDomClass(cssName, this.props.editorDefaultClassName)
+    ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
     onChange({
-      className: `${this.parentClassName} .${cssName}`,
+      className: `${this.parentClassName} .${newCssName}`,
       parentClassName: this.parentClassName,
-      cssName,
+      cssName: newCssName,
       value,
       css,
       mobileCss,
@@ -193,10 +195,12 @@ class EditorList extends Component {
       const str = css.default;
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
+    const newCssName = !this.classNameInDefaultDomClass(cssName, this.props.editorDefaultClassName)
+    ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
     onChange({
-      className: `${this.parentClassName} .${cssName}`,
+      className: `${this.parentClassName} .${newCssName}`,
       parentClassName: this.parentClassName,
-      cssName,
+      cssName: newCssName,
       value,
       css,
       mobileCss,
@@ -241,6 +245,8 @@ class EditorList extends Component {
     const value = this.getDefaultData(domStyle[classState]);
     const cssName = this.getClassName(props);
     const style = this.ownerDocument.querySelector(`#${this.dataId}`);
+    this.defaultDomClass = props.editorElem.className ?
+      removeEditClassName(props.editorElem.className, props.editorDefaultClassName) : '';
     if (dom.getAttribute('data-editor_css_id')
       && style) {
       const prev = style.previousElementSibling;
@@ -254,8 +260,6 @@ class EditorList extends Component {
       this.defaultDataStyle = domStyle;
       this.defaultData = value;
     }
-    this.defaultDomClass = props.editorElem.className ?
-      removeEditClassName(props.editorElem.className, props.editorDefaultClassName) : '';
     const css = this.getDefaultCssData(cssName);
     return {
       value,

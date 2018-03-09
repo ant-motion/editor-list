@@ -79,6 +79,9 @@ React.render(<EditorList />, container);
 | onChange   | func           | null    | change callback |
 | useClassName | bool   | true   |  use className or style |
 | isMobile   | bool  | false | edit mobile style |
+| editorDefaultClassName | string | editor_css| default editor class name|
+| parentClassNameCanUseTagName | bool |  true | parent can use tag name |
+| parentClassNameLength | number |  2 | parent class name length |
 
 
 ## License
