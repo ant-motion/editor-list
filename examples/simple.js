@@ -26359,10 +26359,11 @@ var _initialiseProps = function _initialiseProps() {
         css = _state.css,
         mobileCss = _state.mobileCss;
 
+    var newCssName = !_this3.classNameInDefaultDomClass(cssName, _this3.props.editorDefaultClassName) ? cssName + '-' + _this3.props.editorDefaultClassName : cssName;
     onChange({
-      className: _this3.parentClassName + ' .' + cssName,
+      className: _this3.parentClassName + ' .' + newCssName,
       parentClassName: _this3.parentClassName,
-      cssName: cssName,
+      cssName: newCssName,
       value: value,
       css: css,
       mobileCss: mobileCss,
@@ -26471,10 +26472,11 @@ var _initialiseProps = function _initialiseProps() {
       var str = css['default'];
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
+    var newCssName = !_this3.classNameInDefaultDomClass(cssName, _this3.props.editorDefaultClassName) ? cssName + '-' + _this3.props.editorDefaultClassName : cssName;
     onChange({
-      className: _this3.parentClassName + ' .' + cssName,
+      className: _this3.parentClassName + ' .' + newCssName,
       parentClassName: _this3.parentClassName,
-      cssName: cssName,
+      cssName: newCssName,
       value: value,
       css: css,
       mobileCss: mobileCss,
@@ -26525,6 +26527,7 @@ var _initialiseProps = function _initialiseProps() {
     var value = _this3.getDefaultData(domStyle[classState]);
     var cssName = _this3.getClassName(props);
     var style = _this3.ownerDocument.querySelector('#' + _this3.dataId);
+    _this3.defaultDomClass = props.editorElem.className ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["a" /* removeEditClassName */])(props.editorElem.className, props.editorDefaultClassName) : '';
     if (dom.getAttribute('data-editor_css_id') && style) {
       var prev = style.previousElementSibling;
       style.remove();
@@ -26537,7 +26540,6 @@ var _initialiseProps = function _initialiseProps() {
       _this3.defaultDataStyle = domStyle;
       _this3.defaultData = value;
     }
-    _this3.defaultDomClass = props.editorElem.className ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["a" /* removeEditClassName */])(props.editorElem.className, props.editorDefaultClassName) : '';
     var css = _this3.getDefaultCssData(cssName);
     return {
       value: value,
