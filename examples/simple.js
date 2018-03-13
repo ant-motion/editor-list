@@ -22878,7 +22878,7 @@ var Demo = function (_React$Component) {
         null,
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
-          { onClick: this.onClick, className: 'a c editor-user-css' },
+          { onClick: this.onClick, className: 'a c editor-user-css jeply9mvwlk-editor_css' },
           '\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5',
           __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
           '---------\u8BF7\u70B9\u51FB---------'
@@ -26583,7 +26583,12 @@ var _initialiseProps = function _initialiseProps() {
         parentClassNameLength = props.parentClassNameLength,
         editorDefaultClassName = props.editorDefaultClassName;
 
-    var random = editorElem.getAttribute('data-editor_css_rand') || __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["g" /* getRandomKey */])();
+    var currentEditorCssName = (editorElem.className || '').split(' ').filter(function (name) {
+      return name.indexOf(editorDefaultClassName) >= 0;
+    }).map(function (name) {
+      return name.replace('-' + editorDefaultClassName, '');
+    })[0];
+    var random = currentEditorCssName || editorElem.getAttribute('data-editor_css_rand') || __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["g" /* getRandomKey */])();
     _this3.dataId = editorElem.getAttribute('data-editor_css_id') || editorDefaultClassName + '-' + random;
     editorElem.setAttribute('data-editor_css_id', _this3.dataId);
     editorElem.setAttribute('data-editor_css_rand', random);
