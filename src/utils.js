@@ -8,6 +8,29 @@ const RadioButton = Radio.Button;
 
 const colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
 
+const colorLookup = {
+  aqua: 'rgb(0, 255, 255)',
+  lime: 'rgb(0, 255, 0)',
+  silver: 'rgb(192, 192, 192)',
+  black: 'rgb(0, 0, 0)',
+  maroon: 'rgb(128, 0, 0)',
+  teal: 'rgb(0, 128, 128)',
+  blue: 'rgb(0, 0, 255)',
+  navy: 'rgb(0, 0, 128)',
+  white: 'rgb(255, 255, 255)',
+  fuchsia: 'rgb(255, 0, 255)',
+  olive: 'rgb(128, 128, 0)',
+  yellow: 'rgb(255, 255, 0)',
+  orange: 'rgb(255, 165, 0)',
+  gray: 'rgb(128, 128, 128)',
+  purple: 'rgb(128, 0, 128)',
+  green: 'rgb(0, 128, 0)',
+  red: 'rgb(255, 0, 0)',
+  pink: 'rgb(255, 192, 203)',
+  cyan: 'rgb(0, 255, 255)',
+  transparent: 'rgba(255, 255, 255, 0)',
+};
+
 export const mobileTitle = '@media screen and (max-width: 767px) {';
 
 export const styleInUse = {
@@ -177,10 +200,18 @@ export function convertShadowData(d) {
   if (!convertData(d)) {
     return {};
   }
-  const dataArray = d.replace(colorExp, '').split(/\s+/).filter(item => item);
+  const dataArray = d.replace(/\,\s+/g, ',').split(/\s+/);
+  let color;
+  const noColor = dataArray.map(c => {
+    if ((!c.replace(colorExp, '') || !colorLookup[c])) {
+      return c;
+    }
+    color = c;
+    return null;
+  }).filter(item => item);
   const keys = ['x', 'y', 'blur', 'spread', 'inset'];
-  const value = { color: d.match(colorExp)[0] };
-  dataArray.forEach((data, i) => {
+  const value = { color };
+  noColor.forEach((data, i) => {
     value[keys[i]] = i === 3 ? convertData(data) : data;
   });
   return value;
@@ -401,8 +432,8 @@ ${addCss}` : addCss;
 function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   let style = '';
   const styleObj = {};
-  function cssRulesForEach(item, rule) {
-    item.forEach(cssStyle => {
+  function cssRulesForEach(item, i, rule) {
+    item.forEach((cssStyle, j) => {
       if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
         return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), rule);
       }
@@ -414,48 +445,49 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
           return doms.length;
         }).length;
         if (isCurrentDom) {
-          // style += cssStyle.style.cssText;
-          styleObj[select] = cssStyle.style.cssText;
+          const newSelectName = `${select}~${i}~${j}`;
+          styleObj[newSelectName] = cssStyle.style.cssText;
         }
       }
     });
   }
-  const classNames = dom.className.split(' ');
-  classNames.forEach(css => {
-    const str = `\\.(${state ? `${css}\\:${state}` : `${css}$|${css},`})`;
-    const rule = new RegExp(str, 'g');
-    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(item => {
+  const forEachStyle = (rule) => {
+    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach((item, i) => {
       if (item.href) {
         const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
         if (host !== dom.ownerDocument.location.host) {
           return;
         }
       }
-      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), rule);
+      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i, rule);
     });
+  };
+  const classNames = dom.className.split(' ');
+  classNames.forEach(css => {
+    const str = `\\.(${state ? `${css}\\:${state}` : `${css}$|${css},`})`;
+    const rule = new RegExp(str, 'g');
+    forEachStyle(rule);
   });
+  const id = dom.id;
+  if (id) {
+    forEachStyle(new RegExp(`\\#(${state ? `${id}\\:${state}` : `${id}$|${id},`})`));
+  }
   const t = Object.keys(styleObj).sort((a, b) => {
-    const aa = a.replace(/\>/g, ' ').split(/\s+/).filter(c => c);
-    const bb = b.replace(/\>/g, ' ').split(/\s+/).filter(c => c);
-    const c = classNames.indexOf(aa[aa.length - 1].replace('.', ''));
-    const d = classNames.indexOf(bb[bb.length - 1].replace('.', ''));
-    return bb.length - aa.length || d - c;
-  }).map(key => (
-    styleObj[key].replace(/\s+/g, '').split(';').filter(c => c).map(c => c.split(':'))
-  ));
-  t.forEach((item, i) => {
-    if (!i) {
-      style += `${item.map(c => c.join(':')).join(';')};`;
-    } else {
-      const preItem = [];
-      for (let j = 0; j <= i - 1; j++) {
-        preItem.push(t[j].map(c => c[0]).join());
-      }
-      const newItem = item.map((c) => {
-        return c[1].indexOf('!important') >= 0 || preItem.indexOf(c[0]) === -1 ? c : null;
-      }).filter(c => c);
-      style += `${newItem.map(c => c.join(':')).join(';')};`;
+    const aArray = a.split('~');
+    const bArray = b.split('~');
+    const aa = aArray[0].replace(/\>/g, ' ').split(/\s+/).filter(c => c);
+    const bb = bArray[0].replace(/\>/g, ' ').split(/\s+/).filter(c => c);
+    if (bArray[0].indexOf('#') >= 0) {
+      return false;
     }
+    return aa.length - bb.length ||
+      parseFloat(aArray[1]) - parseFloat(bArray[1]) ||
+      parseFloat(aArray[2]) - parseFloat(bArray[2]);
+  }).map(key => (
+    styleObj[key].split(';').filter(c => c).map(c => c.split(':').map(d => d.trim()))
+  ));
+  t.forEach((item) => {
+    style += `${item.map(c => c.join(':')).join(';')};`;
   });
   return style;
 }
@@ -479,6 +511,7 @@ export function getDomCssRule(dom, isMobile, state) {
   dom.parentNode.appendChild(div);
   // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
   let style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
+  // 状态下的样式获取;
   if (state) {
     style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
