@@ -103,7 +103,7 @@ class EditorList extends Component {
     });
     const { cssName, css, mobileCss } = this.state;
     const newCssName = !this.classNameInDefaultDomClass(cssName, this.props.editorDefaultClassName)
-    ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
+      ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
     onChange({
       className: `${this.parentClassName} .${newCssName}`,
       parentClassName: this.parentClassName,
@@ -196,7 +196,7 @@ class EditorList extends Component {
       editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
     }
     const newCssName = !this.classNameInDefaultDomClass(cssName, this.props.editorDefaultClassName)
-    ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
+      ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
     onChange({
       className: `${this.parentClassName} .${newCssName}`,
       parentClassName: this.parentClassName,
@@ -277,7 +277,11 @@ class EditorList extends Component {
       parentClassNameLength,
       editorDefaultClassName,
     } = props;
-    const random = editorElem.getAttribute('data-editor_css_rand') || getRandomKey();
+    const currentEditorCssName = (editorElem.className || '').split(' ')
+      .filter(name => name.indexOf(editorDefaultClassName) >= 0)
+      .map(name => name.replace(`-${editorDefaultClassName}`, ''))[0];
+    const random = currentEditorCssName ||
+      editorElem.getAttribute('data-editor_css_rand') || getRandomKey();
     this.dataId = editorElem.getAttribute('data-editor_css_id')
       || `${editorDefaultClassName}-${random}`;
     editorElem.setAttribute('data-editor_css_id', this.dataId);

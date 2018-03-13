@@ -37,7 +37,7 @@ class Demo extends React.Component {
 
   render() {
     return (<div>
-      <div onClick={this.onClick} className="a c editor-user-css">
+      <div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css">
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
       </div>
