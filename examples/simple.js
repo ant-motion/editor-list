@@ -721,6 +721,29 @@ var RadioButton = __WEBPACK_IMPORTED_MODULE_5_antd_lib_radio___default.a.Button;
 
 var colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
 
+var colorLookup = {
+  aqua: 'rgb(0, 255, 255)',
+  lime: 'rgb(0, 255, 0)',
+  silver: 'rgb(192, 192, 192)',
+  black: 'rgb(0, 0, 0)',
+  maroon: 'rgb(128, 0, 0)',
+  teal: 'rgb(0, 128, 128)',
+  blue: 'rgb(0, 0, 255)',
+  navy: 'rgb(0, 0, 128)',
+  white: 'rgb(255, 255, 255)',
+  fuchsia: 'rgb(255, 0, 255)',
+  olive: 'rgb(128, 128, 0)',
+  yellow: 'rgb(255, 255, 0)',
+  orange: 'rgb(255, 165, 0)',
+  gray: 'rgb(128, 128, 128)',
+  purple: 'rgb(128, 0, 128)',
+  green: 'rgb(0, 128, 0)',
+  red: 'rgb(255, 0, 0)',
+  pink: 'rgb(255, 192, 203)',
+  cyan: 'rgb(0, 255, 255)',
+  transparent: 'rgba(255, 255, 255, 0)'
+};
+
 var mobileTitle = '@media screen and (max-width: 767px) {';
 
 var styleInUse = {
@@ -888,12 +911,20 @@ function convertShadowData(d) {
   if (!convertData(d)) {
     return {};
   }
-  var dataArray = d.replace(colorExp, '').split(/\s+/).filter(function (item) {
+  var dataArray = d.replace(/\,\s+/g, ',').split(/\s+/);
+  var color = void 0;
+  var noColor = dataArray.map(function (c) {
+    if (!c.replace(colorExp, '') || !colorLookup[c]) {
+      return c;
+    }
+    color = c;
+    return null;
+  }).filter(function (item) {
     return item;
   });
   var keys = ['x', 'y', 'blur', 'spread', 'inset'];
-  var value = { color: d.match(colorExp)[0] };
-  dataArray.forEach(function (data, i) {
+  var value = { color: color };
+  noColor.forEach(function (data, i) {
     value[keys[i]] = i === 3 ? convertData(data) : data;
   });
   return value;
@@ -1122,8 +1153,8 @@ function toCss(newData, currentData) {
 function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   var style = '';
   var styleObj = {};
-  function cssRulesForEach(item, rule) {
-    item.forEach(function (cssStyle) {
+  function cssRulesForEach(item, i, rule) {
+    item.forEach(function (cssStyle, j) {
       if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
         return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), rule);
       }
@@ -1136,64 +1167,59 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
           return doms.length;
         }).length;
         if (isCurrentDom) {
-          // style += cssStyle.style.cssText;
-          styleObj[select] = cssStyle.style.cssText;
+          var newSelectName = select + '~' + i + '~' + j;
+          styleObj[newSelectName] = cssStyle.style.cssText;
         }
       }
     });
   }
-  var classNames = dom.className.split(' ');
-  classNames.forEach(function (css) {
-    var str = '\\.(' + (state ? css + '\\:' + state : css + '$|' + css + ',') + ')';
-    var rule = new RegExp(str, 'g');
-    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(function (item) {
+  var forEachStyle = function forEachStyle(rule) {
+    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(function (item, i) {
       if (item.href) {
         var host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
         if (host !== dom.ownerDocument.location.host) {
           return;
         }
       }
-      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), rule);
+      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i, rule);
     });
+  };
+  var classNames = dom.className.split(' ');
+  classNames.forEach(function (css) {
+    var str = '\\.(' + (state ? css + '\\:' + state : css + '$|' + css + ',') + ')';
+    var rule = new RegExp(str, 'g');
+    forEachStyle(rule);
   });
+  var id = dom.id;
+  if (id) {
+    forEachStyle(new RegExp('\\#(' + (state ? id + '\\:' + state : id + '$|' + id + ',') + ')'));
+  }
   var t = Object.keys(styleObj).sort(function (a, b) {
-    var aa = a.replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
+    var aArray = a.split('~');
+    var bArray = b.split('~');
+    var aa = aArray[0].replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
       return c;
     });
-    var bb = b.replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
+    var bb = bArray[0].replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
       return c;
     });
-    var c = classNames.indexOf(aa[aa.length - 1].replace('.', ''));
-    var d = classNames.indexOf(bb[bb.length - 1].replace('.', ''));
-    return bb.length - aa.length || d - c;
+    if (bArray[0].indexOf('#') >= 0) {
+      return false;
+    }
+    return aa.length - bb.length || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]);
   }).map(function (key) {
-    return styleObj[key].replace(/\s+/g, '').split(';').filter(function (c) {
+    return styleObj[key].split(';').filter(function (c) {
       return c;
     }).map(function (c) {
-      return c.split(':');
+      return c.split(':').map(function (d) {
+        return d.trim();
+      });
     });
   });
-  t.forEach(function (item, i) {
-    if (!i) {
-      style += item.map(function (c) {
-        return c.join(':');
-      }).join(';') + ';';
-    } else {
-      var preItem = [];
-      for (var j = 0; j <= i - 1; j++) {
-        preItem.push(t[j].map(function (c) {
-          return c[0];
-        }).join());
-      }
-      var newItem = item.map(function (c) {
-        return c[1].indexOf('!important') >= 0 || preItem.indexOf(c[0]) === -1 ? c : null;
-      }).filter(function (c) {
-        return c;
-      });
-      style += newItem.map(function (c) {
-        return c.join(':');
-      }).join(';') + ';';
-    }
+  t.forEach(function (item) {
+    style += item.map(function (c) {
+      return c.join(':');
+    }).join(';') + ';';
   });
   return style;
 }
@@ -1215,6 +1241,7 @@ function getDomCssRule(dom, isMobile, state) {
   dom.parentNode.appendChild(div);
   // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
   var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
+  // 状态下的样式获取;
   if (state) {
     style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
   }
