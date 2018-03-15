@@ -82,7 +82,7 @@ React.render(<EditorList />, container);
 | editorDefaultClassName | string | editor_css| default editor class name|
 | parentClassNameCanUseTagName | bool |  true | parent can use tag name |
 | parentClassNameLength | number |  2 | parent class name length |
-
+| cssToDom    | bool | true | insert css into dom |
 
 ## License
 

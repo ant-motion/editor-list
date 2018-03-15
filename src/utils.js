@@ -280,54 +280,6 @@ function borderToCss(d, current) {
   }).filter(item => item).join('\n');
 }
 
-/*
- function borderToCss(d) {
- let border = {};
- if (!d.style && !d.radius) {
- return
- }
- Object.keys(d).forEach(key => {
- const data = d[key];
- if (!data) {
- return;
- }
- if (key === 'radius') {
- border.radius = typeof data === 'object' ?
- cssUnique(Object.keys(data).sort((a, b) => sort[a] > sort[b]).map(key => data[key]))
- .join(' ')
- : data;
- } else if (typeof data === 'string') {
- border.style = `${border.style || ''}${data} `;
- } else {
- Object.keys(data).forEach(cKey => {
- const cData = data[cKey];
- if (!cData) {
- return;
- }
- border[cKey] = `${border[cKey] || ''}${cData} `;
- })
- }
- });
- const borderArr = Object.keys(border);
- if (borderArr.length > 2 && borderArr.indexOf('style') >= 0) {
- borderArr.splice(borderArr.indexOf('style'), 1);
- const style = border.style;
- borderArr.forEach(key => {
- if (key !== 'radius') {
- border[key] = `${style}${border[key]}`;
- }
- });
- }
- return borderArr.map(key => {
- if (key === 'style') {
- return `border: ${border[key].trim()};`
- }
- return `border-${key}: ${border[key].trim()};`
- }).join('\n');
- }
- */
-
-
 function marginToCss(d, current) {
   // 合并 margin padding, 用一个样式。。toStyleString 样式太多;
   function getMargin(obj) {
@@ -444,19 +396,25 @@ function contrastParent(node, d) {
 }
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
-  dom, ownerDocument, isMobile, state) {
+  dom, ownerDocument, isMobile, state, className) {
   const rep = state === 'active' ? new RegExp(`\:${state}|\:hover`) : `:${state}`;
+  const classRep = new RegExp(`\\.(${state ?
+    `${className}\\:${state}` : `${className}`})`);
   item.forEach((cssStyle, j) => {
     if (cssStyle.conditionText &&
       mobileTitle.indexOf(cssStyle.conditionText) >= 0 &&
       isMobile) {
       return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i,
-        newStyleState, styleObj, dom, ownerDocument, isMobile, state);
+        newStyleState, styleObj, dom, ownerDocument, isMobile, state, className);
     }
     const select = cssStyle.selectorText;
     // 去除所有不是状态的
     if (select) {
       const currentDomStr = select.split(',').filter(str => {
+        if (className && !str.match(classRep)) {
+          return false;
+        }
+
         const surplus = state ? !str.match(rep)
           : newStyleState.map(key => {
             const newKey = `:${key}`;
@@ -464,6 +422,9 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           }).some(c => c);
         if (surplus) {
           return false;
+        }
+        if (className) {
+          return str.match(classRep) && str;
         }
         // 判断是不是状态样式
         return Array.prototype.slice.call(
@@ -481,22 +442,22 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
   });
 }
 
-function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
+function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, className) {
   let style = '';
   const styleObj = {};
   const newStyleState = styleState.map(key =>
     (state === 'active' ? key !== state || key !== 'hover' : key !== state)
     && key
   ).filter(c => c);
-  Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach((item, i) => {
+  Array.prototype.slice.call(ownerDocument.styleSheets || []).forEach((item, i) => {
     if (item.href) {
       const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
-      if (host !== dom.ownerDocument.location.host) {
+      if (host !== ownerDocument.location.host) {
         return;
       }
     }
     cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i,
-      newStyleState, styleObj, dom, ownerDocument, isMobile, state);
+      newStyleState, styleObj, dom, ownerDocument, isMobile, state, className);
   });
   Object.keys(styleObj).sort((a, b) => {
     const aArray = a.split('~');
@@ -536,6 +497,21 @@ export function getDomCssRule(dom, isMobile, state) {
   const styleObject = removeEmptyStyle(div.style);
   div.remove();
   return styleObject;
+}
+
+export function getClassNameCssRule(ownerDocument, className, state, isMobile, getObject) {
+  const div = ownerDocument.createElement('div');
+  const style = getCssPropertyForRuleToCss(null, ownerDocument,
+    isMobile, state, className);
+  div.style = style;
+  if (getObject) {
+    const styleObject = removeEmptyStyle(div.style);
+    div.remove();
+    return styleObject;
+  }
+  const styleString = div.style.cssText;
+  div.remove();
+  return styleString;
 }
 
 export function getParentClassName(dom, useTagName = true, length = 50) {

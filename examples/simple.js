@@ -58,7 +58,9 @@ class Demo extends React.Component {
       <style
         dangerouslySetInnerHTML={
           {
-            __html: `.jeply9mvwlk-editor_css{font-size: 32px}
+            __html: `.jeply9mvwlk-editor_css{
+              text-decoration: underline;
+            }
         .jeply9mvwlk-editor_css:focus{
           font-size: 64px;
         }

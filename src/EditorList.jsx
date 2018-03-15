@@ -23,6 +23,7 @@ import {
   removeMultiEmpty,
   removeEditClassName,
   getDomCssRule,
+  getClassNameCssRule,
   getParentClassName,
   mobileTitle,
 } from './utils';
@@ -252,14 +253,14 @@ class EditorList extends Component {
   }
 
   setDefaultState = (dom, props) => {
-    const { editorElem, editorDefaultClassName, isMobile } = props;
+    const { editorDefaultClassName, isMobile } = props;
     this.ownerDocument = dom.ownerDocument;
     const classState = 'default';
     const domStyle = this.getDefaultValue(dom, isMobile);
     const value = this.getDefaultData(domStyle[classState]);
     const className = dom.className;
-    this.defaultDomClass = editorElem.className ?
-      removeEditClassName(editorElem.className, editorDefaultClassName) : '';
+    this.defaultDomClass = dom.className ?
+      removeEditClassName(dom.className, editorDefaultClassName) : '';
     const cssName = this.getClassName(props);
     const inDomStyle = className.split(' ')
       .some(c => c === `${cssName}-${editorDefaultClassName}`);
@@ -273,7 +274,9 @@ class EditorList extends Component {
       this.defaultData = value;
     }
     const cssMobileOrWebName = isMobile ? 'mobileCss' : 'css';
-    const css = this.getDefaultCssData(inDomStyle, domStyle, cssMobileOrWebName);
+    const css = this.getDefaultCssData(dom, inDomStyle,
+      `${cssName}-${editorDefaultClassName}`,
+      isMobile, cssMobileOrWebName);
     this.currentData = {};
     if (this.props.useClassName) {
       Object.keys(css[cssMobileOrWebName]).forEach(key => {
@@ -314,7 +317,7 @@ class EditorList extends Component {
       parentClassNameCanUseTagName, parentClassNameLength);
     return this.props.useClassName ? className : '';
   };
-  getDefaultCssData = (inDomStyle, domStyle, cssName) => {
+  getDefaultCssData = (dom, inDomStyle, className, isMobile, cssName) => {
     const css = {
       css: {
         default: '',
@@ -330,8 +333,8 @@ class EditorList extends Component {
     };
     if (this.props.useClassName && inDomStyle) {
       Object.keys(css[cssName]).forEach(key => {
-        css[cssName][key] = toCss(this.getDefaultData(domStyle[key]),
-          this.getDefaultData(this.defaultDataStyle[key]));
+        css[cssName][key] = getClassNameCssRule(this.ownerDocument,
+          className, key !== 'default' && key, isMobile);
       });
     }
     return css;
