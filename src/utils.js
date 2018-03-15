@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'antd/lib/select';
 import Radio from 'antd/lib/radio';
+import specificity from 'specificity';
 
 const Option = Select.Option;
 
@@ -172,6 +173,9 @@ export function convertDefaultData(d) {
 }
 
 export function convertBorderData(d, width, isRadius) {
+  if (!d) {
+    return '';
+  }
   const dataIsColor = isColor(d);
   const dArray = !!dataIsColor ? dataIsColor : d.split(' ');
   if (dArray.length > 1) {
@@ -428,66 +432,80 @@ ${addCss}` : addCss;
   });
   return css;
 }
+// chrome state;
+const styleState = ['hover', 'focus', 'active', 'visited', 'focus-within'];
+function contrastParent(node, d) {
+  if (node === d) {
+    return true;
+  } else if (!node) {
+    return false;
+  }
+  return contrastParent(node.parentNode, d);
+}
+
+function cssRulesForEach(item, i, newStyleState, styleObj,
+  dom, ownerDocument, isMobile, state) {
+  const rep = state === 'active' ? new RegExp(`\:${state}|\:hover`) : `:${state}`;
+  item.forEach((cssStyle, j) => {
+    if (cssStyle.conditionText &&
+      mobileTitle.indexOf(cssStyle.conditionText) >= 0 &&
+      isMobile) {
+      return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i,
+        newStyleState, styleObj, dom, ownerDocument, isMobile, state);
+    }
+    const select = cssStyle.selectorText;
+    // 去除所有不是状态的
+    if (select) {
+      const currentDomStr = select.split(',').filter(str => {
+        const surplus = state ? !str.match(rep)
+          : newStyleState.map(key => {
+            const newKey = `:${key}`;
+            return str.indexOf(newKey) >= 0;
+          }).some(c => c);
+        if (surplus) {
+          return false;
+        }
+        // 判断是不是状态样式
+        return Array.prototype.slice.call(
+          ownerDocument.querySelectorAll(str.trim().replace(state ? rep : '', '')))
+          .some(d =>
+            // 继承的样式一并获取
+            contrastParent(dom, d)
+          ) ? str : null;
+      })[0];
+      if (currentDomStr) {
+        const newSelectName = `${currentDomStr}~${i}~${j}`;
+        styleObj[newSelectName] = cssStyle.style.cssText;
+      }
+    }
+  });
+}
 
 function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   let style = '';
   const styleObj = {};
-  function cssRulesForEach(item, i, rule) {
-    item.forEach((cssStyle, j) => {
-      if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
-        return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), rule);
+  const newStyleState = styleState.map(key =>
+    (state === 'active' ? key !== state || key !== 'hover' : key !== state)
+    && key
+  ).filter(c => c);
+  Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach((item, i) => {
+    if (item.href) {
+      const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
+      if (host !== dom.ownerDocument.location.host) {
+        return;
       }
-      const select = cssStyle.selectorText;
-      if (select && select.match(rule)) {
-        const isCurrentDom = select.split(',').filter(str => {
-          const doms = Array.prototype.slice.call(ownerDocument.querySelectorAll(str.split(':')[0]))
-            .filter(d => d === dom);
-          return doms.length;
-        }).length;
-        if (isCurrentDom) {
-          const newSelectName = `${select}~${i}~${j}`;
-          styleObj[newSelectName] = cssStyle.style.cssText;
-        }
-      }
-    });
-  }
-  const forEachStyle = (rule) => {
-    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach((item, i) => {
-      if (item.href) {
-        const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
-        if (host !== dom.ownerDocument.location.host) {
-          return;
-        }
-      }
-      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i, rule);
-    });
-  };
-  const classNames = dom.className.split(' ');
-  classNames.forEach(css => {
-    const str = `\\.(${state ? `${css}\\:${state}` : `${css}$|${css},`})`;
-    const rule = new RegExp(str, 'g');
-    forEachStyle(rule);
+    }
+    cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i,
+      newStyleState, styleObj, dom, ownerDocument, isMobile, state);
   });
-  const id = dom.id;
-  if (id) {
-    forEachStyle(new RegExp(`\\#(${state ? `${id}\\:${state}` : `${id}$|${id},`})`));
-  }
-  const t = Object.keys(styleObj).sort((a, b) => {
+  Object.keys(styleObj).sort((a, b) => {
     const aArray = a.split('~');
     const bArray = b.split('~');
-    const aa = aArray[0].replace(/\>/g, ' ').split(/\s+/).filter(c => c);
-    const bb = bArray[0].replace(/\>/g, ' ').split(/\s+/).filter(c => c);
-    if (bArray[0].indexOf('#') >= 0) {
-      return false;
-    }
-    return aa.length - bb.length ||
+    return specificity.compare(aArray[0], bArray[0]) === 1 ||
       parseFloat(aArray[1]) - parseFloat(bArray[1]) ||
       parseFloat(aArray[2]) - parseFloat(bArray[2]);
-  }).map(key => (
-    styleObj[key].split(';').filter(c => c).map(c => c.split(':').map(d => d.trim()))
-  ));
-  t.forEach((item) => {
-    style += `${item.map(c => c.join(':')).join(';')};`;
+  }).forEach(key => {
+    style += styleObj[key];
   });
   return style;
 }
@@ -497,7 +515,7 @@ const removeEmptyStyle = (s) => {
   Object.keys(style).forEach(key => {
     const value = style[key];
     if (parseFloat(key) || parseFloat(key) === 0 ||
-      value === 'auto' || value === 'initial' || value === 'normal'
+      value === 'initial' || value === 'normal'
       || !value) {
       delete style[key];
     }
@@ -510,22 +528,14 @@ export function getDomCssRule(dom, isMobile, state) {
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   dom.parentNode.appendChild(div);
   // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
-  let style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
-  // 状态下的样式获取;
-  if (state) {
-    style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
-  }
-  style += 'display:none;';
+  const style = `${getCssPropertyForRuleToCss(dom, ownerDocument,
+    isMobile, state)}display:none;`;
+  // 给 style 去重;
   div.style = `${style}${dom.style.cssText}`;
   // 获取当前 div 带 vh 的样式；
   const styleObject = removeEmptyStyle(div.style);
-  // 再取 className 样式；
-  div.style.cssText = 'display: none';
-  div.className = dom.className;
-  // 生成 div 所有样样；
-  const s = { ...getComputedStyle(div), ...styleObject };
   div.remove();
-  return s;
+  return styleObject;
 }
 
 export function getParentClassName(dom, useTagName = true, length = 50) {
@@ -556,8 +566,8 @@ export function currentScrollTop() {
 
 export function getParentNode(node, className) {
   const parent = node.parentNode;
-  const classNameArray = (parent.className || '').split(' ').filter(name => name === className);
-  if (classNameArray.length || parent.tagName.toLocaleLowerCase() === 'body') {
+  const classNameArray = (parent.className || '').split(' ').some(name => name === className);
+  if (classNameArray || parent.tagName.toLocaleLowerCase() === 'body') {
     return parent;
   }
   return getParentNode(parent, className);

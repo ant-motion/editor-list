@@ -36,7 +36,7 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div>
+    return (<div className="box">
       <div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css">
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
@@ -55,6 +55,17 @@ class Demo extends React.Component {
           onChange={this.onChange}
           isMobile={this.state.state === 'mobile'}
         />)}
+      <style
+        dangerouslySetInnerHTML={
+          {
+            __html: `.jeply9mvwlk-editor_css{font-size: 32px}
+        .jeply9mvwlk-editor_css:focus{
+          font-size: 64px;
+        }
+        `,
+          }
+        }
+      />
     </div>);
   }
 }
