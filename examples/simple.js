@@ -708,6 +708,9 @@ process.umask = function() { return 0; };
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_antd_lib_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_antd_lib_select__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_antd_lib_radio__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_antd_lib_radio___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_antd_lib_radio__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_specificity__ = __webpack_require__(517);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_specificity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_specificity__);
+
 
 
 
@@ -883,6 +886,9 @@ function convertDefaultData(d) {
 }
 
 function convertBorderData(d, width, isRadius) {
+  if (!d) {
+    return '';
+  }
   var dataIsColor = isColor(d);
   var dArray = !!dataIsColor ? dataIsColor : d.split(' ');
   if (dArray.length > 1) {
@@ -1149,77 +1155,75 @@ function toCss(newData, currentData) {
   });
   return css;
 }
+// chrome state;
+var styleState = ['hover', 'focus', 'active', 'visited', 'focus-within'];
+function contrastParent(node, d) {
+  if (node === d) {
+    return true;
+  } else if (!node) {
+    return false;
+  }
+  return contrastParent(node.parentNode, d);
+}
+
+function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, isMobile, state) {
+  var rep = state === 'active' ? new RegExp(':' + state + '|:hover') : ':' + state;
+  item.forEach(function (cssStyle, j) {
+    if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
+      return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i, newStyleState, styleObj, dom, ownerDocument, isMobile, state);
+    }
+    var select = cssStyle.selectorText;
+    // 去除所有不是状态的
+    if (select) {
+      var currentDomStr = select.split(',').filter(function (str) {
+        var surplus = state ? !str.match(rep) : newStyleState.map(function (key) {
+          var newKey = ':' + key;
+          return str.indexOf(newKey) >= 0;
+        }).some(function (c) {
+          return c;
+        });
+        if (surplus) {
+          return false;
+        }
+        // 判断是不是状态样式
+        return Array.prototype.slice.call(ownerDocument.querySelectorAll(str.trim().replace(state ? rep : '', ''))).some(function (d) {
+          return (
+            // 继承的样式一并获取
+            contrastParent(dom, d)
+          );
+        }) ? str : null;
+      })[0];
+      if (currentDomStr) {
+        var newSelectName = currentDomStr + '~' + i + '~' + j;
+        styleObj[newSelectName] = cssStyle.style.cssText;
+      }
+    }
+  });
+}
 
 function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) {
   var style = '';
   var styleObj = {};
-  function cssRulesForEach(item, i, rule) {
-    item.forEach(function (cssStyle, j) {
-      if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
-        return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), rule);
-      }
-      var select = cssStyle.selectorText;
-      if (select && select.match(rule)) {
-        var isCurrentDom = select.split(',').filter(function (str) {
-          var doms = Array.prototype.slice.call(ownerDocument.querySelectorAll(str.split(':')[0])).filter(function (d) {
-            return d === dom;
-          });
-          return doms.length;
-        }).length;
-        if (isCurrentDom) {
-          var newSelectName = select + '~' + i + '~' + j;
-          styleObj[newSelectName] = cssStyle.style.cssText;
-        }
-      }
-    });
-  }
-  var forEachStyle = function forEachStyle(rule) {
-    Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(function (item, i) {
-      if (item.href) {
-        var host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
-        if (host !== dom.ownerDocument.location.host) {
-          return;
-        }
-      }
-      cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i, rule);
-    });
-  };
-  var classNames = dom.className.split(' ');
-  classNames.forEach(function (css) {
-    var str = '\\.(' + (state ? css + '\\:' + state : css + '$|' + css + ',') + ')';
-    var rule = new RegExp(str, 'g');
-    forEachStyle(rule);
+  var newStyleState = styleState.map(function (key) {
+    return (state === 'active' ? key !== state || key !== 'hover' : key !== state) && key;
+  }).filter(function (c) {
+    return c;
   });
-  var id = dom.id;
-  if (id) {
-    forEachStyle(new RegExp('\\#(' + (state ? id + '\\:' + state : id + '$|' + id + ',') + ')'));
-  }
-  var t = Object.keys(styleObj).sort(function (a, b) {
+  Array.prototype.slice.call(dom.ownerDocument.styleSheets || []).forEach(function (item, i) {
+    if (item.href) {
+      var host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
+      if (host !== dom.ownerDocument.location.host) {
+        return;
+      }
+    }
+    cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i, newStyleState, styleObj, dom, ownerDocument, isMobile, state);
+  });
+  Object.keys(styleObj).sort(function (a, b) {
     var aArray = a.split('~');
     var bArray = b.split('~');
-    var aa = aArray[0].replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
-      return c;
-    });
-    var bb = bArray[0].replace(/\>/g, ' ').split(/\s+/).filter(function (c) {
-      return c;
-    });
-    if (bArray[0].indexOf('#') >= 0) {
-      return false;
-    }
-    return aa.length - bb.length || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]);
-  }).map(function (key) {
-    return styleObj[key].split(';').filter(function (c) {
-      return c;
-    }).map(function (c) {
-      return c.split(':').map(function (d) {
-        return d.trim();
-      });
-    });
-  });
-  t.forEach(function (item) {
-    style += item.map(function (c) {
-      return c.join(':');
-    }).join(';') + ';';
+    return __WEBPACK_IMPORTED_MODULE_6_specificity___default.a.compare(aArray[0], bArray[0]) === 1 || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]);
+  }).forEach(function (key) {
+    style += styleObj[key];
   });
   return style;
 }
@@ -1228,7 +1232,7 @@ var removeEmptyStyle = function removeEmptyStyle(s) {
   var style = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, s);
   Object.keys(style).forEach(function (key) {
     var value = style[key];
-    if (parseFloat(key) || parseFloat(key) === 0 || value === 'auto' || value === 'initial' || value === 'normal' || !value) {
+    if (parseFloat(key) || parseFloat(key) === 0 || value === 'initial' || value === 'normal' || !value) {
       delete style[key];
     }
   });
@@ -1240,22 +1244,13 @@ function getDomCssRule(dom, isMobile, state) {
   var div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   dom.parentNode.appendChild(div);
   // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
-  var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile);
-  // 状态下的样式获取;
-  if (state) {
-    style += getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state);
-  }
-  style += 'display:none;';
+  var style = getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state) + 'display:none;';
+  // 给 style 去重;
   div.style = '' + style + dom.style.cssText;
   // 获取当前 div 带 vh 的样式；
   var styleObject = removeEmptyStyle(div.style);
-  // 再取 className 样式；
-  div.style.cssText = 'display: none';
-  div.className = dom.className;
-  // 生成 div 所有样样；
-  var s = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, getComputedStyle(div), styleObject);
   div.remove();
-  return s;
+  return styleObject;
 }
 
 function getParentClassName(dom) {
@@ -1289,10 +1284,10 @@ function currentScrollTop() {
 
 function getParentNode(node, className) {
   var parent = node.parentNode;
-  var classNameArray = (parent.className || '').split(' ').filter(function (name) {
+  var classNameArray = (parent.className || '').split(' ').some(function (name) {
     return name === className;
   });
-  if (classNameArray.length || parent.tagName.toLocaleLowerCase() === 'body') {
+  if (classNameArray || parent.tagName.toLocaleLowerCase() === 'body') {
     return parent;
   }
   return getParentNode(parent, className);
@@ -1381,7 +1376,7 @@ var _each = __webpack_require__(396);
 
 var _each2 = _interopRequireDefault(_each);
 
-var _tinycolor = __webpack_require__(517);
+var _tinycolor = __webpack_require__(518);
 
 var _tinycolor2 = _interopRequireDefault(_tinycolor);
 
@@ -22283,7 +22278,7 @@ TweenOne.isTweenOne = true;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tween_functions__ = __webpack_require__(518);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tween_functions__ = __webpack_require__(519);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tween_functions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_tween_functions__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__(55);
 
@@ -22875,7 +22870,7 @@ var Demo = function (_React$Component) {
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
         'div',
-        null,
+        { className: 'box' },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
           { onClick: this.onClick, className: 'a c editor-user-css jeply9mvwlk-editor_css' },
@@ -22906,6 +22901,11 @@ var Demo = function (_React$Component) {
           editorElem: this.state.editorDom,
           onChange: this.onChange,
           isMobile: this.state.state === 'mobile'
+        }),
+        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('style', {
+          dangerouslySetInnerHTML: {
+            __html: '.jeply9mvwlk-editor_css{font-size: 32px}\n        .jeply9mvwlk-editor_css:focus{\n          font-size: 64px;\n        }\n        '
+          }
         })
       );
     }
@@ -26286,6 +26286,7 @@ var EditorList = function (_Component) {
     _this.select = {};
     _this.defaultDataStyle = {};
     _this.defaultData = {};
+    _this.currentData = {};
     _this.cssString = '';
     _this.state = _this.setDefaultState(props.editorElem, props);
     _this.setEditorElemClassName();
@@ -26340,7 +26341,8 @@ EditorList.propTypes = {
   isMobile: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool,
   parentClassNameCanUseTagName: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool,
   parentClassNameLength: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
-  editorDefaultClassName: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.string
+  editorDefaultClassName: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.string,
+  cssToDom: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool
 };
 EditorList.defaultProps = {
   className: 'editor-list',
@@ -26350,7 +26352,8 @@ EditorList.defaultProps = {
   isMobile: false,
   parentClassNameCanUseTagName: true,
   parentClassNameLength: 2,
-  editorDefaultClassName: 'editor_css'
+  editorDefaultClassName: 'editor_css',
+  cssToDom: true
 };
 
 var _initialiseProps = function _initialiseProps() {
@@ -26370,12 +26373,9 @@ var _initialiseProps = function _initialiseProps() {
   this.onChangeCssState = function (classState) {
     var _props = _this3.props,
         editorDefaultClassName = _props.editorDefaultClassName,
-        editorElem = _props.editorElem,
-        isMobile = _props.isMobile,
         onChange = _props.onChange;
 
-    var domStyle = _this3.getDefaultValue(editorElem, isMobile);
-    var value = _this3.getDefaultData(domStyle[classState]);
+    var value = _this3.currentData[classState];
     _this3.defaultData = _this3.getDefaultData(_this3.defaultDataStyle[classState]);
     _this3.setState({
       value: value,
@@ -26428,6 +26428,7 @@ var _initialiseProps = function _initialiseProps() {
       // 关联编辑器里的参性, 后期忧化;
       var domStyle = _this3.getDefaultValue(editorElem, isMobile);
       var value = _this3.getDefaultData(domStyle[classState]);
+      _this3.currentData[classState] = value;
       _this3.setState({
         value: value
       });
@@ -26467,6 +26468,7 @@ var _initialiseProps = function _initialiseProps() {
       });
       newCss = '  ' + (currentCss.join('\n  ') + '\n  ' + stateNewCss.join('\n  ')).trim();
     }
+    _this3.currentData[classState] = v;
     var state = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({
       value: v
     }, _this3.props.isMobile ? 'mobileCss' : 'css', __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, myCss, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, classState, newCss)));
@@ -26475,9 +26477,17 @@ var _initialiseProps = function _initialiseProps() {
 
   this.getDefaultValue = function (dom, isMobile) {
     var domStyle = {};
-    Object.keys(stateSort).forEach(function (key) {
-      domStyle[key] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["d" /* getDomCssRule */])(dom, isMobile, key === 'default' ? null : key);
-    });
+    if (_this3.props.useClassName) {
+      Object.keys(stateSort).forEach(function (key) {
+        if (key !== 'default') {
+          domStyle[key] = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, domStyle['default'], __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["d" /* getDomCssRule */])(dom, isMobile, key));
+        } else {
+          domStyle[key] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["d" /* getDomCssRule */])(dom, isMobile);
+        }
+      });
+    } else {
+      domStyle['default'] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["d" /* getDomCssRule */])(dom, isMobile);
+    }
     return domStyle;
   };
 
@@ -26490,14 +26500,16 @@ var _initialiseProps = function _initialiseProps() {
     var _props4 = _this3.props,
         editorElem = _props4.editorElem,
         onChange = _props4.onChange,
-        editorDefaultClassName = _props4.editorDefaultClassName;
+        editorDefaultClassName = _props4.editorDefaultClassName,
+        cssToDom = _props4.cssToDom;
 
-    if (cssName) {
-      _this3.setClassToDom();
-      _this3.setEditorElemClassName();
-    } else {
-      var str = css['default'];
-      editorElem.style.cssText = str.substring(str.indexOf('{') + 1, str.indexOf('}'));
+    if (cssToDom) {
+      if (cssName) {
+        _this3.setStyleToDom();
+        _this3.setEditorElemClassName();
+      } else {
+        editorElem.style.cssText = css['default'];
+      }
     }
     var newCssName = !_this3.classNameInDefaultDomClass(cssName, _this3.props.editorDefaultClassName) ? cssName + '-' + _this3.props.editorDefaultClassName : cssName;
     onChange({
@@ -26512,7 +26524,7 @@ var _initialiseProps = function _initialiseProps() {
     });
   };
 
-  this.setClassToDom = function () {
+  this.setStyleToDom = function () {
     var editorDefaultClassName = _this3.props.editorDefaultClassName;
     var _state6 = _this3.state,
         css = _state6.css,
@@ -26548,26 +26560,39 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.setDefaultState = function (dom, props) {
+    var editorElem = props.editorElem,
+        editorDefaultClassName = props.editorDefaultClassName,
+        isMobile = props.isMobile;
+
     _this3.ownerDocument = dom.ownerDocument;
     var classState = 'default';
-    var domStyle = _this3.getDefaultValue(dom, props.isMobile);
+    var domStyle = _this3.getDefaultValue(dom, isMobile);
     var value = _this3.getDefaultData(domStyle[classState]);
+    var className = dom.className;
+    _this3.defaultDomClass = editorElem.className ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["a" /* removeEditClassName */])(editorElem.className, editorDefaultClassName) : '';
     var cssName = _this3.getClassName(props);
-    var style = _this3.ownerDocument.querySelector('#' + _this3.dataId);
-    _this3.defaultDomClass = props.editorElem.className ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["a" /* removeEditClassName */])(props.editorElem.className, props.editorDefaultClassName) : '';
-    if (dom.getAttribute('data-editor_css_id') && style) {
-      var prev = style.previousElementSibling;
-      style.remove();
-      var defaultStyle = _this3.getDefaultValue(dom, props.isMobile);
-      _this3.defaultDataStyle = defaultStyle;
-      _this3.defaultData = _this3.getDefaultData(defaultStyle[classState]);
-      var noDefault = !_this3.classNameInDefaultDomClass(cssName, props.editorDefaultClassName);
-      _this3.ownerDocument[noDefault ? 'body' : 'head'].insertBefore(style, prev.nextSibling);
+    var inDomStyle = className.split(' ').some(function (c) {
+      return c === cssName + '-' + editorDefaultClassName;
+    });
+    if (inDomStyle) {
+      dom.className = _this3.defaultDomClass;
+      _this3.defaultDataStyle = _this3.getDefaultValue(dom, isMobile);
+      _this3.defaultData = _this3.getDefaultData(_this3.defaultDataStyle[classState]);
+      dom.className = className;
     } else {
       _this3.defaultDataStyle = domStyle;
       _this3.defaultData = value;
     }
-    var css = _this3.getDefaultCssData(cssName);
+    var cssMobileOrWebName = isMobile ? 'mobileCss' : 'css';
+    var css = _this3.getDefaultCssData(inDomStyle, domStyle, cssMobileOrWebName);
+    _this3.currentData = {};
+    if (_this3.props.useClassName) {
+      Object.keys(css[cssMobileOrWebName]).forEach(function (key) {
+        _this3.currentData[key] = _this3.getDefaultData(domStyle[key]);
+      });
+    } else {
+      _this3.currentData['default'] = value;
+    }
     return {
       value: value,
       css: css.css,
@@ -26599,7 +26624,7 @@ var _initialiseProps = function _initialiseProps() {
     return _this3.props.useClassName ? className : '';
   };
 
-  this.getDefaultCssData = function () {
+  this.getDefaultCssData = function (inDomStyle, domStyle, cssName) {
     var css = {
       css: {
         'default': '',
@@ -26613,31 +26638,10 @@ var _initialiseProps = function _initialiseProps() {
         focus: ''
       }
     };
-    if (_this3.props.useClassName) {
-      var setCssDataToDefault = function setCssDataToDefault(content, currentCss) {
-        content.split('}').filter(function (c) {
-          return c.trim();
-        }).forEach(function (c) {
-          var cssContentArray = c.split('{');
-          var state = cssContentArray[0].split(':')[1];
-          var key = state ? state.trim() : 'default';
-          var cssContent = cssContentArray[1].trim();
-          if (cssContent) {
-            currentCss[key] = '  ' + cssContent.split(';').filter(function (b) {
-              return b;
-            }).map(function (d) {
-              return d.trim() + ';';
-            }).join('\n  ').trim();
-          }
-        });
-      };
-      var defaultClass = _this3.ownerDocument.querySelector('#' + _this3.dataId);
-      if (defaultClass && defaultClass.tagName === 'STYLE') {
-        var content = defaultClass.innerText;
-        content.split(__WEBPACK_IMPORTED_MODULE_20__utils__["e" /* mobileTitle */]).forEach(function (item, i) {
-          setCssDataToDefault(item, css[i ? 'mobileCss' : 'css']);
-        });
-      }
+    if (_this3.props.useClassName && inDomStyle) {
+      Object.keys(css[cssName]).forEach(function (key) {
+        css[cssName][key] = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["b" /* toCss */])(_this3.getDefaultData(domStyle[key]), _this3.getDefaultData(_this3.defaultDataStyle[key]));
+      });
     }
     return css;
   };
@@ -26681,7 +26685,7 @@ var _initialiseProps = function _initialiseProps() {
         attachment: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["j" /* convertDefaultData */])(style.backgroundAttachment)
       },
       border: {
-        style: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["k" /* convertBorderData */])(style.borderStyle, style.borderWidth),
+        style: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["k" /* convertBorderData */])(style.borderStyle, style.borderWidth) || 'none',
         color: borderBool && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["k" /* convertBorderData */])(style.borderColor, style.borderWidth) || null,
         width: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["k" /* convertBorderData */])(style.borderWidth),
         radius: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_20__utils__["k" /* convertBorderData */])(style.borderRadius, null, true)
@@ -26760,7 +26764,7 @@ var _initialiseProps = function _initialiseProps() {
       showClassState: _this3.props.useClassName,
       value: stateValue,
       isMobile: _this3.props.isMobile
-    }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10__components_Font__["a" /* default */], { onChange: _this3.onChange, key: 'EditorFont', value: value.font }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__components_Interface__["a" /* default */], { onChange: _this3.onChange, key: 'EditorInterface', value: value['interface'] }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__components_BackGround__["a" /* default */], { onChange: _this3.onChange, key: 'EditorBackGround', value: value.background }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_12__components_Border__["a" /* default */], { onChange: _this3.onChange, key: 'EditorBorder', value: value.border }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_14__components_Margin__["a" /* default */], { onChange: _this3.onChange, key: 'EditorMargin', value: value.margin }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_15__components_Shadow__["a" /* default */], { onChange: _this3.onChange, key: 'EditorShadow', value: value.shadow }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_17__components_Transition__["a" /* default */], { onChange: _this3.onChange, key: 'EditorTransition', value: value.transition }), _this3.props.useClassName && __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_16__components_Css__["a" /* default */], {
+    }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10__components_Font__["a" /* default */], { onChange: _this3.onChange, key: 'EditorFont', value: value.font }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__components_Interface__["a" /* default */], { onChange: _this3.onChange, key: 'EditorInterface', value: value['interface'] }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__components_BackGround__["a" /* default */], { onChange: _this3.onChange, key: 'EditorBackGround', value: value.background }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_12__components_Border__["a" /* default */], { onChange: _this3.onChange, key: 'EditorBorder', value: value.border }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_14__components_Margin__["a" /* default */], { onChange: _this3.onChange, key: 'EditorMargin', value: value.margin }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_15__components_Shadow__["a" /* default */], { onChange: _this3.onChange, key: 'EditorShadow', value: value.shadow }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_17__components_Transition__["a" /* default */], { onChange: _this3.onChange, key: 'EditorTransition', value: value.transition }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_16__components_Css__["a" /* default */], {
       onChange: _this3.onCssChange,
       key: 'EditorCss',
       value: myCss[classState],
@@ -26790,9 +26794,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.classNameInDefaultDomClass = function (name, editorDefaultClass) {
-    return _this3.defaultDomClass.split(' ').filter(function (key) {
+    return _this3.defaultDomClass.split(' ').some(function (key) {
       return key === name || key === name + '-' + editorDefaultClass;
-    }).length;
+    });
   };
 };
 
@@ -31650,7 +31654,7 @@ var TransitionEvents = {
  * MIT Licensed
  */
 
-var type = __webpack_require__(519);
+var type = __webpack_require__(520);
 function FakeMap() {
   this._key = 'chai/deep-eql__' + Math.random() + Date.now();
 }
@@ -68177,6 +68181,244 @@ module.exports = function shallowEqual(objA, objB, compare, compareContext) {
 /* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var SPECIFICITY = (function() {
+	var calculate,
+		calculateSingle,
+		compare;
+
+	// Calculate the specificity for a selector by dividing it into simple selectors and counting them
+	calculate = function(input) {
+		var selectors,
+			selector,
+			i,
+			len,
+			results = [];
+
+		// Separate input by commas
+		selectors = input.split(',');
+
+		for (i = 0, len = selectors.length; i < len; i += 1) {
+			selector = selectors[i];
+			if (selector.length > 0) {
+				results.push(calculateSingle(selector));
+			}
+		}
+
+		return results;
+	};
+
+	/**
+	 * Calculates the specificity of CSS selectors
+	 * http://www.w3.org/TR/css3-selectors/#specificity
+	 *
+	 * Returns an object with the following properties:
+	 *  - selector: the input
+	 *  - specificity: e.g. 0,1,0,0
+	 *  - parts: array with details about each part of the selector that counts towards the specificity
+	 *  - specificityArray: e.g. [0, 1, 0, 0]
+	 */
+	calculateSingle = function(input) {
+		var selector = input,
+			findMatch,
+			typeCount = {
+				'a': 0,
+				'b': 0,
+				'c': 0
+			},
+			parts = [],
+			// The following regular expressions assume that selectors matching the preceding regular expressions have been removed
+			attributeRegex = /(\[[^\]]+\])/g,
+			idRegex = /(#[^\#\s\+>~\.\[:]+)/g,
+			classRegex = /(\.[^\s\+>~\.\[:]+)/g,
+			pseudoElementRegex = /(::[^\s\+>~\.\[:]+|:first-line|:first-letter|:before|:after)/gi,
+			// A regex for pseudo classes with brackets - :nth-child(), :nth-last-child(), :nth-of-type(), :nth-last-type(), :lang()
+			pseudoClassWithBracketsRegex = /(:[\w-]+\([^\)]*\))/gi,
+			// A regex for other pseudo classes, which don't have brackets
+			pseudoClassRegex = /(:[^\s\+>~\.\[:]+)/g,
+			elementRegex = /([^\s\+>~\.\[:]+)/g;
+
+		// Find matches for a regular expression in a string and push their details to parts
+		// Type is "a" for IDs, "b" for classes, attributes and pseudo-classes and "c" for elements and pseudo-elements
+		findMatch = function(regex, type) {
+			var matches, i, len, match, index, length;
+			if (regex.test(selector)) {
+				matches = selector.match(regex);
+				for (i = 0, len = matches.length; i < len; i += 1) {
+					typeCount[type] += 1;
+					match = matches[i];
+					index = selector.indexOf(match);
+					length = match.length;
+					parts.push({
+						selector: input.substr(index, length),
+						type: type,
+						index: index,
+						length: length
+					});
+					// Replace this simple selector with whitespace so it won't be counted in further simple selectors
+					selector = selector.replace(match, Array(length + 1).join(' '));
+				}
+			}
+		};
+
+		// Replace escaped characters with plain text, using the "A" character
+		// https://www.w3.org/TR/CSS21/syndata.html#characters
+		(function() {
+			var replaceWithPlainText = function(regex) {
+					var matches, i, len, match;
+					if (regex.test(selector)) {
+						matches = selector.match(regex);
+						for (i = 0, len = matches.length; i < len; i += 1) {
+							match = matches[i];
+							selector = selector.replace(match, Array(match.length + 1).join('A'));
+						}
+					}
+				},
+				// Matches a backslash followed by six hexadecimal digits followed by an optional single whitespace character
+				escapeHexadecimalRegex = /\\[0-9A-Fa-f]{6}\s?/g,
+				// Matches a backslash followed by fewer than six hexadecimal digits followed by a mandatory single whitespace character
+				escapeHexadecimalRegex2 = /\\[0-9A-Fa-f]{1,5}\s/g,
+				// Matches a backslash followed by any character
+				escapeSpecialCharacter = /\\./g;
+
+			replaceWithPlainText(escapeHexadecimalRegex);
+			replaceWithPlainText(escapeHexadecimalRegex2);
+			replaceWithPlainText(escapeSpecialCharacter);
+		}());
+
+		// Remove the negation psuedo-class (:not) but leave its argument because specificity is calculated on its argument
+		(function() {
+			var regex = /:not\(([^\)]*)\)/g;
+			if (regex.test(selector)) {
+				selector = selector.replace(regex, '     $1 ');
+			}
+		}());
+
+		// Remove anything after a left brace in case a user has pasted in a rule, not just a selector
+		(function() {
+			var regex = /{[^]*/gm,
+				matches, i, len, match;
+			if (regex.test(selector)) {
+				matches = selector.match(regex);
+				for (i = 0, len = matches.length; i < len; i += 1) {
+					match = matches[i];
+					selector = selector.replace(match, Array(match.length + 1).join(' '));
+				}
+			}
+		}());
+
+		// Add attribute selectors to parts collection (type b)
+		findMatch(attributeRegex, 'b');
+
+		// Add ID selectors to parts collection (type a)
+		findMatch(idRegex, 'a');
+
+		// Add class selectors to parts collection (type b)
+		findMatch(classRegex, 'b');
+
+		// Add pseudo-element selectors to parts collection (type c)
+		findMatch(pseudoElementRegex, 'c');
+
+		// Add pseudo-class selectors to parts collection (type b)
+		findMatch(pseudoClassWithBracketsRegex, 'b');
+		findMatch(pseudoClassRegex, 'b');
+
+		// Remove universal selector and separator characters
+		selector = selector.replace(/[\*\s\+>~]/g, ' ');
+
+		// Remove any stray dots or hashes which aren't attached to words
+		// These may be present if the user is live-editing this selector
+		selector = selector.replace(/[#\.]/g, ' ');
+
+		// The only things left should be element selectors (type c)
+		findMatch(elementRegex, 'c');
+
+		// Order the parts in the order they appear in the original selector
+		// This is neater for external apps to deal with
+		parts.sort(function(a, b) {
+			return a.index - b.index;
+		});
+
+		return {
+			selector: input,
+			specificity: '0,' + typeCount.a.toString() + ',' + typeCount.b.toString() + ',' + typeCount.c.toString(),
+			specificityArray: [0, typeCount.a, typeCount.b, typeCount.c],
+			parts: parts
+		};
+	};
+
+	/**
+	 * Compares two CSS selectors for specificity
+	 * Alternatively you can replace one of the CSS selectors with a specificity array
+	 *
+	 *  - it returns -1 if a has a lower specificity than b
+	 *  - it returns 1 if a has a higher specificity than b
+	 *  - it returns 0 if a has the same specificity than b
+	 */
+	compare = function(a, b) {
+		var aSpecificity,
+			bSpecificity,
+			i;
+
+		if (typeof a ==='string') {
+			if (a.indexOf(',') !== -1) {
+				throw 'Invalid CSS selector';
+			} else {
+				aSpecificity = calculateSingle(a)['specificityArray'];
+			}
+		} else if (Array.isArray(a)) {
+			if (a.filter(function(e) { return (typeof e === 'number'); }).length !== 4) {
+				throw 'Invalid specificity array';
+			} else {
+				aSpecificity = a;
+			}
+		} else {
+			throw 'Invalid CSS selector or specificity array';
+		}
+
+		if (typeof b ==='string') {
+			if (b.indexOf(',') !== -1) {
+				throw 'Invalid CSS selector';
+			} else {
+				bSpecificity = calculateSingle(b)['specificityArray'];
+			}
+		} else if (Array.isArray(b)) {
+			if (b.filter(function(e) { return (typeof e === 'number'); }).length !== 4) {
+				throw 'Invalid specificity array';
+			} else {
+				bSpecificity = b;
+			}
+		} else {
+			throw 'Invalid CSS selector or specificity array';
+		}
+
+		for (i = 0; i < 4; i += 1) {
+			if (aSpecificity[i] < bSpecificity[i]) {
+				return -1;
+			} else if (aSpecificity[i] > bSpecificity[i]) {
+				return 1;
+			}
+		}
+
+		return 0;
+	};
+
+	return {
+		calculate: calculate,
+		compare: compare
+	};
+}());
+
+// Export for Node JS
+if (true) {
+	exports.calculate = SPECIFICITY.calculate;
+	exports.compare = SPECIFICITY.compare;
+}
+
+
+/***/ }),
+/* 518 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var __WEBPACK_AMD_DEFINE_RESULT__;// TinyColor v1.4.1
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
@@ -69376,7 +69618,7 @@ else {
 
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69632,7 +69874,7 @@ module.exports = tweenFunctions;
 
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function (global, factory) {
@@ -70027,12 +70269,12 @@ return typeDetect;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)))
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(196);
 
 
 /***/ })
-],[520]);
+],[521]);
 //# sourceMappingURL=simple.js.map
