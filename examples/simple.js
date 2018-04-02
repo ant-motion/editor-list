@@ -27,6 +27,7 @@ class Demo extends React.Component {
   onSwicth = () => {
     this.setState({
       state: this.state.state === 'web' ? 'mobile' : 'web',
+      editorDom: null,
     });
   }
   closeEdit = () => {
@@ -63,6 +64,12 @@ class Demo extends React.Component {
             }
         .jeply9mvwlk-editor_css:focus{
           font-size: 64px;
+        }
+        @media screen and (max-width: 767px) {
+          .jeply9mvwlk-editor_css{
+            color: #00ff00;
+          }
+
         }
         `,
           }

@@ -152,7 +152,8 @@ export function getComputedStyle() {
 }
 
 export function convertData(d, b) {
-  const c = b ? (!d & typeof d !== 'number') || d.indexOf('none') >= 0 || d.indexOf('normal') >= 0 :
+  const c = b ? (!d & typeof d !== 'number') || d.indexOf('none') >= 0
+    || d.indexOf('normal') >= 0 :
     !d || d.indexOf('none') >= 0 || d === '0px' || d.indexOf('normal') >= 0;
   if (c) {
     return null;
@@ -396,7 +397,7 @@ function contrastParent(node, d) {
 }
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
-  dom, ownerDocument, isMobile, state, className) {
+  dom, ownerDocument, isMobile, state, className, onlyMobile, media) {
   const rep = state === 'active' ? new RegExp(`\:${state}|\:hover`) : `:${state}`;
   const classRep = new RegExp(`\\.(${state ?
     `${className}\\:${state}` : `${className}`})`);
@@ -405,7 +406,11 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
       mobileTitle.indexOf(cssStyle.conditionText) >= 0 &&
       isMobile) {
       return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i,
-        newStyleState, styleObj, dom, ownerDocument, isMobile, state, className);
+        newStyleState, styleObj, dom, ownerDocument, isMobile, state,
+        className, onlyMobile, 'moblie');
+    }
+    if (onlyMobile && !media) {
+      return null;
     }
     const select = cssStyle.selectorText;
     // 去除所有不是状态的
@@ -435,14 +440,14 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           ) ? str : null;
       })[0];
       if (currentDomStr) {
-        const newSelectName = `${currentDomStr}~${i}~${j}`;
+        const newSelectName = `${currentDomStr}~${i}~${j}${media ? `~${media}` : ''}`;
         styleObj[newSelectName] = cssStyle.style.cssText;
       }
     }
   });
 }
 
-function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, className) {
+function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, className, onlyMobile) {
   let style = '';
   const styleObj = {};
   const newStyleState = styleState.map(key =>
@@ -457,14 +462,15 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
       }
     }
     cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i,
-      newStyleState, styleObj, dom, ownerDocument, isMobile, state, className);
+      newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile);
   });
   Object.keys(styleObj).sort((a, b) => {
     const aArray = a.split('~');
     const bArray = b.split('~');
     return specificity.compare(aArray[0], bArray[0]) === 1 ||
       parseFloat(aArray[1]) - parseFloat(bArray[1]) ||
-      parseFloat(aArray[2]) - parseFloat(bArray[2]);
+      parseFloat(aArray[2]) - parseFloat(bArray[2]) ||
+      aArray.length - bArray.length;
   }).forEach(key => {
     style += styleObj[key];
   });
@@ -502,7 +508,7 @@ export function getDomCssRule(dom, isMobile, state) {
 export function getClassNameCssRule(ownerDocument, className, state, isMobile, getObject) {
   const div = ownerDocument.createElement('div');
   const style = getCssPropertyForRuleToCss(null, ownerDocument,
-    isMobile, state, className);
+    isMobile, state, className, isMobile);
   div.style = style;
   if (getObject) {
     const styleObject = removeEmptyStyle(div.style);

@@ -265,8 +265,8 @@ class EditorList extends Component {
     const inDomStyle = className.split(' ')
       .some(c => c === `${cssName}-${editorDefaultClassName}`);
     if (inDomStyle) {
-      dom.className = this.defaultDomClass;
-      this.defaultDataStyle = this.getDefaultValue(dom, isMobile);
+      dom.className = isMobile ? className : this.defaultDomClass;
+      this.defaultDataStyle = this.getDefaultValue(dom);
       this.defaultData = this.getDefaultData(this.defaultDataStyle[classState]);
       dom.className = className;
     } else {
@@ -275,8 +275,7 @@ class EditorList extends Component {
     }
     const cssMobileOrWebName = isMobile ? 'mobileCss' : 'css';
     const css = this.getDefaultCssData(dom, inDomStyle,
-      `${cssName}-${editorDefaultClassName}`,
-      isMobile, cssMobileOrWebName);
+      `${cssName}-${editorDefaultClassName}`);
     this.currentData = {};
     if (this.props.useClassName) {
       Object.keys(css[cssMobileOrWebName]).forEach(key => {
@@ -317,7 +316,7 @@ class EditorList extends Component {
       parentClassNameCanUseTagName, parentClassNameLength);
     return this.props.useClassName ? className : '';
   };
-  getDefaultCssData = (dom, inDomStyle, className, isMobile, cssName) => {
+  getDefaultCssData = (dom, inDomStyle, className) => {
     const css = {
       css: {
         default: '',
@@ -332,9 +331,11 @@ class EditorList extends Component {
       },
     };
     if (this.props.useClassName && inDomStyle) {
-      Object.keys(css[cssName]).forEach(key => {
-        css[cssName][key] = getClassNameCssRule(this.ownerDocument,
-          className, key !== 'default' && key, isMobile);
+      Object.keys(css).forEach(name => {
+        Object.keys(css[name]).forEach(key => {
+          css[name][key] = getClassNameCssRule(this.ownerDocument,
+            className, key !== 'default' && key, name === 'mobileCss');
+        });
       });
     }
     return css;
