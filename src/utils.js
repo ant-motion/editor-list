@@ -32,6 +32,50 @@ const colorLookup = {
   transparent: 'rgba(255, 255, 255, 0)',
 };
 
+const classInherited = [
+  'azimuth',
+  'border-collapse',
+  'border-spacing',
+  'caption-side',
+  'color',
+  'cursor',
+  'direction',
+  'elevation',
+  'empty-cells',
+  'font-family',
+  'font-size',
+  'font-style',
+  'font-variant',
+  'font-weight',
+  'font',
+  'letter-spacing',
+  'line-height',
+  'list-style-image',
+  'list-style-position',
+  'list-style-type',
+  'list-style',
+  'orphans',
+  'pitch-range',
+  'pitch',
+  'quotes',
+  'richness',
+  'speak-header',
+  'speak-numeral',
+  'speak-punctuation',
+  'speak',
+  'speech-rate',
+  'stress',
+  'text-align',
+  'text-indent',
+  'text-transform',
+  'visibility',
+  'voice-family',
+  'volume',
+  'white-space',
+  'widows',
+  'word-spacing',
+];
+
 export const mobileTitle = '@media screen and (max-width: 767px) {';
 
 export const styleInUse = {
@@ -403,7 +447,8 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
     `${className}\\:${state}` : `${className}`})`);
   item.forEach((cssStyle, j) => {
     if (cssStyle.conditionText &&
-      mobileTitle.indexOf(cssStyle.conditionText) >= 0 &&
+      cssStyle.media &&
+      cssStyle.cssRules &&
       isMobile) {
       return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i,
         newStyleState, styleObj, dom, ownerDocument, isMobile, state,
@@ -415,6 +460,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
     const select = cssStyle.selectorText;
     // 去除所有不是状态的
     if (select) {
+      let cssText = cssStyle.style.cssText;
       const currentDomStr = select.split(',').filter(str => {
         if (className && !str.match(classRep)) {
           return false;
@@ -432,17 +478,26 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           return str.match(classRep) && str;
         }
         // 判断是不是状态样式
-        return Array.prototype.slice.call(
-          ownerDocument.querySelectorAll(str.trim().replace(state ? rep : '', '')))
-          .some(d =>
-            // 继承的样式一并获取
-            contrastParent(dom, d)
-          ) ? str : null;
+        const childrenArray = Array.prototype.slice.call(ownerDocument.querySelectorAll(
+          str.trim().replace(state ? rep : '', ''))
+        );
+        childrenArray.forEach(d => {
+          const isDom = contrastParent(dom, d);
+          if (isDom && d !== dom) {
+            // 获取继承的样式
+            cssText = cssText.split(';').filter(css => {
+              const cssName = css.split(':')[0].trim();
+              return classInherited.indexOf(cssName) >= 0;
+            }).join(';');
+          }
+        });
+        // some attached value: Unexpected assignment within ConditionalExpression;
+        return childrenArray.some(d => contrastParent(dom, d)) ? str : null;
       })[0];
       if (currentDomStr) {
         const newSelectName = `${currentDomStr}~${i}${cj ?
           `~${cj}` : ''}~${j}${media ? `~${media}` : ''}`;
-        styleObj[newSelectName] = cssStyle.style.cssText;
+        styleObj[newSelectName] = cssText;
       }
     }
   });
