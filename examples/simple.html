@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-editor-list@1.0.14</title>
+  <title>simple.js - example - rc-editor-list@1.0.15</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-editor-list@1.0.14</h1>
+      <h1>rc-editor-list@1.0.15</h1>
 
       <p>editor-list ui component for react</p>
     </div>
@@ -298,6 +298,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   onSwicth = () =&gt; {
     <span class="hljs-keyword">this</span>.setState({
       state: <span class="hljs-keyword">this</span>.state.state === <span class="hljs-string">'web'</span> ? <span class="hljs-string">'mobile'</span> : <span class="hljs-string">'web'</span>,
+      editorDom: <span class="hljs-literal">null</span>,
     });
   }
   closeEdit = () =&gt; {
@@ -334,6 +335,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
             }
         .jeply9mvwlk-editor_css:focus{
           font-size: 64px;
+        }
+        @media screen and (max-width: 767px) {
+          .jeply9mvwlk-editor_css{
+            color: #00ff00;
+          }
+
         }
         `</span>,
           }
