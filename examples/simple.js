@@ -1120,12 +1120,12 @@ function contrastParent(node, d) {
   return contrastParent(node.parentNode, d);
 }
 
-function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile, media) {
+function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
   var rep = state === 'active' ? new RegExp(':' + state + '|:hover') : ':' + state;
   var classRep = new RegExp('\\.(' + (state ? className + '\\:' + state : '' + className) + ')');
   item.forEach(function (cssStyle, j) {
     if (cssStyle.conditionText && mobileTitle.indexOf(cssStyle.conditionText) >= 0 && isMobile) {
-      return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i, newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile, 'moblie');
+      return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i, newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile, 'moblie', j);
     }
     if (onlyMobile && !media) {
       return null;
@@ -1159,7 +1159,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, i
         }) ? str : null;
       })[0];
       if (currentDomStr) {
-        var newSelectName = currentDomStr + '~' + i + '~' + j + (media ? '~' + media : '');
+        var newSelectName = currentDomStr + '~' + i + (cj ? '~' + cj : '') + '~' + j + (media ? '~' + media : '');
         styleObj[newSelectName] = cssStyle.style.cssText;
       }
     }
@@ -1186,7 +1186,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   Object.keys(styleObj).sort(function (a, b) {
     var aArray = a.split('~');
     var bArray = b.split('~');
-    return __WEBPACK_IMPORTED_MODULE_6_specificity___default.a.compare(aArray[0], bArray[0]) === 1 || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length;
+    return __WEBPACK_IMPORTED_MODULE_6_specificity___default.a.compare(aArray[0], bArray[0]) === 1 || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length || parseFloat(aArray[3]) - parseFloat(bArray[3]);
   }).forEach(function (key) {
     style += styleObj[key];
   });
@@ -22847,7 +22847,7 @@ var Demo = function (_React$Component) {
         }),
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('style', {
           dangerouslySetInnerHTML: {
-            __html: '.jeply9mvwlk-editor_css{\n              text-decoration: underline;\n            }\n        .jeply9mvwlk-editor_css:focus{\n          font-size: 64px;\n        }\n        @media screen and (max-width: 767px) {\n          .jeply9mvwlk-editor_css{\n            color: #00ff00;\n          }\n\n        }\n        '
+            __html: '.jeply9mvwlk-editor_css{\n              text-decoration: underline;\n            }\n        .jeply9mvwlk-editor_css:focus{\n          font-size: 64px;\n        }\n        @media screen and (max-width: 767px) {\n          .jeply9mvwlk-editor_css{\n            color: #00ff00;\n          }\n        }\n        '
           }
         })
       );
