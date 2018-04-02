@@ -397,7 +397,7 @@ function contrastParent(node, d) {
 }
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
-  dom, ownerDocument, isMobile, state, className, onlyMobile, media) {
+  dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
   const rep = state === 'active' ? new RegExp(`\:${state}|\:hover`) : `:${state}`;
   const classRep = new RegExp(`\\.(${state ?
     `${className}\\:${state}` : `${className}`})`);
@@ -407,7 +407,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
       isMobile) {
       return cssRulesForEach(Array.prototype.slice.call(cssStyle.cssRules || []), i,
         newStyleState, styleObj, dom, ownerDocument, isMobile, state,
-        className, onlyMobile, 'moblie');
+        className, onlyMobile, 'moblie', j);
     }
     if (onlyMobile && !media) {
       return null;
@@ -440,7 +440,8 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           ) ? str : null;
       })[0];
       if (currentDomStr) {
-        const newSelectName = `${currentDomStr}~${i}~${j}${media ? `~${media}` : ''}`;
+        const newSelectName = `${currentDomStr}~${i}${cj ?
+          `~${cj}` : ''}~${j}${media ? `~${media}` : ''}`;
         styleObj[newSelectName] = cssStyle.style.cssText;
       }
     }
@@ -470,7 +471,8 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
     return specificity.compare(aArray[0], bArray[0]) === 1 ||
       parseFloat(aArray[1]) - parseFloat(bArray[1]) ||
       parseFloat(aArray[2]) - parseFloat(bArray[2]) ||
-      aArray.length - bArray.length;
+      aArray.length - bArray.length ||
+      parseFloat(aArray[3]) - parseFloat(bArray[3]);
   }).forEach(key => {
     style += styleObj[key];
   });

@@ -69,7 +69,6 @@ class Demo extends React.Component {
           .jeply9mvwlk-editor_css{
             color: #00ff00;
           }
-
         }
         `,
           }
