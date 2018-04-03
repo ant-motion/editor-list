@@ -1162,7 +1162,8 @@ function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, i
             cssText = cssText.split(';').filter(function (css) {
               var cssName = css.split(':')[0].trim();
               return classInherited.indexOf(cssName) >= 0;
-            }).join(';');
+            }).join(';') + ';';
+            cssText = cssText ? cssText + ';' : '';
           }
         });
         // some attached value: Unexpected assignment within ConditionalExpression;
