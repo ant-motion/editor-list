@@ -485,10 +485,11 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           const isDom = contrastParent(dom, d);
           if (isDom && d !== dom) {
             // 获取继承的样式
-            cssText = cssText.split(';').filter(css => {
+            cssText = `${cssText.split(';').filter(css => {
               const cssName = css.split(':')[0].trim();
               return classInherited.indexOf(cssName) >= 0;
-            }).join(';');
+            }).join(';')};`;
+            cssText = cssText ? `${cssText};` : '';
           }
         });
         // some attached value: Unexpected assignment within ConditionalExpression;
