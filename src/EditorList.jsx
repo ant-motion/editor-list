@@ -60,25 +60,27 @@ class EditorList extends Component {
   constructor(props) {
     super(props);
     this.select = {};
-    this.defaultDataStyle = {};
+    this.defaultValue = {};
     this.defaultData = {};
     this.currentData = {};
     this.cssString = '';
     this.state = this.setDefaultState(props.editorElem, props);
+
     this.setEditorElemClassName();
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.editorElem !== nextProps.editorElem) {
-      this.defaultDataStyle = {};
+      this.defaultValue = {};
       this.defaultData = {};
       this.setState(this.setDefaultState(nextProps.editorElem, nextProps), () => {
         this.setEditorElemClassName();
       });
     }
     if (this.props.isMobile !== nextProps.isMobile) {
-      const domStyle = this.getDefaultValue(nextProps.editorElem, nextProps.isMobile);
-      this.defaultDataStyle = domStyle;
+      const domStyle = this.getDefaultValue(nextProps.editorElem,
+        nextProps.isMobile, this.state.classState);
+      this.defaultValue = domStyle;
       const value = this.getDefaultData(domStyle[this.state.classState]);
       this.defaultData = value;
       this.setState({ value });
@@ -97,9 +99,15 @@ class EditorList extends Component {
   }
 
   onChangeCssState = (classState) => {
-    const { editorDefaultClassName, onChange } = this.props;
+    const { editorDefaultClassName, onChange, isMobile, editorElem } = this.props;
+    this.defaultValue[classState] = this.defaultValue[classState] ||
+      this.getDefaultValue(editorElem, isMobile, classState);
+    this.currentData[classState] = this.currentData[classState] ||
+      this.getDefaultData(this.defaultValue[classState]);
     const value = this.currentData[classState];
-    this.defaultData = this.getDefaultData(this.defaultDataStyle[classState]);
+
+    this.defaultData = this.getDefaultData(this.defaultValue[classState]);
+
     this.setState({
       value,
       classState,
@@ -142,8 +150,8 @@ class EditorList extends Component {
     }, () => {
       this.setCssToDom();
       // 关联编辑器里的参性, 后期忧化;
-      const domStyle = this.getDefaultValue(editorElem, isMobile);
-      const value = this.getDefaultData(domStyle[classState]);
+      const domStyle = this.getDefaultValue(editorElem, isMobile, classState);
+      const value = this.getDefaultData(domStyle);
       this.currentData[classState] = value;
       this.setState({
         value,
@@ -182,18 +190,16 @@ class EditorList extends Component {
     this.setState(state, this.setCssToDom);
   };
 
-  getDefaultValue = (dom, isMobile) => {
-    const domStyle = {};
+  getDefaultValue = (dom, isMobile, state) => {
+    let domStyle = {};
     if (this.props.useClassName) {
-      Object.keys(stateSort).forEach(key => {
-        if (key !== 'default') {
-          domStyle[key] = { ...domStyle.default, ...getDomCssRule(dom, isMobile, key) };
-        } else {
-          domStyle[key] = getDomCssRule(dom, isMobile);
-        }
-      });
+      if (state !== 'default') {
+        domStyle = { ...this.defaultValue.default, ...getDomCssRule(dom, isMobile, state) };
+      } else {
+        domStyle = getDomCssRule(dom, isMobile);
+      }
     } else {
-      domStyle.default = getDomCssRule(dom, isMobile);
+      domStyle = getDomCssRule(dom, isMobile);
     }
     return domStyle;
   }
@@ -256,8 +262,8 @@ class EditorList extends Component {
     const { editorDefaultClassName, isMobile } = props;
     this.ownerDocument = dom.ownerDocument;
     const classState = 'default';
-    const domStyle = this.getDefaultValue(dom, isMobile);
-    const value = this.getDefaultData(domStyle[classState]);
+    const domStyle = this.getDefaultValue(dom, isMobile, classState);
+    const value = this.getDefaultData(domStyle);
     const className = dom.className;
     this.defaultDomClass = dom.className ?
       removeEditClassName(dom.className, editorDefaultClassName) : '';
@@ -266,21 +272,18 @@ class EditorList extends Component {
       .some(c => c === `${cssName}-${editorDefaultClassName}`);
     if (inDomStyle) {
       dom.className = isMobile ? className : this.defaultDomClass;
-      this.defaultDataStyle = this.getDefaultValue(dom);
-      this.defaultData = this.getDefaultData(this.defaultDataStyle[classState]);
+      this.defaultValue[classState] = this.getDefaultValue(dom, false, classState);
+      this.defaultData = this.getDefaultData(this.defaultValue[classState]);
       dom.className = className;
     } else {
-      this.defaultDataStyle = domStyle;
+      this.defaultValue[classState] = domStyle;
       this.defaultData = value;
     }
-    const cssMobileOrWebName = isMobile ? 'mobileCss' : 'css';
     const css = this.getDefaultCssData(dom, inDomStyle,
       `${cssName}-${editorDefaultClassName}`);
     this.currentData = {};
     if (this.props.useClassName) {
-      Object.keys(css[cssMobileOrWebName]).forEach(key => {
-        this.currentData[key] = this.getDefaultData(domStyle[key]);
-      });
+      this.currentData[classState] = this.getDefaultData(domStyle);
     } else {
       this.currentData.default = value;
     }
@@ -342,6 +345,9 @@ class EditorList extends Component {
   }
 
   getDefaultData = (style) => {
+    if (!style) {
+      return null;
+    }
     const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
     return {
       state: {
