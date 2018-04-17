@@ -488,7 +488,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
             cssText = `${cssText.split(';').filter(css => {
               const cssName = css.split(':')[0].trim();
               return classInherited.indexOf(cssName) >= 0;
-            }).join(';')};`;
+            }).join(';')}`;
             cssText = cssText ? `${cssText};` : '';
           }
         });
@@ -524,7 +524,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   Object.keys(styleObj).sort((a, b) => {
     const aArray = a.split('~');
     const bArray = b.split('~');
-    return specificity.compare(aArray[0], bArray[0]) === 1 ||
+    return specificity.compare(aArray[0], bArray[0]) ||
       parseFloat(aArray[1]) - parseFloat(bArray[1]) ||
       parseFloat(aArray[2]) - parseFloat(bArray[2]) ||
       aArray.length - bArray.length ||

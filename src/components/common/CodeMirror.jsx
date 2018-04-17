@@ -17,7 +17,7 @@ export default class RcCodeMirror extends React.Component {
   };
 
   static defaultProps = {
-    option: {},
+    options: {},
     value: '',
     onChange: noop,
     onKeyDown: noop,
