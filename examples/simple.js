@@ -1159,10 +1159,10 @@ function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, i
           var isDom = contrastParent(dom, d);
           if (isDom && d !== dom) {
             // 获取继承的样式
-            cssText = cssText.split(';').filter(function (css) {
+            cssText = '' + cssText.split(';').filter(function (css) {
               var cssName = css.split(':')[0].trim();
               return classInherited.indexOf(cssName) >= 0;
-            }).join(';') + ';';
+            }).join(';');
             cssText = cssText ? cssText + ';' : '';
           }
         });
@@ -1199,7 +1199,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   Object.keys(styleObj).sort(function (a, b) {
     var aArray = a.split('~');
     var bArray = b.split('~');
-    return __WEBPACK_IMPORTED_MODULE_6_specificity___default.a.compare(aArray[0], bArray[0]) === 1 || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length || parseFloat(aArray[3]) - parseFloat(bArray[3]);
+    return __WEBPACK_IMPORTED_MODULE_6_specificity___default.a.compare(aArray[0], bArray[0]) || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length || parseFloat(aArray[3]) - parseFloat(bArray[3]);
   }).forEach(function (key) {
     style += styleObj[key];
   });
@@ -29128,7 +29128,7 @@ RcCodeMirror.propTypes = {
   onKeyUp: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.func
 };
 RcCodeMirror.defaultProps = {
-  option: {},
+  options: {},
   value: '',
   onChange: noop,
   onKeyDown: noop,
