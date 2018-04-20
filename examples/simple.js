@@ -1189,7 +1189,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   });
   Array.prototype.slice.call(ownerDocument.styleSheets || []).forEach(function (item, i) {
     if (item.href) {
-      var host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
+      var host = item.href.match(/(:\/\/)(.+?)\//i)[2];
       if (host !== ownerDocument.location.host) {
         return;
       }
