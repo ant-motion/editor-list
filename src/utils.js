@@ -513,7 +513,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   ).filter(c => c);
   Array.prototype.slice.call(ownerDocument.styleSheets || []).forEach((item, i) => {
     if (item.href) {
-      const host = item.href.match(/^(\w+:\/\/)?([^\/]+)/i)[2];
+      const host = item.href.match(/(:\/\/)(.+?)\//i)[2];
       if (host !== ownerDocument.location.host) {
         return;
       }
