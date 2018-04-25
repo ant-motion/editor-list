@@ -1,6 +1,6 @@
 {
   "name": "rc-editor-list",
-  "version": "1.0.21",
+  "version": "1.1.0",
   "description": "editor-list ui component for react",
   "keywords": [
     "react",
@@ -51,7 +51,7 @@
   "devDependencies": {
     "expect.js": "0.3.x",
     "pre-commit": "1.x",
-    "rc-tools": "6.x",
+    "rc-tools": "7.x",
     "react": "16.x",
     "react-addons-test-utils": "15.x",
     "react-dom": "16.x"

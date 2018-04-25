@@ -210,10 +210,12 @@ class EditorList extends Component {
     if (cssToDom) {
       if (cssName) {
         this.setStyleToDom();
-        this.setEditorElemClassName();
       } else {
         editorElem.style.cssText = css.default;
       }
+    }
+    if (cssName) {
+      this.setEditorElemClassName();
     }
     const newCssName = !this.classNameInDefaultDomClass(cssName, this.props.editorDefaultClassName)
       ? `${cssName}-${this.props.editorDefaultClassName}` : cssName;
@@ -334,6 +336,7 @@ class EditorList extends Component {
       },
     };
     if (this.props.useClassName && inDomStyle) {
+      // 样式叠加型式。
       Object.keys(css).forEach(name => {
         Object.keys(css[name]).forEach(key => {
           css[name][key] = getClassNameCssRule(this.ownerDocument,
