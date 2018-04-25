@@ -1,7 +1,7 @@
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 /* stylelint-disable at-rule-no-unknown */
 @font-face {
   font-family: "Monospaced Number";
@@ -2162,7 +2162,7 @@ mark {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-row {
   position: relative;
   margin-left: 0;
@@ -5462,7 +5462,7 @@ mark {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-select {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -6013,7 +6013,7 @@ mark {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-input {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
@@ -6352,7 +6352,7 @@ textarea.ant-input {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-input-number {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
@@ -6603,7 +6603,7 @@ textarea.ant-input-number {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-radio-group {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -6863,7 +6863,7 @@ span.ant-radio + * {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-tooltip {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -6990,7 +6990,7 @@ span.ant-radio + * {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-switch {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -7137,7 +7137,7 @@ span.ant-radio + * {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-dropdown {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -7404,7 +7404,7 @@ span.ant-radio + * {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-collapse {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -7514,7 +7514,7 @@ span.ant-radio + * {
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-menu {
   font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -7813,17 +7813,14 @@ span.ant-radio + * {
   border-bottom: 2px solid #1890ff;
   color: #1890ff;
 }
-.ant-menu-horizontal > .ant-menu-item > a,
-.ant-menu-horizontal > .ant-menu-submenu > a {
+.ant-menu-horizontal > .ant-menu-item > a {
   display: block;
   color: rgba(0, 0, 0, 0.65);
 }
-.ant-menu-horizontal > .ant-menu-item > a:hover,
-.ant-menu-horizontal > .ant-menu-submenu > a:hover {
+.ant-menu-horizontal > .ant-menu-item > a:hover {
   color: #1890ff;
 }
-.ant-menu-horizontal > .ant-menu-item > a:before,
-.ant-menu-horizontal > .ant-menu-submenu > a:before {
+.ant-menu-horizontal > .ant-menu-item > a:before {
   bottom: -2px;
 }
 .ant-menu-horizontal:after {
@@ -8002,6 +7999,12 @@ span.ant-radio + * {
   color: rgba(0, 0, 0, 0.25) !important;
   cursor: not-allowed;
 }
+.ant-menu-item-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:before,
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:before,
+.ant-menu-item-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:after,
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:after {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
 .ant-menu-dark,
 .ant-menu-dark .ant-menu-sub {
   color: rgba(255, 255, 255, 0.65);
@@ -8032,6 +8035,9 @@ span.ant-radio + * {
 .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
   border-color: #001529;
   border-bottom: 0;
+}
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item > a:before {
+  bottom: 0;
 }
 .ant-menu-dark .ant-menu-item,
 .ant-menu-dark .ant-menu-item-group-title,
@@ -8144,6 +8150,12 @@ span.ant-radio + * {
 .ant-menu-dark .ant-menu-item-disabled > .ant-menu-submenu-title,
 .ant-menu-dark .ant-menu-submenu-disabled > .ant-menu-submenu-title {
   color: rgba(255, 255, 255, 0.35) !important;
+}
+.ant-menu-dark .ant-menu-item-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:before,
+.ant-menu-dark .ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:before,
+.ant-menu-dark .ant-menu-item-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:after,
+.ant-menu-dark .ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-submenu-arrow:after {
+  background: rgba(255, 255, 255, 0.35) !important;
 }
 /* BASICS */
 
@@ -9073,6 +9085,7 @@ body .editor-user-css {
   position: absolute;
   left: 10%;
   right: 0;
+  transition: width 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), height 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), left 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   background: url(https://zos.alipayobjects.com/rmsportal/gGlUMYGEIvjDOOw.jpg);
 }
 body .editor-user-css:hover {
