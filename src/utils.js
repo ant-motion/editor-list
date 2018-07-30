@@ -352,6 +352,9 @@ function marginToCss(d, current) {
 function shadowToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
+    if (typeof data === 'string') {
+      return removeMultiEmpty(`${toCssLowerCase(key)}: ${data};`).trim();
+    }
     const cData = current[key];
     if (!data || !Object.keys(data).length) {
       return null;

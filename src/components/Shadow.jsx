@@ -51,10 +51,11 @@ export default class EditorShadow extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
-      const boxShadow = !!Object.keys(nextProps.value.boxShadow).length;
-      const textShadow = !!Object.keys(nextProps.value.textShadow).length;
+      const boxShadow = nextProps.value.boxShadow !== 'none' &&
+        !!Object.keys(nextProps.value.boxShadow).length;
+      const textShadow = nextProps.value.textShadow !== 'none' &&
+        !!Object.keys(nextProps.value.textShadow).length;
       this.setState({
-        key: 'boxShadow',
         open: {
           boxShadow,
           textShadow,
@@ -94,7 +95,7 @@ export default class EditorShadow extends Component {
     const { open, key } = this.state;
     const value = {
       ...this.props.value,
-      [key]: e ? { ...this.defaultShadow } : {},
+      [key]: e ? { ...this.defaultShadow } : 'none',
     };
     this.props.onChange('shadow', value);
     this.setState({

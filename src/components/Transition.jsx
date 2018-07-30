@@ -74,7 +74,7 @@ export default class EditorTransition extends Component {
     this.setState({
       data,
     }, () => {
-      let value = '';
+      let value = data.length ? '' : 'none';
       data.forEach(d => {
         if (d.name) {
           value += `${value ? ', ' : ''}${removeMultiEmpty(
