@@ -49,6 +49,19 @@ export default class EditorShadow extends Component {
       },
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      const boxShadow = !!Object.keys(nextProps.value.boxShadow).length;
+      const textShadow = !!Object.keys(nextProps.value.textShadow).length;
+      this.setState({
+        key: 'boxShadow',
+        open: {
+          boxShadow,
+          textShadow,
+        },
+      });
+    }
+  }
 
   onChange = (key, v) => {
     const keyValue = {
@@ -111,7 +124,7 @@ export default class EditorShadow extends Component {
             开启
           </Col>
           <Col span={20}>
-            <Switch size="small" checked={!!open[key]} onChange={this.openChange} />
+            <Switch size="small" checked={open[key]} onChange={this.openChange} />
           </Col>
         </Row>
         <Row gutter={8}>

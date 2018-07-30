@@ -7,7 +7,7 @@ const Option = Select.Option;
 
 const RadioButton = Radio.Button;
 
-const colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
+const colorExp = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$|(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;// eslint-disable-line max-len
 
 const colorLookup = {
   aqua: 'rgb(0, 255, 255)',
@@ -252,11 +252,11 @@ export function convertShadowData(d) {
   const dataArray = d.replace(/\,\s+/g, ',').split(/\s+/);
   let color;
   const noColor = dataArray.map(c => {
-    if ((!c.replace(colorExp, '') || !colorLookup[c])) {
-      return c;
+    if (isColor(c) || colorLookup[c]) {
+      color = c;
+      return null;
     }
-    color = c;
-    return null;
+    return c;
   }).filter(item => item);
   const keys = ['x', 'y', 'blur', 'spread', 'inset'];
   const value = { color };
