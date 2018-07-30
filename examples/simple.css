@@ -9086,6 +9086,7 @@ body .editor-user-css {
   left: 10%;
   right: 0;
   transition: width 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), height 0.3s cubic-bezier(0.075, 0.82, 0.165, 1), left 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
   background: url(https://zos.alipayobjects.com/rmsportal/gGlUMYGEIvjDOOw.jpg);
 }
 body .editor-user-css:hover {

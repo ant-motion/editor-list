@@ -715,7 +715,7 @@ var Option = __WEBPACK_IMPORTED_MODULE_2_antd_es_select__["a" /* default */].Opt
 
 var RadioButton = __WEBPACK_IMPORTED_MODULE_3_antd_es_radio__["a" /* default */].Button;
 
-var colorExp = /(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;
+var colorExp = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$|(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig; // eslint-disable-line max-len
 
 var colorLookup = {
   aqua: 'rgb(0, 255, 255)',
@@ -917,11 +917,11 @@ function convertShadowData(d) {
   var dataArray = d.replace(/\,\s+/g, ',').split(/\s+/);
   var color = void 0;
   var noColor = dataArray.map(function (c) {
-    if (!c.replace(colorExp, '') || !colorLookup[c]) {
-      return c;
+    if (isColor(c) || colorLookup[c]) {
+      color = c;
+      return null;
     }
-    color = c;
-    return null;
+    return c;
   }).filter(function (item) {
     return item;
   });
@@ -68474,6 +68474,20 @@ var EditorShadow = function (_Component) {
     return _this;
   }
 
+  EditorShadow.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      var boxShadow = !!Object.keys(nextProps.value.boxShadow).length;
+      var textShadow = !!Object.keys(nextProps.value.textShadow).length;
+      this.setState({
+        key: 'boxShadow',
+        open: {
+          boxShadow: boxShadow,
+          textShadow: textShadow
+        }
+      });
+    }
+  };
+
   EditorShadow.prototype.render = function render() {
     var _this2 = this;
 
@@ -68505,7 +68519,7 @@ var EditorShadow = function (_Component) {
           __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_9_antd_es_col__["a" /* default */],
             { span: 20 },
-            __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11_antd_es_switch__["a" /* default */], { size: 'small', checked: !!open[key], onChange: this.openChange })
+            __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11_antd_es_switch__["a" /* default */], { size: 'small', checked: open[key], onChange: this.openChange })
           )
         ),
         __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
