@@ -1028,6 +1028,9 @@ function marginToCss(d, current) {
 function shadowToCss(d, current) {
   return Object.keys(d).map(function (key) {
     var data = d[key];
+    if (typeof data === 'string') {
+      return removeMultiEmpty(toCssLowerCase(key) + ': ' + data + ';').trim();
+    }
     var cData = current[key];
     if (!data || !Object.keys(data).length) {
       return null;
@@ -68441,7 +68444,7 @@ var EditorShadow = function (_Component) {
           open = _this$state.open,
           key = _this$state.key;
 
-      var value = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, _this.props.value, (_extends4 = {}, _extends4[key] = e ? __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, _this.defaultShadow) : {}, _extends4));
+      var value = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, _this.props.value, (_extends4 = {}, _extends4[key] = e ? __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, _this.defaultShadow) : 'none', _extends4));
       _this.props.onChange('shadow', value);
       _this.setState({
         open: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, open, (_extends5 = {}, _extends5[key] = e, _extends5))
@@ -68476,10 +68479,9 @@ var EditorShadow = function (_Component) {
 
   EditorShadow.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
-      var boxShadow = !!Object.keys(nextProps.value.boxShadow).length;
-      var textShadow = !!Object.keys(nextProps.value.textShadow).length;
+      var boxShadow = nextProps.value.boxShadow !== 'none' && !!Object.keys(nextProps.value.boxShadow).length;
+      var textShadow = nextProps.value.textShadow !== 'none' && !!Object.keys(nextProps.value.textShadow).length;
       this.setState({
-        key: 'boxShadow',
         open: {
           boxShadow: boxShadow,
           textShadow: textShadow
@@ -69843,7 +69845,7 @@ var _initialiseProps = function _initialiseProps() {
     _this2.setState({
       data: data
     }, function () {
-      var value = '';
+      var value = data.length ? '' : 'none';
       data.forEach(function (d) {
         if (d.name) {
           value += '' + (value ? ', ' : '') + Object(__WEBPACK_IMPORTED_MODULE_13__utils__["r" /* removeMultiEmpty */])(d.name + ' ' + (d.duration || '0s') + ' ' + (d.ease || 'ease') + (d.delay ? ' ' + d.delay : ''));
