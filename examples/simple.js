@@ -886,6 +886,9 @@ function convertBorderData(d, width, isRadius) {
   if (!d) {
     return '';
   }
+  if (typeof d === 'object') {
+    return d;
+  }
   var dataIsColor = isColor(d);
   var dArray = !!dataIsColor ? dataIsColor : d.split(' ');
   if (dArray.length > 1) {
@@ -895,6 +898,7 @@ function convertBorderData(d, width, isRadius) {
     var left = convertData(dArray[3] || dArray[1]);
     if (width) {
       var wArray = width.split(' ');
+      wArray[1] = wArray[1] || wArray[0];
       wArray[2] = wArray[2] || wArray[0];
       wArray[3] = wArray[3] || wArray[1];
       top = parseFloat(wArray[0]) && top || null;
@@ -5322,9 +5326,9 @@ var Color = function (_React$Component) {
 
     _this.removeColor = function () {
       _this.setState({
-        color: null
+        color: 'transparent'
       });
-      _this.props.onChange();
+      _this.props.onChange('transparent');
     };
 
     _this.renderPickerComponent = function (rect) {
@@ -42242,13 +42246,22 @@ var _initialiseProps = function _initialiseProps() {
       var currentCssName = currentCss.map(function (str) {
         return str.split(':')[0].trim();
       });
+      var borderArray = currentCssName.filter(function (c) {
+        return c === 'border-style' || c === 'border-color' || c === 'border-width';
+      });
+      borderArray.forEach(function (c) {
+        var reg = new RegExp('border(.*)' + c.split('-')[1] + '.*');
+        stateCssArray = stateCssArray.filter(function (d) {
+          return !d.match(reg);
+        });
+      });
       var stateNewCss = stateCssArray.map(function (str) {
         var cssName = str.split(':')[0].trim();
         return currentCssName.indexOf(cssName) >= 0 || __WEBPACK_IMPORTED_MODULE_18__utils__["s" /* styleInUse */][cssName] ? null : str;
       }).filter(function (c) {
         return c;
       });
-      newCss = '  ' + (currentCss.join('\n  ') + '\n  ' + stateNewCss.join('\n  ')).trim();
+      newCss = '  ' + (stateNewCss.join('\n  ') + '\n  ' + currentCss.join('\n  ')).trim();
     }
     _this3.currentData[classState] = v;
     var state = (_state4 = {
@@ -42431,7 +42444,7 @@ var _initialiseProps = function _initialiseProps() {
     if (!style) {
       return null;
     }
-    var borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
+    var borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px' || style.borderTopStyle !== 'none' && style.borderTopColor !== '0px' || style.borderRightStyle !== 'none' && style.borderRightColor !== '0px' || style.borderBottomStyle !== 'none' && style.borderBottomColor !== '0px' || style.borderLeftStyle !== 'none' && style.borderLeftColor !== '0px';
     return {
       state: {
         cursor: style.cursor
@@ -42469,10 +42482,30 @@ var _initialiseProps = function _initialiseProps() {
         attachment: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["d" /* convertDefaultData */])(style.backgroundAttachment)
       },
       border: {
-        style: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderStyle, style.borderWidth) || 'none',
-        color: borderBool && Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderColor, style.borderWidth) || null,
-        width: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderWidth),
-        radius: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderRadius, null, true)
+        style: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderStyle || (style.borderTopStyle || style.borderRightStyle || style.borderBottomStyle || style.borderLeftStyle ? {
+          top: style.borderTopStyle,
+          right: style.borderRightStyle,
+          bottom: style.borderBottomStyle,
+          left: style.borderLeftStyle
+        } : null), style.borderWidth) || 'none',
+        color: borderBool && Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderColor || (style.borderTopColor || style.borderRightColor || style.borderBottomColor || style.borderLeftColor ? {
+          top: style.borderTopColor,
+          right: style.borderRightColor,
+          bottom: style.borderBottomColor,
+          left: style.borderLeftColor
+        } : null), style.borderWidth) || null,
+        width: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderWidth || (style.borderTopWidth || style.borderRightWidth || style.borderBottomWidth || style.borderLeftWidth ? {
+          top: style.borderTopWidth,
+          right: style.borderRightWidth,
+          bottom: style.borderBottomWidth,
+          left: style.borderLeftWidth
+        } : null)),
+        radius: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.borderRadius || (style.borderTopLeftRadius || style.borderTopRightRadius || style.borderBottomRightRadius || style.borderBottomLeftRadius ? {
+          'top-left': style.borderTopLeftRadius,
+          'top-right': style.borderTopRightRadius,
+          'bottom-right': style.borderBottomRightRadius,
+          'bottom-left': style.borderBottomLeftRadius
+        } : null), null, true)
       },
       margin: {
         margin: Object(__WEBPACK_IMPORTED_MODULE_18__utils__["b" /* convertBorderData */])(style.margin),
