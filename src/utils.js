@@ -221,6 +221,9 @@ export function convertBorderData(d, width, isRadius) {
   if (!d) {
     return '';
   }
+  if (typeof d === 'object') {
+    return d;
+  }
   const dataIsColor = isColor(d);
   const dArray = !!dataIsColor ? dataIsColor : d.split(' ');
   if (dArray.length > 1) {
@@ -230,6 +233,7 @@ export function convertBorderData(d, width, isRadius) {
     let left = convertData(dArray[3] || dArray[1]);
     if (width) {
       const wArray = width.split(' ');
+      wArray[1] = wArray[1] || wArray[0];
       wArray[2] = wArray[2] || wArray[0];
       wArray[3] = wArray[3] || wArray[1];
       top = parseFloat(wArray[0]) && top || null;

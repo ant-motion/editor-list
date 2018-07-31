@@ -171,13 +171,19 @@ class EditorList extends Component {
       .filter(c => c).map(c => c.trim());
     const stateCss = myCss[classState];
     if (stateCss) {
-      const stateCssArray = stateCss.split('\n').map(c => c.trim()).filter(c => c);
+      let stateCssArray = stateCss.split('\n').map(c => c.trim()).filter(c => c);
       const currentCssName = currentCss.map(str => str.split(':')[0].trim());
+      const borderArray = currentCssName.filter(c => c === 'border-style' ||
+        c === 'border-color' || c === 'border-width');
+      borderArray.forEach(c => {
+        const reg = new RegExp(`border(.*)${c.split('-')[1]}.*`);
+        stateCssArray = stateCssArray.filter(d => !d.match(reg));
+      });
       const stateNewCss = stateCssArray.map(str => {
         const cssName = str.split(':')[0].trim();
         return currentCssName.indexOf(cssName) >= 0 || styleInUse[cssName] ? null : str;
       }).filter(c => c);
-      newCss = `  ${`${currentCss.join('\n  ')}\n  ${stateNewCss.join('\n  ')}`.trim()}`;
+      newCss = `  ${`${stateNewCss.join('\n  ')}\n  ${currentCss.join('\n  ')}`.trim()}`;
     }
     this.currentData[classState] = v;
     const state = {
@@ -351,7 +357,11 @@ class EditorList extends Component {
     if (!style) {
       return null;
     }
-    const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px';
+    const borderBool = style.borderStyle !== 'none' && style.borderColor !== '0px'
+      || style.borderTopStyle !== 'none' && style.borderTopColor !== '0px'
+      || style.borderRightStyle !== 'none' && style.borderRightColor !== '0px'
+      || style.borderBottomStyle !== 'none' && style.borderBottomColor !== '0px'
+      || style.borderLeftStyle !== 'none' && style.borderLeftColor !== '0px';
     return {
       state: {
         cursor: style.cursor,
@@ -389,10 +399,54 @@ class EditorList extends Component {
         attachment: convertDefaultData(style.backgroundAttachment),
       },
       border: {
-        style: convertBorderData(style.borderStyle, style.borderWidth) || 'none',
-        color: borderBool && convertBorderData(style.borderColor, style.borderWidth) || null,
-        width: convertBorderData(style.borderWidth),
-        radius: convertBorderData(style.borderRadius, null, true),
+        style: convertBorderData(style.borderStyle || (
+          style.borderTopStyle ||
+            style.borderRightStyle ||
+            style.borderBottomStyle ||
+            style.borderLeftStyle ?
+            {
+              top: style.borderTopStyle,
+              right: style.borderRightStyle,
+              bottom: style.borderBottomStyle,
+              left: style.borderLeftStyle,
+            } : null
+        ), style.borderWidth) || 'none',
+        color: borderBool && convertBorderData(style.borderColor || (
+          style.borderTopColor ||
+            style.borderRightColor ||
+            style.borderBottomColor ||
+            style.borderLeftColor ?
+            {
+              top: style.borderTopColor,
+              right: style.borderRightColor,
+              bottom: style.borderBottomColor,
+              left: style.borderLeftColor,
+            } : null
+        ), style.borderWidth) || null,
+        width: convertBorderData(style.borderWidth || (
+          style.borderTopWidth ||
+            style.borderRightWidth ||
+            style.borderBottomWidth ||
+            style.borderLeftWidth ?
+            {
+              top: style.borderTopWidth,
+              right: style.borderRightWidth,
+              bottom: style.borderBottomWidth,
+              left: style.borderLeftWidth,
+            } : null
+        )),
+        radius: convertBorderData(style.borderRadius || (
+          style.borderTopLeftRadius ||
+            style.borderTopRightRadius ||
+            style.borderBottomRightRadius ||
+            style.borderBottomLeftRadius ?
+            {
+              'top-left': style.borderTopLeftRadius,
+              'top-right': style.borderTopRightRadius,
+              'bottom-right': style.borderBottomRightRadius,
+              'bottom-left': style.borderBottomLeftRadius,
+            } : null
+        ), null, true),
       },
       margin: {
         margin: convertBorderData(style.margin),

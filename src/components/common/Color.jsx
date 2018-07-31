@@ -179,9 +179,9 @@ class Color extends React.Component {
 
   removeColor = () => {
     this.setState({
-      color: null,
+      color: 'transparent',
     });
-    this.props.onChange();
+    this.props.onChange('transparent');
   }
 
   renderPickerComponent = (rect) => {
