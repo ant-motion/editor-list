@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'antd/lib/select';
+import AutoComplete from 'antd/lib/auto-complete';
 import PropTypes from 'prop-types';
 import { getParentNode } from '../../utils';
 
@@ -64,10 +64,8 @@ export default class SelectInput extends React.Component {
   render() {
     return (
       <div className="select-input">
-        <Select
-          mode="combobox"
+        <AutoComplete
           {...this.props}
-          defaultActiveFirstOption={false}
           style={{ width: '100%' }}
           placeholder={this.props.placeholder || '--'}
           filterOption={this.filterOption}
@@ -81,7 +79,7 @@ export default class SelectInput extends React.Component {
           dropdownClassName="editor-list-dropdown"
         >
           {this.props.children}
-        </Select>
+        </AutoComplete>
       </div>
     );
   }
