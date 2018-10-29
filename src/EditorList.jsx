@@ -449,8 +449,18 @@ class EditorList extends Component {
         ), null, true),
       },
       margin: {
-        margin: convertBorderData(style.margin),
-        padding: convertBorderData(style.padding),
+        margin: convertBorderData(style.margin || {
+          top: style.marginTop,
+          right: style.marginRight,
+          bottom: style.marginBottom,
+          left: style.marginLeft,
+        }),
+        padding: convertBorderData(style.padding || {
+          top: style.paddingTop,
+          right: style.paddingRight,
+          bottom: style.paddingBottom,
+          left: style.paddingLeft,
+        }),
       },
       shadow: {
         boxShadow: convertShadowData(style.boxShadow),

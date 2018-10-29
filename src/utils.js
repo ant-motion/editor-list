@@ -68,6 +68,7 @@ const classInherited = [
   'text-align',
   'text-indent',
   'text-transform',
+  'text-decoration',
   'visibility',
   'voice-family',
   'volume',
@@ -391,7 +392,7 @@ function interfaceToCss(d, current) {
     if (!data || current[key] === data) {
       return null;
     }
-    return `${key}: ${data};`;
+    return `${toCssLowerCase(key)}: ${data};`;
   }).filter(item => item).join('\n');
 }
 

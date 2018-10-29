@@ -28,7 +28,7 @@ export default class AutoComplete extends React.Component {
       this.props.onSearch();
     }
     this.setState({
-      dataSource: value && !value.match(/[a-z]/ig) ?
+      dataSource: value && !value.match(/[a-z|%]/ig) ?
         this.props.dataSource.map(key => `${value}${key}`) : [],
     });
   }
