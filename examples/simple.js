@@ -815,23 +815,20 @@ Icon.setTwoToneColor = __WEBPACK_IMPORTED_MODULE_10__twoTonePrimaryColor__["b" /
 /* harmony export (immutable) */ __webpack_exports__["k"] = getParentClassName;
 /* harmony export (immutable) */ __webpack_exports__["f"] = currentScrollTop;
 /* harmony export (immutable) */ __webpack_exports__["l"] = getParentNode;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_antd_es_select__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_antd_es_radio__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_specificity__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_specificity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_specificity__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_antd_es_select__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_antd_es_radio__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_specificity__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_specificity___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_specificity__);
 
 
 
 
 
+var Option = __WEBPACK_IMPORTED_MODULE_1_antd_es_select__["a" /* default */].Option;
 
-var Option = __WEBPACK_IMPORTED_MODULE_2_antd_es_select__["a" /* default */].Option;
-
-var RadioButton = __WEBPACK_IMPORTED_MODULE_3_antd_es_radio__["a" /* default */].Button;
+var RadioButton = __WEBPACK_IMPORTED_MODULE_2_antd_es_radio__["a" /* default */].Button;
 
 var colorExp = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$|(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig; // eslint-disable-line max-len
 
@@ -903,7 +900,7 @@ var styleInUse = {
 
 function toArrayChildren(children) {
   var ret = [];
-  __WEBPACK_IMPORTED_MODULE_1_react___default.a.Children.forEach(children, function (c) {
+  __WEBPACK_IMPORTED_MODULE_0_react___default.a.Children.forEach(children, function (c) {
     ret.push(c);
   });
   return ret;
@@ -951,7 +948,7 @@ function getBorderDataToStyle(name, d) {
 
 function getOption(value) {
   return Object.keys(value).map(function (key) {
-    return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       Option,
       { key: key, value: key },
       value[key] + ' - ' + key
@@ -961,7 +958,7 @@ function getOption(value) {
 
 function getOptionArray(array) {
   return array.map(function (key) {
-    return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       Option,
       { key: key, value: key },
       key
@@ -971,7 +968,7 @@ function getOptionArray(array) {
 
 function getRadioButton(array) {
   return array.map(function (key) {
-    return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       RadioButton,
       { value: key, key: key, className: 'ant-radio-button-auto-width' },
       key
@@ -1061,11 +1058,11 @@ function toCssLowerCase(d) {
   });
 }
 
-/*
 function toStyleUpperCase(d) {
-  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+  return d.replace(/-(.?)/g, function ($1) {
+    return $1.replace('-', '').toLocaleUpperCase();
+  });
 }
-*/
 
 function fontToCss(d, current) {
   return Object.keys(d).map(function (key) {
@@ -1318,7 +1315,7 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
   Object.keys(styleObj).sort(function (a, b) {
     var aArray = a.split('~');
     var bArray = b.split('~');
-    return __WEBPACK_IMPORTED_MODULE_4_specificity___default.a.compare(aArray[0], bArray[0]) || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length || parseFloat(aArray[3]) - parseFloat(bArray[3]);
+    return __WEBPACK_IMPORTED_MODULE_3_specificity___default.a.compare(aArray[0], bArray[0]) || parseFloat(aArray[1]) - parseFloat(bArray[1]) || parseFloat(aArray[2]) - parseFloat(bArray[2]) || aArray.length - bArray.length || parseFloat(aArray[3]) - parseFloat(bArray[3]);
   }).forEach(function (key) {
     style += styleObj[key];
   });
@@ -1326,11 +1323,16 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
 }
 
 var removeEmptyStyle = function removeEmptyStyle(s) {
-  var style = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, s);
-  Object.keys(style).forEach(function (key) {
-    var value = style[key];
-    if (parseFloat(key) || parseFloat(key) === 0 || value === 'initial' || value === 'normal' || !value) {
-      delete style[key];
+  var style = {};
+  Array(s.length).fill(1).forEach(function (k, i) {
+    var key = s[i];
+    var value = s[key];
+    if (value && value !== 'initial' && value !== 'normal') {
+      style[key] = s[key];
+      style[toStyleUpperCase(key)] = s[key];
+      if (key.indexOf('transition') >= 0) {
+        style.transition = s.transition;
+      }
     }
   });
   return style;
@@ -77879,13 +77881,13 @@ var EditorTransition = function (_Component) {
 
     _initialiseProps.call(_this);
 
-    var values = _this.props.value.split(/(?<=[^0-9]),/g).map(function (c) {
+    var values = props.value.split(/,\s?(?=[a-z])/g).map(function (c) {
       return c.trim();
     });
     var data = values.filter(function (str) {
       return str && str !== 'all 0s ease 0s' && str !== 'all 0s ease';
     }).map(function (str) {
-      var d = str.split(/(?<=[^,])\s+/g);
+      var d = str.replace(/,\s+/g, ',').split(/\s+/g);
       return { key: Object(__WEBPACK_IMPORTED_MODULE_13__utils__["n" /* getRandomKey */])(), name: d[0], duration: d[1], ease: d[2], delay: d[3] };
     });
     data = data.length ? data : [{ key: Object(__WEBPACK_IMPORTED_MODULE_13__utils__["n" /* getRandomKey */])() }];

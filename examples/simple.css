@@ -8142,6 +8142,7 @@ li.CodeMirror-hint-active {
 .ant-collapse.editor-list .ant-collapse-content > .ant-collapse-content-box {
   margin-top: 16px;
   margin-bottom: 16px;
+  padding: 0;
 }
 .ant-collapse.editor-list .ant-collapse-content-inactive {
   display: none;
