@@ -275,11 +275,9 @@ function toCssLowerCase(d) {
   return d.replace(/[A-Z]/, ($1) => (`-${$1.toLocaleLowerCase()}`));
 }
 
-/*
 function toStyleUpperCase(d) {
-  return d.replace(/-(.?)/, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+  return d.replace(/-(.?)/g, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
 }
-*/
 
 function fontToCss(d, current) {
   return Object.keys(d).map(key => {
@@ -544,13 +542,16 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
 }
 
 const removeEmptyStyle = (s) => {
-  const style = { ...s };
-  Object.keys(style).forEach(key => {
-    const value = style[key];
-    if (parseFloat(key) || parseFloat(key) === 0 ||
-      value === 'initial' || value === 'normal'
-      || !value) {
-      delete style[key];
+  const style = {};
+  Array(s.length).fill(1).forEach((k, i) => {
+    const key = s[i];
+    const value = s[key];
+    if (value && value !== 'initial' && value !== 'normal') {
+      style[key] = s[key];
+      style[toStyleUpperCase(key)] = s[key];
+      if (key.indexOf('transition') >= 0) {
+        style.transition = s.transition;
+      }
     }
   });
   return style;

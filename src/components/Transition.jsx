@@ -42,11 +42,11 @@ export default class EditorTransition extends Component {
 
   constructor(props) {
     super(props);
-    const values = this.props.value.split(/(?<=[^0-9]),/g).map(c => c.trim());
+    const values = props.value.split(/,\s?(?=[a-z])/g).map(c => c.trim());
     let data = values.filter(str =>
       (str && str !== 'all 0s ease 0s' && str !== 'all 0s ease'))
       .map(str => {
-        const d = str.split(/(?<=[^,])\s+/g);
+        const d = str.replace(/,\s+/g, ',').split(/\s+/g);
         return ({ key: getRandomKey(), name: d[0], duration: d[1], ease: d[2], delay: d[3] });
       });
     data = data.length ? data : [{ key: getRandomKey() }];
