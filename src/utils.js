@@ -524,7 +524,17 @@ function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, classNa
         return;
       }
     }
-    cssRulesForEach(Array.prototype.slice.call(item.cssRules || []), i,
+    try {
+      if (!item.cssRules) {
+        return;
+      }
+    } catch (e) {
+      if (e.name !== 'SecurityError') {
+        throw e;
+      }
+      return;
+    }
+    cssRulesForEach(Array.prototype.slice.call(item.cssRules), i,
       newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile);
   });
   Object.keys(styleObj).sort((a, b) => {
