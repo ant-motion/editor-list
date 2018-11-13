@@ -199,7 +199,7 @@ export function getComputedStyle() {
 export function convertData(d, b) {
   const c = b ? (!d & typeof d !== 'number') || d.indexOf('none') >= 0
     || d.indexOf('normal') >= 0 :
-    !d || d.indexOf('none') >= 0 || d === '0px' || d.indexOf('normal') >= 0;
+    !d || d === '0px' || d.indexOf('normal') >= 0;
   if (c) {
     return null;
   }
@@ -378,6 +378,9 @@ function backgroundToCss(d, current) {
     if (!data || current[key] === data) {
       return null;
     } else if (key === 'image') {
+      if (data === 'none') {
+        return `background-${key}: none`;
+      }
       return `background-${key}: url(${data});`;
     }
     return `background-${key}: ${data};`;
