@@ -27,7 +27,7 @@ class Demo extends React.Component {
   onSwicth = () => {
     this.setState({
       state: this.state.state === 'web' ? 'mobile' : 'web',
-      editorDom: null,
+      // editorDom: null,
     });
   }
   closeEdit = () => {

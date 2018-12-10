@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 import Collapse from 'antd/lib/collapse';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
-import Input from 'antd/lib/input';
-import Icon from 'antd/lib/icon';
-import Tooltip from 'antd/lib/tooltip';
-import Dropdown from 'antd/lib/dropdown';
-import Menu from 'antd/lib/menu';
-import { getParentNode } from '../utils';
+import Tag from 'antd/lib/tag';
 
 const Panel = Collapse.Panel;
+
+const { CheckableTag } = Tag;
 
 export default class EditorClassName extends Component {
   static propTypes = {
@@ -42,49 +39,52 @@ export default class EditorClassName extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value, classNameArray, placeholder } = props;
-    const menuChild = classNameArray.filter(c => c && c.indexOf('editor_css-') === -1)
-      .map(key => <Menu.Item key={key}>{key}</Menu.Item>);
-    const menu = (
-      <Menu onClick={this.onClick}>
-        {menuChild}
-      </Menu>
-    );
-    ['classNameArray', 'value', 'onChange'].map(key => delete props[key]);
-
+    const { value, classNameArray, editClassName } = props;
+    ['value', 'onChange'].map(key => delete props[key]);
     return (
       <Panel {...props}>
         <Row gutter={8}>
-          <Col span={4}>名称</Col>
-          <Col span={17}>
-            <Dropdown
-              overlay={menu}
-              overlayClassName="editor-list-dropdown"
-              getPopupContainer={node => getParentNode(node, 'editor-list')}
-            >
-              <Input
-                size="small"
-                value={value}
-                onChange={(e) => {
-                  const css = e.target.value;
-                  this.onChange(css);
-                }}
-                onMouseEnter={this.onHover}
-                onMouseLeave={this.onLeave}
-                placeholder={placeholder}
-              />
-            </Dropdown>
-          </Col>
-          <Col span={3}>
-            <Tooltip
-              placement="topRight"
-              arrowPointAtCenter
-              title={<span>自定义或选择当前样式编辑</span>}
-            >
-              <Icon type="question-circle" />
-            </Tooltip>
+          <Col span={6}>
+            专属样式
           </Col>
         </Row>
+        <Row gutter={8}>
+          <Col>
+            <CheckableTag
+              key={editClassName}
+              onChange={() => {
+                this.onChange(editClassName);
+              }}
+              checked={value === editClassName}
+            >
+              {editClassName}
+            </CheckableTag>
+          </Col>
+        </Row>
+        {classNameArray.length && [
+          (<Row gutter={8} key="name">
+            <Col span={24}>标签上其它样式编辑</Col>
+          </Row>),
+          (
+          <Row gutter={8} key="select">
+              <Col span={18}>
+                {classNameArray.map(key => {
+                  return (
+                    <CheckableTag
+                      key={key}
+                      onChange={() => {
+                        this.onChange(key);
+                      }}
+                      checked={value === key}
+                    >
+                      {key}
+                    </CheckableTag>
+                  );
+                })}
+              </Col>
+            </Row>
+          ),
+        ]}
       </Panel>
     );
   }

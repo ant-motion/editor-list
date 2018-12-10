@@ -17,7 +17,7 @@ export default class EditorCss extends Component {
   };
 
   static defaultProps = {
-    header: '样式代码编辑',
+    header: '代码编辑',
     value: '',
     onChange: () => {
     },

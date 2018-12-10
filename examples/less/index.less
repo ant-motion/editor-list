@@ -6,7 +6,7 @@ body .editor-user-css {
   text-align: center;
   margin-bottom: 100px;
   position: absolute;
-  left: 10%;
+  left: 20%;
   right: 0;
   transition: width .3s cubic-bezier(0.075, 0.82, 0.165, 1), 
   height .3s cubic-bezier(0.075, 0.82, 0.165, 1),
@@ -25,13 +25,14 @@ body .editor-user-css {
   text-align: left;
 }
 
-.a, .c .a{
+.a, .c .a, .c{
   &:hover {
     font-size: 15px
   }
 }
 
 .a{
+  top: 10px;
   &:hover {
     color: #fff;
     
@@ -40,5 +41,8 @@ body .editor-user-css {
 @media screen and (max-width: 767px) {
   body .editor-user-css {
     background: #333;
+  }
+  body .a {
+    color: #000fff;
   }
 }

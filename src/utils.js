@@ -452,8 +452,10 @@ function contrastParent(node, d) {
 function cssRulesForEach(item, i, newStyleState, styleObj,
   dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
   const rep = state === 'active' ? new RegExp(`\:${state}|\:hover`) : `:${state}`;
-  const classRep = new RegExp(`\\.(${state ?
-    `${className}\\:${state}` : `${className}`})`);
+  // `\\.${className}(:(hover|focus|active))?\s*(?=(,|$))`
+  const repClassName = className || dom.className.split(' ').join('|');
+  const classRep = new RegExp(`\\.${state ?
+    `(${className || repClassName}):${state}` : `(${repClassName})`}?\s*(?=(,|$))`);
   item.forEach((cssStyle, j) => {
     if (cssStyle.conditionText &&
       cssStyle.media &&
@@ -467,14 +469,25 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
       return null;
     }
     const select = cssStyle.selectorText;
+    if (!select) {
+      return null;
+    }
     // 去除所有不是状态的
-    if (select) {
+    let childrenArray = [];
+    let isParent;
+    // className 为 null
+    if (!className) {
+      childrenArray = Array.prototype.slice.call(ownerDocument.querySelectorAll(
+        select.trim().replace(state ? rep : '', ''))
+      );
+      isParent = childrenArray.some(d => contrastParent(dom, d));
+    }
+    if (select.match(classRep) || isParent) {
       let cssText = cssStyle.style.cssText;
       const currentDomStr = select.split(',').filter(str => {
         if (className && !str.match(classRep)) {
           return false;
         }
-
         const surplus = state ? !str.match(rep)
           : newStyleState.map(key => {
             const newKey = `:${key}`;
@@ -487,9 +500,6 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           return str.match(classRep) && str;
         }
         // 判断是不是状态样式
-        const childrenArray = Array.prototype.slice.call(ownerDocument.querySelectorAll(
-          str.trim().replace(state ? rep : '', ''))
-        );
         childrenArray.forEach(d => {
           const isDom = contrastParent(dom, d);
           if (isDom && d !== dom) {
@@ -502,7 +512,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
           }
         });
         // some attached value: Unexpected assignment within ConditionalExpression;
-        return childrenArray.some(d => contrastParent(dom, d)) ? str : null;
+        return isParent ? str : null;
       })[0];
       if (currentDomStr) {
         const newSelectName = `${currentDomStr}~${i}${cj ?
@@ -513,7 +523,10 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
   });
 }
 
-function getCssPropertyForRuleToCss(dom, ownerDocument, isMobile, state, className, onlyMobile) {
+function getCssPropertyForRuleToCss({
+  dom, ownerDocument,
+  isMobile, state, className, onlyMobile,
+}) {
   let style = '';
   const styleObj = {};
   const newStyleState = styleState.map(key =>
@@ -570,13 +583,15 @@ const removeEmptyStyle = (s) => {
   return style;
 };
 
-export function getDomCssRule(dom, isMobile, state) {
+export function getDomCssRule({ dom, isMobile, state, onlyMobile }) {
   const ownerDocument = dom.ownerDocument;
   const div = ownerDocument.createElement(dom.tagName.toLocaleLowerCase());
   dom.parentNode.appendChild(div);
   // 有 vh 的情况下，computedStyle 会把 vh 转化成 px，用遍历样式找出全部样式
-  const style = `${getCssPropertyForRuleToCss(dom, ownerDocument,
-    isMobile, state)}display:none;`;
+  const style = `${getCssPropertyForRuleToCss({
+    dom, ownerDocument,
+    isMobile, state, onlyMobile,
+  })}display:none;`;
   // 给 style 去重;
   div.style = `${style}${dom.style.cssText}`;
   // 获取当前 div 带 vh 的样式；
@@ -585,10 +600,13 @@ export function getDomCssRule(dom, isMobile, state) {
   return styleObject;
 }
 
-export function getClassNameCssRule(ownerDocument, className, state, isMobile, getObject) {
+export function getClassNameCssRule({ dom, className, isMobile, onlyMobile, state, getObject }) {
+  const ownerDocument = dom.ownerDocument;
   const div = ownerDocument.createElement('div');
-  const style = getCssPropertyForRuleToCss(null, ownerDocument,
-    isMobile, state, className, isMobile);
+  const style = getCssPropertyForRuleToCss({
+    dom, ownerDocument,
+    isMobile, state, className, onlyMobile,
+  });
   div.style = style;
   if (getObject) {
     const styleObject = removeEmptyStyle(div.style);
