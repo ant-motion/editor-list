@@ -33,7 +33,6 @@ export default class EditorState extends Component {
     ['value', 'onChange'].map(key => delete props[key]);
     const childrenToRender = Object.keys(locale.style_select).map(key => {
       const item = locale.style_select;
-      console.log(item);
       if (isMobile && item[key] === 'hover') {
         return null;
       }
