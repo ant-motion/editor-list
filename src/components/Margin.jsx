@@ -13,10 +13,10 @@ export default class EditorMargin extends Component {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
-    header: '边距',
     value: {
       margin: null,
       padding: null,
@@ -27,10 +27,6 @@ export default class EditorMargin extends Component {
   constructor(props) {
     super(props);
     this.keys = ['top', 'right', 'bottom', 'left', 'center'];
-    this.tags = {
-      margin: '外边 margin',
-      padding: '内边 padding',
-    };
     this.state = {
       key: 'margin',
     };
@@ -46,9 +42,9 @@ export default class EditorMargin extends Component {
 
   getTabs = () => (
     <RadioGroup value={this.state.key} onChange={this.radioChange} size="small">
-      {Object.keys(this.tags).map(key => (
+      {Object.keys(this.props.locale.tags).map(key => (
         <RadioButton value={key} key={key} className="ant-radio-button-auto-width">
-          {this.tags[key]}
+          {this.props.locale.tags[key]}
         </RadioButton>
       ))}
     </RadioGroup>
@@ -62,10 +58,10 @@ export default class EditorMargin extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     const key = this.state.key;
     ['value', 'tags', 'onChange'].map(str => delete props[str]);
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       {this.getTabs()}
       <BoxModel
         name={key}

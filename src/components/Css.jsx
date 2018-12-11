@@ -17,7 +17,6 @@ export default class EditorCss extends Component {
   };
 
   static defaultProps = {
-    header: '代码编辑',
     value: '',
     onChange: () => {
     },
@@ -39,10 +38,10 @@ export default class EditorCss extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     ['defaultData', 'onChange'].map(key => delete props[key]);
     const newValue = `{\n${value}\n}`;
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       <CodeMirror
         value={newValue}
         options={{

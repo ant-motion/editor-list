@@ -170,9 +170,9 @@ export function getBorderDataToStyle(name, d) {
   return { [`border${key}`]: d };
 }
 
-export function getOption(value) {
+export function getOption(value, noKey) {
   return Object.keys(value).map(key => (
-    <Option key={key} value={key}>{`${value[key]} - ${key}`}</Option>
+    <Option key={key} value={key}>{noKey ? value[key] : `${value[key]} - ${key}`}</Option>
   ));
 }
 

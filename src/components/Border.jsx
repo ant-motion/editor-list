@@ -13,10 +13,10 @@ export default class EditorBorder extends Component {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
-    header: '边框',
     value: {
       style: 'none',
       color: '#000',
@@ -30,12 +30,6 @@ export default class EditorBorder extends Component {
   constructor(props) {
     super(props);
     this.keys = ['top', 'right', 'bottom', 'left', 'center'];
-    this.tags = {
-      width: '线宽',
-      color: '颜色',
-      style: '样式',
-      radius: '圆角',
-    };
     this.state = {
       key: 'width',
     };
@@ -51,9 +45,9 @@ export default class EditorBorder extends Component {
 
   getTabs = () => (
     <RadioGroup value={this.state.key} onChange={this.radioChange} size="small">
-      {Object.keys(this.tags).map(key => (
+      {Object.keys(this.props.locale.tags).map(key => (
         <RadioButton value={key} key={key} className="ant-radio-button-auto-width">
-          {this.tags[key]}
+          {this.props.locale.tags[key]}
         </RadioButton>
       ))}
     </RadioGroup>
@@ -67,10 +61,10 @@ export default class EditorBorder extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     const key = this.state.key;
     ['value', 'onChange'].map(str => delete props[str]);
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       {this.getTabs()}
       <BoxModel
         name={key}

@@ -4,6 +4,7 @@ import Collapse from 'antd/lib/collapse';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
+import Icon from './common/Icon';
 import Radio from 'antd/lib/radio';
 import AutoComplete from './common/AutoComplete';
 import SelectInput from './common/SelectInput';
@@ -22,11 +23,11 @@ class EditorFont extends Component {
     font: PropTypes.array,
     value: PropTypes.object,
     onChange: PropTypes.func,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
     className: 'editor-font',
-    header: '字体',
     font: [],
     value: {
       family: 'Helvetica Neue',
@@ -106,12 +107,14 @@ class EditorFont extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     ['value', 'font'].map(key => delete props[key]);
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       <Row gutter={8}>
-        <Col span={4}>字体</Col>
-        <Col span={20}>
+        <Col span={3} >
+          <Icon prompt={locale.font}><span className="icon">A</span></Icon>
+        </Col>
+        <Col span={21}>
           <SelectInput
             placeholder="选择字体"
             style={{ width: '100%' }}
@@ -126,8 +129,8 @@ class EditorFont extends Component {
         </Col>
       </Row>
       <Row gutter={8}>
-        <Col span={4}>大小</Col>
-        <Col span={8}>
+        <Col span={3} ><Icon type="font-size" prompt={locale.size} /></Col>
+        <Col span={9}>
           <AutoComplete
             style={{ width: '100%' }}
             value={value.size}
@@ -136,8 +139,8 @@ class EditorFont extends Component {
             }}
           />
         </Col>
-        <Col span={4}>粗细</Col>
-        <Col span={8}>
+        <Col span={3}><Icon type="bold" prompt={locale.blod} /></Col>
+        <Col span={9}>
           <Select
             style={{ width: '100%' }}
             value={value.weight || 'normal'}
@@ -154,8 +157,8 @@ class EditorFont extends Component {
         </Col>
       </Row>
       <Row gutter={8}>
-        <Col span={4}>行距</Col>
-        <Col span={8}>
+        <Col span={3} ><Icon type="line-height" prompt={locale.lineHeight} /></Col>
+        <Col span={9}>
           <AutoComplete
             style={{ width: '100%' }}
             value={value.lineHeight}
@@ -164,8 +167,8 @@ class EditorFont extends Component {
             }}
           />
         </Col>
-        <Col span={4}>间距</Col>
-        <Col span={8}>
+        <Col span={3}><Icon type="letterSpacing" prompt={locale.letterSpacing} /></Col>
+        <Col span={9}>
           <AutoComplete
             style={{ width: '100%' }}
             value={value.letterSpacing}
@@ -175,9 +178,12 @@ class EditorFont extends Component {
           />
         </Col>
       </Row>
-      <Color color={value.color} onChange={(e) => {
-        this.onChange('color', e);
-      }}
+      <Color
+        color={value.color}
+        title={<Icon type="font-colors" prompt={locale.color} />}
+        onChange={(e) => {
+          this.onChange('color', e);
+        }}
       />
       <Row>
         <Col span={24} style={{ textAlign: 'center' }}>

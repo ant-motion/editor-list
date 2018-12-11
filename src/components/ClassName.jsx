@@ -16,10 +16,10 @@ export default class EditorClassName extends Component {
     classNameArray: PropTypes.array,
     header: PropTypes.string,
     placeholder: PropTypes.string,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
-    header: '样式编辑',
     value: '',
     onChange: () => {
     },
@@ -39,13 +39,13 @@ export default class EditorClassName extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value, classNameArray, editClassName } = props;
+    const { value, classNameArray, editClassName, locale } = props;
     ['value', 'onChange'].map(key => delete props[key]);
     return (
-      <Panel {...props}>
+      <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
           <Col span={6}>
-            专属样式
+            {locale.exclusive}
           </Col>
         </Row>
         <Row gutter={8}>
@@ -63,7 +63,7 @@ export default class EditorClassName extends Component {
         </Row>
         {classNameArray.length && [
           (<Row gutter={8} key="name">
-            <Col span={24}>标签上其它样式编辑</Col>
+            <Col span={24}>{locale.common}</Col>
           </Row>),
           (
           <Row gutter={8} key="select">

@@ -11,6 +11,7 @@ import Css from './components/Css';
 import Transition from './components/Transition';
 import State from './components/State';
 import ClassName from './components/ClassName';
+import Locale from './locale/zh_CN';
 import {
   styleInUse,
   toArrayChildren,
@@ -42,6 +43,7 @@ class EditorList extends Component {
     parentClassNameLength: PropTypes.number,
     editorDefaultClassName: PropTypes.string,
     cssToDom: PropTypes.bool,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
@@ -55,6 +57,7 @@ class EditorList extends Component {
     parentClassNameLength: 2,
     editorDefaultClassName: 'editor_css',
     cssToDom: true,
+    locale: Locale,
   };
 
   constructor(props) {
@@ -593,6 +596,7 @@ class EditorList extends Component {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
         }
+        itemProps.locale = Locale[key];
         return cloneElement(item, itemProps);
       }).filter(c => c);
     }
@@ -604,28 +608,66 @@ class EditorList extends Component {
           classNameArray={classNameArray}
           placeholder={this.props.editorDefaultClassName}
           key="EditorClassName"
+          locale={Locale.EditorClassName}
           editClassName={this.editClassName}
         />
       ),
       <State
         onChange={this.onStateChange}
         key="EditorState"
+        locale={Locale.EditorState}
         showClassState={this.props.useClassName}
         value={stateValue}
         isMobile={this.props.isMobile}
       />,
-      <Font onChange={this.onChange} key="EditorFont" value={value.font} />,
-      <Interface onChange={this.onChange} key="EditorInterface" value={value.interface} />,
-      <BackGround onChange={this.onChange} key="EditorBackGround" value={value.background} />,
-      <Border onChange={this.onChange} key="EditorBorder" value={value.border} />,
-      <Margin onChange={this.onChange} key="EditorMargin" value={value.margin} />,
-      <Shadow onChange={this.onChange} key="EditorShadow" value={value.shadow} />,
-      <Transition onChange={this.onChange} key="EditorTransition" value={value.transition} />,
+      <Font
+        onChange={this.onChange}
+        key="EditorFont"
+        value={value.font}
+        locale={Locale.EditorFont}
+      />,
+      <Interface
+        onChange={this.onChange}
+        key="EditorInterface"
+        value={value.interface}
+        locale={Locale.EditorInterface}
+      />,
+      <BackGround
+        onChange={this.onChange}
+        key="EditorBackGround"
+        value={value.background}
+        locale={Locale.EditorBackGround}
+      />,
+      <Border
+        onChange={this.onChange}
+        key="EditorBorder"
+        value={value.border}
+        locale={Locale.EditorBorder}
+      />,
+      <Margin
+        onChange={this.onChange}
+        key="EditorMargin"
+        value={value.margin}
+        locale={Locale.EditorMargin}
+      />,
+      <Shadow
+        onChange={this.onChange}
+        key="EditorShadow"
+        value={value.shadow}
+        locale={Locale.EditorShadow}
+      />,
+      <Transition
+        onChange={this.onChange}
+        key="EditorTransition"
+        value={value.transition}
+        locale={Locale.EditorTransition}
+      />,
       <Css
         onChange={this.onCssChange}
         key="EditorCss"
         value={myCss[classState]}
         cssName={cssName}
+        locale={Locale.EditorCss}
       />,
     ];
   }

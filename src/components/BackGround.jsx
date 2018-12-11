@@ -6,6 +6,7 @@ import Col from 'antd/lib/col';
 import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import SelectInput from './common/SelectInput';
+import Icon from './common/Icon';
 import Color from './common/Color';
 import RowHelp from './common/RowHelp';
 import Radio from 'antd/lib/radio';
@@ -22,11 +23,11 @@ class EditorBg extends Component {
     header: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.object,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
     className: 'editor-bg',
-    header: '背景',
     value: {
       color: null,
       image: '',
@@ -35,7 +36,7 @@ class EditorBg extends Component {
       size: 'contain',
       attachment: 'scroll',
     },
-    onChange: () => {},
+    onChange: () => { },
   };
 
   onChange = (key, v) => {
@@ -46,8 +47,6 @@ class EditorBg extends Component {
     this.props.onChange('background', value);
   }
 
-  repeat = { repeat: '重复', 'repeat-x': '横向重复', 'repeat-y': '竖向重复', 'no-repeat': '不重复' };
-
   position = ['center', 'center left', 'center right', 'top', 'top left',
     'top right', 'bottom', 'bottom left', 'bottom right'];
 
@@ -57,20 +56,21 @@ class EditorBg extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     ['value', 'onChange', 'font'].map(key => delete props[key]);
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       <Color
         onChange={(e) => {
           this.onChange('color', e);
         }}
+        title={<Icon type="bg-colors" prompt={locale.color}/>}
         color={value.color}
       />
       <Row gutter={8}>
-        <Col span={4}>
-          图片
+        <Col span={3}>
+          <Icon type="picture" prompt={locale.image} />
         </Col>
-        <Col span={20}>
+        <Col span={21}>
           <Input
             value={value.image || ''}
             onChange={(e) => {
@@ -78,15 +78,15 @@ class EditorBg extends Component {
               this.onChange('image', v);
             }}
             size="small"
-            placeholder="添加图片"
+            placeholder="Add image url"
           />
         </Col>
       </Row>
       <Row gutter={8}>
-        <Col span={4}>
-          重复
+        <Col span={3}>
+          <Icon type="repeat" prompt={locale.repeat} />
         </Col>
-        <Col span={20}>
+        <Col span={21}>
           <Select
             style={{ width: '100%' }}
             value={value.repeat || 'repeat'}
@@ -98,11 +98,16 @@ class EditorBg extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(this.repeat)}
+            {getOption(locale.repeat_select)}
           </Select>
         </Col>
       </Row>
-      <RowHelp title="位置" help={<div>可设置自定义值(x, y)<br />如: 50px 100px</div>}>
+      <RowHelp
+        title={
+          <Icon type="imagePosition" prompt={locale.position} />
+        }
+        help={locale.position_help}
+      >
         <SelectInput
           style={{ width: '100%' }}
           value={value.position || ''}
@@ -114,7 +119,10 @@ class EditorBg extends Component {
           {getOptionArray(this.position)}
         </SelectInput>
       </RowHelp>
-      <RowHelp title="尺寸" help={<div>可设置自定义值(x, y)<br />如: 50px 100px</div>}>
+      <RowHelp
+        title={<Icon type="size" prompt={locale.size} />}
+        help={locale.size_help}
+      >
         <SelectInput
           style={{ width: '100%' }}
           value={value.size || ''}
@@ -127,10 +135,10 @@ class EditorBg extends Component {
         </SelectInput>
       </RowHelp>
       <Row gutter={8}>
-        <Col span={4}>
-          类型
+        <Col span={3}>
+          <Icon type="attachment" prompt={locale.attachment} />
         </Col>
-        <Col span={20}>
+        <Col span={21}>
           <RadioGroup
             value={value.attachment || 'scroll'}
             size="small"
