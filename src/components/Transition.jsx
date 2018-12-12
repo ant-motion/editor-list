@@ -32,10 +32,10 @@ export default class EditorTransition extends Component {
     value: PropTypes.string,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
-    header: '过渡',
     value: '',
     onChange: () => {},
   };
@@ -158,16 +158,17 @@ export default class EditorTransition extends Component {
 
   render() {
     const { ...props } = this.props;
+    const { locale } = props;
     ['value', 'font'].map(key => delete props[key]);
     return (
-      <Panel {...props}>
+      <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
           <Col span={6}>
-            名称
+            {locale.name}
           </Col>
-          <Col span={5}>时间</Col>
-          <Col span={6}>缓动</Col>
-          <Col span={5}>延时</Col>
+          <Col span={5}>{locale.time}</Col>
+          <Col span={6}>{locale.ease}</Col>
+          <Col span={5}>{locale.delay}</Col>
         </Row>
         <TweenOneGroup
           appear={false}

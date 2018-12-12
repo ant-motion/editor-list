@@ -15,7 +15,7 @@ const TweenOneGroup = TweenOne.TweenOneGroup;
 class Color extends React.Component {
   static propTypes = {
     className: PropTypes.string,
-    title: PropTypes.string,
+    title: PropTypes.any,
     color: PropTypes.string,
     onChange: PropTypes.func,
     type: PropTypes.string,
@@ -235,14 +235,14 @@ class Color extends React.Component {
 
     return (
       <Row {...props} className={classNameWrapper} gutter={8}>
-        <Col span={4}>
+        <Col span={3}>
           {this.props.title}
         </Col>
-        <Col span={8} style={{ position: 'relative' }}>
+        <Col span={9} style={{ position: 'relative' }}>
           {children}
         </Col>
         <Col span={12}>
-          <Input value={color} onChange={this.inputChange} size="small" placeholder="添加颜色" />
+          <Input value={color} onChange={this.inputChange} size="small" placeholder="Add color" />
         </Col>
       </Row>
     );

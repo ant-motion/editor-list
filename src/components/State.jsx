@@ -12,26 +12,16 @@ const Panel = Collapse.Panel;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-const cursorState = {
-  auto: '默认光标',
-  pointer: '手型光标',
-  crosshair: '十字线光标',
-  move: '移动光标',
-  text: '文本光标',
-  wait: '加载光标',
-  help: '帮助光标',
-};
-
 export default class EditorState extends Component {
   static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    locale: PropTypes.object,
     showClassState: PropTypes.bool,
   };
 
   static defaultProps = {
-    header: '状态',
     value: '',
     onChange: () => {
     },
@@ -39,27 +29,23 @@ export default class EditorState extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value, showClassState, isMobile } = props;
+    const { value, showClassState, locale, isMobile } = props;
     ['value', 'onChange'].map(key => delete props[key]);
-    const childrenToRender = [
-      { value: 'default', content: '无' },
-      { value: 'hover', content: '经过' },
-      { value: 'active', content: '按下' },
-      { value: 'focus', content: '选中' },
-    ].map(item => {
-      if (isMobile && item.value === 'hover') {
+    const childrenToRender = Object.keys(locale.style_select).map(key => {
+      const item = locale.style_select;
+      if (isMobile && item[key] === 'hover') {
         return null;
       }
       return (
-        <RadioButton value={item.value} key={item.value} className="ant-radio-button-auto-width">
-          {item.content}
+        <RadioButton value={key} key={key} className="ant-radio-button-auto-width">
+          {item[key]}
         </RadioButton>
       );
     }).filter(c => c);
-    return (<Panel {...props} >
+    return (<Panel {...props} header={props.header || locale.header}>
       <Row gutter={8}>
         <Col span={24}>
-          鼠标光标状态
+          {locale.cursor}
         </Col>
       </Row>
       <Row gutter={8}>
@@ -75,14 +61,14 @@ export default class EditorState extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(cursorState)}
+            {getOption(locale.cursor_select, true)}
           </Select>
         </Col>
       </Row>
       {showClassState && [
         <Row gutter={8} key="0">
           <Col span={24}>
-            样式状态
+            {locale.style}
           </Col>
         </Row>,
         <Row gutter={8} key="1">

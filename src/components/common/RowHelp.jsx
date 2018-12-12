@@ -7,7 +7,7 @@ import Tooltip from 'antd/lib/tooltip';
 
 export default class RowHelp extends React.Component {
   static propTypes = {
-    title: PropTypes.string,
+    title: PropTypes.any,
     help: PropTypes.any,
     children: PropTypes.any,
   };
@@ -22,10 +22,10 @@ export default class RowHelp extends React.Component {
     ['title', 'help'].map(key => delete props[key]);
     return (
       <Row gutter={8} {...props}>
-        <Col span={4}>
+        <Col span={3}>
           {this.props.title}
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           {this.props.children}
         </Col>
         <Col span={3}>

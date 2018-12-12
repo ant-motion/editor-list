@@ -5,6 +5,9 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Radio from 'antd/lib/radio';
 import Switch from 'antd/lib/switch';
+import Tooltip from 'antd/lib/tooltip';
+import AntIcon from 'antd/lib/icon';
+import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import Color from './common/Color';
 
@@ -17,10 +20,10 @@ export default class EditorShadow extends Component {
     value: PropTypes.object,
     onChange: PropTypes.func,
     header: PropTypes.string,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
-    header: '阴影',
     value: {
       boxShadow: {},
       textShadow: {},
@@ -31,10 +34,6 @@ export default class EditorShadow extends Component {
 
   constructor(props) {
     super(props);
-    this.tags = {
-      boxShadow: '边框阴影',
-      textShadow: '文字阴影',
-    };
     this.defaultShadow = {
       x: '5px',
       y: '5px',
@@ -83,9 +82,9 @@ export default class EditorShadow extends Component {
 
   getTabs = () => (
     <RadioGroup value={this.state.key} onChange={this.radioChange} size="small">
-      {Object.keys(this.tags).map(key => (
+      {Object.keys(this.props.locale.tags).map(key => (
         <RadioButton value={key} key={key} className="ant-radio-button-auto-width">
-          {this.tags[key]}
+          {this.props.locale.tags[key]}
         </RadioButton>
       ))}
     </RadioGroup>
@@ -114,25 +113,37 @@ export default class EditorShadow extends Component {
 
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     const { key, open } = this.state;
     ['value', 'tags', 'onChange'].map(str => delete props[str]);
-    return (<Panel {...props}>
+    return (<Panel {...props} header={props.header || locale.header}>
       {this.getTabs()}
       <div key={key} style={{ marginTop: 10 }}>
         <Row gutter={8}>
-          <Col span={4}>
-            开启
+          <Col span={6}>
+            {locale.switch}
           </Col>
-          <Col span={20}>
+          <Col span={6}>
             <Switch size="small" checked={open[key]} onChange={this.openChange} />
+          </Col>
+          <Col span={6}>
+            {locale.inner}
+          </Col>
+          <Col span={6}>
+            <Switch
+              size="small"
+              checked={open[key] ? !!value[key].inset : false}
+              onChange={(e) => {
+                this.onChange('inset', e ? 'inset' : null);
+              }}
+            />
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col span={4}>
-            偏移
+          <Col span={3}>
+            <Icon type="offset" prompt={locale.offset} />
           </Col>
-          <Col span={10}>
+          <Col span={9}>
             <AutoComplete
               style={{ width: '100%' }}
               placeholder="offset x"
@@ -142,7 +153,7 @@ export default class EditorShadow extends Component {
               }}
             />
           </Col>
-          <Col span={10}>
+          <Col span={9}>
             <AutoComplete
               style={{ width: '100%' }}
               placeholder="offset y"
@@ -152,12 +163,17 @@ export default class EditorShadow extends Component {
               }}
             />
           </Col>
+          <Col span={3}>
+            <Tooltip placement="topRight" arrowPointAtCenter title={locale.offset_help}>
+              <AntIcon type="question-circle" />
+            </Tooltip>
+          </Col>
         </Row>
         <Row gutter={8}>
-          <Col span={4}>
-            模糊
+          <Col span={3}>
+            <Icon type="blur" prompt={locale.blur} />
           </Col>
-          <Col span={20}>
+          <Col span={9}>
             <AutoComplete
               style={{ width: '100%' }}
               placeholder="blur"
@@ -167,41 +183,31 @@ export default class EditorShadow extends Component {
               }}
             />
           </Col>
+          {this.state.key === 'boxShadow' && (
+            [
+              <Col span={3} key="spread-icon">
+                <Icon type="spread" prompt={locale.spread} />
+              </Col>,
+              <Col span={9} key="1">
+                <AutoComplete
+                  style={{ width: '100%' }}
+                  placeholder="spread"
+                  value={open[key] ? value[key].spread : ''}
+                  onChange={(e) => {
+                    this.onChange('spread', e);
+                  }}
+                />
+              </Col>,
+            ]
+          )}
         </Row>
-        {this.state.key === 'boxShadow' && (
-          <Row gutter={8}>
-            <Col span={4}>
-              范围
-            </Col>
-            <Col span={8}>
-              <AutoComplete
-                style={{ width: '100%' }}
-                placeholder="spread"
-                value={open[key] ? value[key].spread : ''}
-                onChange={(e) => {
-                  this.onChange('spread', e);
-                }}
-              />
-            </Col>
-            <Col span={6}>
-              内阴影
-            </Col>
-            <Col span={6}>
-              <Switch
-                size="small"
-                checked={open[key] ? !!value[key].inset : false}
-                onChange={(e) => {
-                  this.onChange('inset', e ? 'inset' : null);
-                }}
-              />
-            </Col>
-          </Row>
-        )}
+
         <Color
           color={open[key] ? value[key].color : ''}
           onChange={(e) => {
             this.onChange('color', e);
           }}
+          title={<Icon type="bg-colors" prompt={locale.color} />}
         />
       </div>
     </Panel>);

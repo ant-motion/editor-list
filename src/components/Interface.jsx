@@ -4,8 +4,7 @@ import Collapse from 'antd/lib/collapse';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
-import Icon from 'antd/lib/icon';
-import Tooltip from 'antd/lib/tooltip';
+import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import RowHelp from './common/RowHelp';
 import BoxModel from './common/BoxModel';
@@ -19,11 +18,11 @@ export default class EditorInterface extends Component {
     header: PropTypes.string,
     value: PropTypes.object,
     onChange: PropTypes.func,
+    locale: PropTypes.object,
   };
 
   static defaultProps = {
     className: 'editor-font',
-    header: '界面',
     value: {
       overflow: 'visible',
       width: '0px',
@@ -50,21 +49,17 @@ export default class EditorInterface extends Component {
     this.props.onChange('interface', value);
   }
 
-  pos = { static: '没有定位', absolute: '绝对定位', relative: '相对定位', fixed: '窗口定位' };
-
-  overflow = { visible: '不裁剪', hidden: '裁剪内容', scroll: '裁剪出现滚动', auto: '超出则出现滚动' };
-
   render() {
     const { ...props } = this.props;
-    const { value } = props;
+    const { value, locale } = props;
     ['value', 'font'].map(key => delete props[key]);
     return (
-      <Panel {...props}>
+      <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
-          <Col span={4}>
-            裁剪
+          <Col span={3}>
+            <Icon type="overflow" prompt={locale.overflow} />
           </Col>
-          <Col span={20}>
+          <Col span={21}>
             <Select
               style={{ width: '100%' }}
               value={value.overflow || 'visible'}
@@ -76,15 +71,15 @@ export default class EditorInterface extends Component {
               dropdownMatchSelectWidth={false}
               dropdownClassName="editor-list-dropdown"
             >
-              {getOption(this.overflow)}
+              {getOption(locale.overflow_select, true)}
             </Select>
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col span={4}>
-            宽度
+          <Col span={3}>
+            <Icon type="width" prompt={locale.width} />
           </Col>
-          <Col span={8}>
+          <Col span={9}>
             <AutoComplete
               style={{ width: '100%' }}
               value={value.width}
@@ -115,10 +110,10 @@ export default class EditorInterface extends Component {
           </Col>
         </Row>
         <Row gutter={8}>
-          <Col span={4}>
-            高度
+          <Col span={3}>
+            <Icon type="height" prompt={locale.height} />
           </Col>
-          <Col span={8}>
+          <Col span={9}>
             <AutoComplete
               style={{ width: '100%' }}
               value={value.height}
@@ -148,8 +143,21 @@ export default class EditorInterface extends Component {
             />
           </Col>
         </Row>
-        <RowHelp title="定位" help={<div>
-          请选择当前相应的定位，如为绝对定位，请开启父级的相对定位，否则将以有相对定位的顶级为定位。</div>}
+        {/* <Row>
+          <Col>
+            位置 - Position
+            <Tooltip
+              placement="topRight"
+              arrowPointAtCenter
+              title={<span>1. 如需设定位置，请先设置定位; <br /> 2. 如果 4 个都有值，以 top left 为准;</span>}
+            >
+              <Icon type="question-circle" style={{ marginLeft: 5 }} />
+            </Tooltip>
+          </Col>
+        </Row> */}
+        <RowHelp
+          title={<Icon type="position" prompt={locale.position} />}
+          help={locale.position_help}
         >
           <Select
             style={{ width: '100%' }}
@@ -162,21 +170,9 @@ export default class EditorInterface extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(this.pos)}
+            {getOption(locale.position_select, true)}
           </Select>
         </RowHelp>
-        <Row >
-          <Col>
-            位置 - Position
-            <Tooltip
-              placement="topRight"
-              arrowPointAtCenter
-              title={<span>1. 如需设定位置，请先设置定位; <br /> 2. 如果 4 个都有值，以 top left 为准;</span>}
-            >
-              <Icon type="question-circle" style={{ marginLeft: 5 }} />
-            </Tooltip>
-          </Col>
-        </Row>
         <BoxModel keys={['top', 'right', 'bottom', 'left']}
           value={{
             top: value.top,
