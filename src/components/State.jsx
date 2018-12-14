@@ -26,6 +26,9 @@ export default class EditorState extends Component {
     onChange: () => {
     },
   };
+  onChange = (e) => {
+    this.props.onChange('cursor', e);
+  }
 
   render() {
     const { ...props } = this.props;
@@ -54,9 +57,7 @@ export default class EditorState extends Component {
             style={{ width: '100%' }}
             value={value.cursor || 'auto'}
             size="small"
-            onChange={(e) => {
-              this.props.onChange('cursor', e);
-            }}
+            onChange={this.onChange}
             getPopupContainer={node => getParentNode(node, 'editor-list')}
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"

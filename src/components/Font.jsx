@@ -4,12 +4,13 @@ import Collapse from 'antd/lib/collapse';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
-import Icon from './common/Icon';
 import Radio from 'antd/lib/radio';
+import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import SelectInput from './common/SelectInput';
 import Color from './common/Color';
 import { getOptionArray, getParentNode } from '../utils';
+
 const Panel = Collapse.Panel;
 const Option = Select.Option;
 

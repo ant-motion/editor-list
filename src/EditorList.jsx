@@ -77,7 +77,7 @@ class EditorList extends Component {
       this.defaultData = {};
       this.editClassName = this.getClassName(nextProps);
       this.setState(this.setDefaultState(nextProps.editorElem, nextProps), () => {
-        this.setEditorElemClassName();
+        this.setEditorElemClassName(nextProps);
       });
     }
     if (this.props.isMobile !== nextProps.isMobile) {
@@ -113,7 +113,7 @@ class EditorList extends Component {
   }
 
   onChangeCssState = (classState) => {
-    const { onChange, isMobile, editorElem } = this.props;
+    const { onChange, isMobile, editorElem, editorDefaultClassName } = this.props;
     this.defaultValue[classState] = this.defaultValue[classState] ||
       this.getDefaultValue(editorElem, isMobile, classState);
     this.currentData[classState] = this.currentData[classState] ||
@@ -137,6 +137,7 @@ class EditorList extends Component {
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
+      cssName: `${this.editClassName}-${editorDefaultClassName}`,
       cssString: this.cssString,
     });
   }
@@ -313,7 +314,7 @@ class EditorList extends Component {
   setCssToDom = () => {
     const { cssName, cssValue } = this.state;
     const { css } = cssValue[cssName];
-    const { editorElem, onChange, cssToDom } = this.props;
+    const { editorElem, onChange, cssToDom, editorDefaultClassName } = this.props;
     if (cssToDom) {
       if (cssName) {
         this.setStyleToDom();
@@ -324,6 +325,7 @@ class EditorList extends Component {
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
+      cssName: `${this.editClassName}-${editorDefaultClassName}`,
       cssString: this.cssString,
     });
   }
@@ -356,8 +358,8 @@ class EditorList extends Component {
     style.innerHTML = cssStr;
   }
 
-  setEditorElemClassName = () => {
-    const { editorElem, editorDefaultClassName } = this.props;
+  setEditorElemClassName = (props = this.props) => {
+    const { editorElem, editorDefaultClassName } = props;
     const { cssName } = this.state;
 
     if (!this.classNameInDefaultDomClass(cssName, editorDefaultClassName)) {
@@ -380,7 +382,7 @@ class EditorList extends Component {
     const inDomStyle = className.split(' ')
       .some(c => c === `${cssName}-${editorDefaultClassName}`);
     const cssValue = this.getStateCSSValue(cssName, className,
-      inDomStyle, classState, domStyle, value);
+      inDomStyle, classState, domStyle, value, props);
     return {
       cssValue,
       cssName,
@@ -478,7 +480,7 @@ class EditorList extends Component {
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
-        image: (convertData(style.backgroundImage) || '').replace(/^url\(|\"|\)?/ig, ''),
+        image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''), 
         repeat: convertDefaultData(style.backgroundRepeat),
         position: convertDefaultData(style.backgroundPosition),
         size: convertDefaultData(style.backgroundSize),

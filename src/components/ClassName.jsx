@@ -26,7 +26,6 @@ export default class EditorClassName extends Component {
   };
 
   state = {
-    dropdownShow: false,
   }
 
   onChange = (value) => {

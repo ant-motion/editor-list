@@ -5,11 +5,11 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
+import Radio from 'antd/lib/radio';
 import SelectInput from './common/SelectInput';
 import Icon from './common/Icon';
 import Color from './common/Color';
 import RowHelp from './common/RowHelp';
-import Radio from 'antd/lib/radio';
 import { getOption, getOptionArray, getRadioButton, getParentNode } from '../utils';
 
 

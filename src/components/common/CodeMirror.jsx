@@ -3,7 +3,7 @@ import codeMirror from 'codemirror';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-function noop() {}
+function noop() { }
 
 export default class RcCodeMirror extends React.Component {
 
@@ -59,7 +59,7 @@ export default class RcCodeMirror extends React.Component {
       [this.props.className]: !!this.props.className,
     });
     return (
-      <div className={className} ref={(self) => this.ref = self} />
+      <div className={className} ref={(self) => { this.ref = self; }} />
     );
   }
 }

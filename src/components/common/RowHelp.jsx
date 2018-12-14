@@ -1,39 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Icon from 'antd/lib/icon';
 import Tooltip from 'antd/lib/tooltip';
 
-export default class RowHelp extends React.Component {
-  static propTypes = {
-    title: PropTypes.any,
-    help: PropTypes.any,
-    children: PropTypes.any,
-  };
-
-  static defaultProps = {
-    title: '',
-    help: '',
-  };
-
-  render() {
-    const { ...props } = this.props;
-    ['title', 'help'].map(key => delete props[key]);
-    return (
-      <Row gutter={8} {...props}>
-        <Col span={3}>
-          {this.props.title}
-        </Col>
-        <Col span={18}>
-          {this.props.children}
-        </Col>
-        <Col span={3}>
-          <Tooltip placement="topRight" arrowPointAtCenter title={this.props.help}>
-            <Icon type="question-circle" />
-          </Tooltip>
-        </Col>
-      </Row>
-    );
-  }
+export default (props) => {
+  const { title, help, children } = props
+  return (
+    <Row gutter={8} {...props}>
+      <Col span={3}>
+        {title}
+      </Col>
+      <Col span={18}>
+        {children}
+      </Col>
+      <Col span={3}>
+        <Tooltip placement="topRight" arrowPointAtCenter title={help}>
+          <Icon type="question-circle" />
+        </Tooltip>
+      </Col>
+    </Row>
+  );
 }

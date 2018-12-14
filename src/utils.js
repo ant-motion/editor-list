@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React from 'react';
 import Select from 'antd/lib/select';
 import Radio from 'antd/lib/radio';
@@ -192,12 +193,12 @@ export function getRadioButton(array) {
   )));
 }
 
-export function getComputedStyle() {
-  return document.defaultView ? document.defaultView.getComputedStyle(...arguments) : {};
-}
+export function getComputedStyle(target) {
+  return document.defaultView ? document.defaultView.getComputedStyle(target) : {};
+} 
 
 export function convertData(d, b) {
-  const c = b ? (!d & typeof d !== 'number') || d.indexOf('none') >= 0
+  const c = b ? (!d && typeof d !== 'number') || d.indexOf('none') >= 0
     || d.indexOf('normal') >= 0 :
     !d || d === '0px' || d.indexOf('normal') >= 0;
   if (c) {
@@ -226,7 +227,7 @@ export function convertBorderData(d, width, isRadius) {
     return d;
   }
   const dataIsColor = isColor(d);
-  const dArray = !!dataIsColor ? dataIsColor : d.split(' ');
+  const dArray = dataIsColor || d.split(' ');
   if (dArray.length > 1) {
     let top = convertData(dArray[0]);
     let right = convertData(dArray[1]);
@@ -520,6 +521,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
         styleObj[newSelectName] = cssText;
       }
     }
+    return null;
   });
 }
 
