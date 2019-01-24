@@ -79462,7 +79462,7 @@ var EditorClassName = function (_Component) {
           { gutter: 8 },
           __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
             __WEBPACK_IMPORTED_MODULE_10_antd_es_col__["a" /* default */],
-            { span: 6 },
+            null,
             locale.exclusive
           )
         ),
