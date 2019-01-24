@@ -43,7 +43,7 @@ export default class EditorClassName extends Component {
     return (
       <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
-          <Col span={6}>
+          <Col>
             {locale.exclusive}
           </Col>
         </Row>
