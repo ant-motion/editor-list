@@ -51324,7 +51324,7 @@ var _initialiseProps = function _initialiseProps() {
           itemProps.onChange = _this3.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
         }
-        itemProps.locale = __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */][key];
+        itemProps.locale = props.locale[key];
         return Object(__WEBPACK_IMPORTED_MODULE_7_react__["cloneElement"])(item, itemProps);
       }).filter(function (c) {
         return c;
@@ -51336,12 +51336,12 @@ var _initialiseProps = function _initialiseProps() {
       classNameArray: classNameArray,
       placeholder: _this3.props.editorDefaultClassName,
       key: 'EditorClassName',
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorClassName,
+      locale: props.locale.EditorClassName,
       editClassName: _this3.editClassName
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_18__components_State__["a" /* default */], {
       onChange: _this3.onStateChange,
       key: 'EditorState',
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorState,
+      locale: props.locale.EditorState,
       showClassState: _this3.props.useClassName,
       value: stateValue,
       isMobile: _this3.props.isMobile
@@ -51349,43 +51349,43 @@ var _initialiseProps = function _initialiseProps() {
       onChange: _this3.onChange,
       key: 'EditorFont',
       value: value.font,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorFont
+      locale: props.locale.EditorFont
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__components_Interface__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorInterface',
       value: value['interface'],
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorInterface
+      locale: props.locale.EditorInterface
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__components_BackGround__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorBackGround',
       value: value.background,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorBackGround
+      locale: props.locale.EditorBackGround
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_12__components_Border__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorBorder',
       value: value.border,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorBorder
+      locale: props.locale.EditorBorder
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_14__components_Margin__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorMargin',
       value: value.margin,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorMargin
+      locale: props.locale.EditorMargin
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_15__components_Shadow__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorShadow',
       value: value.shadow,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorShadow
+      locale: props.locale.EditorShadow
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_17__components_Transition__["a" /* default */], {
       onChange: _this3.onChange,
       key: 'EditorTransition',
       value: value.transition,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorTransition
+      locale: props.locale.EditorTransition
     }), __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_16__components_Css__["a" /* default */], {
       onChange: _this3.onCssChange,
       key: 'EditorCss',
       value: myCss[classState],
       cssName: cssName,
-      locale: __WEBPACK_IMPORTED_MODULE_20__locale_zh_CN__["a" /* default */].EditorCss
+      locale: props.locale.EditorCss
     })];
   };
 
