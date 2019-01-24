@@ -60,7 +60,7 @@ export default class EditorClassName extends Component {
             </CheckableTag>
           </Col>
         </Row>
-        {classNameArray.length && [
+        {!!classNameArray.length && [
           (<Row gutter={8} key="name">
             <Col span={24}>{locale.common}</Col>
           </Row>),
