@@ -51288,7 +51288,9 @@ var _initialiseProps = function _initialiseProps() {
 
     var myCss = props.isMobile ? mobileCss : css;
     var stateValue = { cursor: value.state.cursor, classState: classState };
-    var classNameArray = _this3.defaultDomClass.split(' ');
+    var classNameArray = _this3.defaultDomClass.split(' ').filter(function (c) {
+      return c;
+    });
     if (props.children) {
       _this3.select = {};
       return Object(__WEBPACK_IMPORTED_MODULE_21__utils__["t" /* toArrayChildren */])(props.children).map(function (item) {
