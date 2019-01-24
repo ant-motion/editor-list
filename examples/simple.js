@@ -79487,7 +79487,7 @@ var EditorClassName = function (_Component) {
             )
           )
         ),
-        classNameArray.length && [__WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
+        !!classNameArray.length && [__WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_9_antd_es_row__["a" /* default */],
           { gutter: 8, key: 'name' },
           __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
