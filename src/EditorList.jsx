@@ -563,7 +563,7 @@ class EditorList extends Component {
     const { css, mobileCss, value } = cssValue[cssName];
     const myCss = props.isMobile ? mobileCss : css;
     const stateValue = { cursor: value.state.cursor, classState };
-    const classNameArray = this.defaultDomClass.split(' ');
+    const classNameArray = this.defaultDomClass.split(' ').filter(c => c);
     if (props.children) {
       this.select = {};
       return toArrayChildren(props.children).map(item => {
