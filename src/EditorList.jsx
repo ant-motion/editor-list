@@ -598,7 +598,7 @@ class EditorList extends Component {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
         }
-        itemProps.locale = Locale[key];
+        itemProps.locale = props.locale[key];
         return cloneElement(item, itemProps);
       }).filter(c => c);
     }
@@ -610,14 +610,14 @@ class EditorList extends Component {
           classNameArray={classNameArray}
           placeholder={this.props.editorDefaultClassName}
           key="EditorClassName"
-          locale={Locale.EditorClassName}
+          locale={props.locale.EditorClassName}
           editClassName={this.editClassName}
         />
       ),
       <State
         onChange={this.onStateChange}
         key="EditorState"
-        locale={Locale.EditorState}
+        locale={props.locale.EditorState}
         showClassState={this.props.useClassName}
         value={stateValue}
         isMobile={this.props.isMobile}
@@ -626,50 +626,50 @@ class EditorList extends Component {
         onChange={this.onChange}
         key="EditorFont"
         value={value.font}
-        locale={Locale.EditorFont}
+        locale={props.locale.EditorFont}
       />,
       <Interface
         onChange={this.onChange}
         key="EditorInterface"
         value={value.interface}
-        locale={Locale.EditorInterface}
+        locale={props.locale.EditorInterface}
       />,
       <BackGround
         onChange={this.onChange}
         key="EditorBackGround"
         value={value.background}
-        locale={Locale.EditorBackGround}
+        locale={props.locale.EditorBackGround}
       />,
       <Border
         onChange={this.onChange}
         key="EditorBorder"
         value={value.border}
-        locale={Locale.EditorBorder}
+        locale={props.locale.EditorBorder}
       />,
       <Margin
         onChange={this.onChange}
         key="EditorMargin"
         value={value.margin}
-        locale={Locale.EditorMargin}
+        locale={props.locale.EditorMargin}
       />,
       <Shadow
         onChange={this.onChange}
         key="EditorShadow"
         value={value.shadow}
-        locale={Locale.EditorShadow}
+        locale={props.locale.EditorShadow}
       />,
       <Transition
         onChange={this.onChange}
         key="EditorTransition"
         value={value.transition}
-        locale={Locale.EditorTransition}
+        locale={props.locale.EditorTransition}
       />,
       <Css
         onChange={this.onCssChange}
         key="EditorCss"
         value={myCss[classState]}
         cssName={cssName}
-        locale={Locale.EditorCss}
+        locale={props.locale.EditorCss}
       />,
     ];
   }
