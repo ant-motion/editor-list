@@ -51091,6 +51091,7 @@ var _initialiseProps = function _initialiseProps() {
       cssStr += '\n';
     });
     cssStr += '\n}';
+    _this3.cssString = cssStr;
     if (cssToDom) {
       // 如果是自定义样式或生成的样式插入到 body
       // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
