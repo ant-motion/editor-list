@@ -315,13 +315,13 @@ class EditorList extends Component {
     const { cssName, cssValue } = this.state;
     const { css } = cssValue[cssName];
     const { editorElem, onChange, cssToDom, editorDefaultClassName } = this.props;
-    if (cssToDom) {
-      if (cssName) {
-        this.setStyleToDom();
-      } else {
-        editorElem.style.cssText = css.default;
-      }
+
+    if (cssName) {
+      this.setStyleToDom(cssToDom);
+    } else {
+      editorElem.style.cssText = css.default;
     }
+
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
@@ -330,7 +330,7 @@ class EditorList extends Component {
     });
   }
 
-  setStyleToDom = () => {
+  setStyleToDom = (cssToDom) => {
     const { cssValue, cssName } = this.state;
     let cssStr = '';
     const cssValueArray = Object.keys(cssValue).sort((a, b) => b === cssName ? -1 : 0);
@@ -346,16 +346,17 @@ class EditorList extends Component {
       cssStr += '\n';
     });
     cssStr += '\n}';
-    this.cssString = cssStr;
-    // 如果是自定义样式或生成的样式插入到 body
-    // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
-    let style = this.ownerDocument.querySelector(`#${this.dataId}`);
-    // 通用插入到 head;
-    if (style) {
-      style.remove();
+    if (cssToDom) {
+      // 如果是自定义样式或生成的样式插入到 body
+      // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
+      let style = this.ownerDocument.querySelector(`#${this.dataId}`);
+      // 通用插入到 head;
+      if (style) {
+        style.remove();
+      }
+      style = this.createStyle();
+      style.innerHTML = cssStr;
     }
-    style = this.createStyle();
-    style.innerHTML = cssStr;
   }
 
   setEditorElemClassName = (props = this.props) => {
@@ -480,7 +481,7 @@ class EditorList extends Component {
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
-        image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''), 
+        image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''),
         repeat: convertDefaultData(style.backgroundRepeat),
         position: convertDefaultData(style.backgroundPosition),
         size: convertDefaultData(style.backgroundSize),
