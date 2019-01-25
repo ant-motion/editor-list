@@ -346,6 +346,7 @@ class EditorList extends Component {
       cssStr += '\n';
     });
     cssStr += '\n}';
+    this.cssString = cssStr;
     if (cssToDom) {
       // 如果是自定义样式或生成的样式插入到 body
       // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
