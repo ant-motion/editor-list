@@ -51055,13 +51055,13 @@ var _initialiseProps = function _initialiseProps() {
         cssToDom = _props4.cssToDom,
         editorDefaultClassName = _props4.editorDefaultClassName;
 
-    if (cssToDom) {
-      if (cssName) {
-        _this3.setStyleToDom();
-      } else {
-        editorElem.style.cssText = css['default'];
-      }
+
+    if (cssName) {
+      _this3.setStyleToDom(cssToDom);
+    } else {
+      editorElem.style.cssText = css['default'];
     }
+
     onChange({
       parentClassName: _this3.parentClassName,
       cssValue: cssValue,
@@ -51070,7 +51070,7 @@ var _initialiseProps = function _initialiseProps() {
     });
   };
 
-  this.setStyleToDom = function () {
+  this.setStyleToDom = function (cssToDom) {
     var _state6 = _this3.state,
         cssValue = _state6.cssValue,
         cssName = _state6.cssName;
@@ -51091,16 +51091,17 @@ var _initialiseProps = function _initialiseProps() {
       cssStr += '\n';
     });
     cssStr += '\n}';
-    _this3.cssString = cssStr;
-    // 如果是自定义样式或生成的样式插入到 body
-    // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
-    var style = _this3.ownerDocument.querySelector('#' + _this3.dataId);
-    // 通用插入到 head;
-    if (style) {
-      style.remove();
+    if (cssToDom) {
+      // 如果是自定义样式或生成的样式插入到 body
+      // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
+      var style = _this3.ownerDocument.querySelector('#' + _this3.dataId);
+      // 通用插入到 head;
+      if (style) {
+        style.remove();
+      }
+      style = _this3.createStyle();
+      style.innerHTML = cssStr;
     }
-    style = _this3.createStyle();
-    style.innerHTML = cssStr;
   };
 
   this.setEditorElemClassName = function () {
