@@ -195,7 +195,7 @@ export function getRadioButton(array) {
 
 export function getComputedStyle(target) {
   return document.defaultView ? document.defaultView.getComputedStyle(target) : {};
-} 
+}
 
 export function convertData(d, b) {
   const c = b ? (!d && typeof d !== 'number') || d.indexOf('none') >= 0
@@ -248,6 +248,7 @@ export function convertBorderData(d, width, isRadius) {
     }
     return { top, right, bottom, left };
   }
+  console.log(d);
   return convertData(d);
 }
 
@@ -610,14 +611,9 @@ export function getClassNameCssRule({ dom, className, isMobile, onlyMobile, stat
     isMobile, state, className, onlyMobile,
   });
   div.style = style;
-  if (getObject) {
-    const styleObject = removeEmptyStyle(div.style);
-    div.remove();
-    return styleObject;
-  }
-  const styleString = div.style.cssText;
+  const styleData = getObject ? removeEmptyStyle(div.style) : div.style.cssText;
   div.remove();
-  return styleString;
+  return styleData;
 }
 
 export function getParentClassName(dom, useTagName = true, length = 50) {
@@ -653,4 +649,19 @@ export function getParentNode(node, className) {
     return parent;
   }
   return getParentNode(parent, className);
+}
+
+export function getCssStr(cssString, className) {
+  const reStr = `\.${className}[\\s\\n?]*\\{\\n?([^\\}]+?)\\n?\\}`;
+  const re = new RegExp(reStr, "gi");
+  const css = cssString.match(re);
+  if (css) {
+    let str = '';
+    css.forEach(string => {
+      const reg = new RegExp(reStr, 'gm');
+      str += string.replace(reg, '$1');
+    })
+    return str;
+  }
+  return null;
 }

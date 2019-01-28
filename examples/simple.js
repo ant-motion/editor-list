@@ -56,26 +56,28 @@ class Demo extends React.Component {
           onChange={this.onChange}
           isMobile={this.state.state === 'mobile'}
         />)}
-      <style
-        dangerouslySetInnerHTML={
-          {
-            __html: `.jeply9mvwlk-editor_css{
-              text-decoration: underline;
-            }
-        .jeply9mvwlk-editor_css:focus{
-          font-size: 64px;
-        }
-        @media screen and (max-width: 767px) {
-          .jeply9mvwlk-editor_css{
-            color: #00ff00;
-          }
-        }
-        `,
-          }
-        }
-      />
     </div>);
   }
 }
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));
+
+
+const t = document.createElement('style');
+t.innerHTML = `
+.demo > .box > .jeply9mvwlk-editor_css{
+  text-decoration: underline;
+  top: 20px;
+}
+.demo > .box > .jeply9mvwlk-editor_css:focus{
+font-size: 64px;
+}
+@media screen and (max-width: 767px) {
+  .demo > .box > .jeply9mvwlk-editor_css{
+color: #00ff00;
+}
+}`;
+t.id = 'demo_box_jeply9mvwlk-editor_css'
+
+document.body.append(t);
+

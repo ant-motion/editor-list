@@ -5,9 +5,9 @@ import Icon from 'antd/lib/icon';
 import Tooltip from 'antd/lib/tooltip';
 
 export default (props) => {
-  const { title, help, children } = props
+  const { title, help, children, ...rowProps } = props
   return (
-    <Row gutter={8} {...props}>
+    <Row gutter={8} {...rowProps}>
       <Col span={3}>
         {title}
       </Col>

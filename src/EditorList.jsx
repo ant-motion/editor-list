@@ -27,6 +27,7 @@ import {
   getClassNameCssRule,
   getParentClassName,
   mobileTitle,
+  getCssStr,
 } from './utils';
 
 const stateSort = { default: 0, hover: 1, focus: 2, active: 3 };
@@ -67,6 +68,7 @@ class EditorList extends Component {
     this.defaultData = {};
     this.currentData = {};
     this.cssString = '';
+    this.currentEditCssString = '';
     this.state = this.setDefaultState(props.editorElem, props);
     this.setEditorElemClassName();
   }
@@ -113,7 +115,7 @@ class EditorList extends Component {
   }
 
   onChangeCssState = (classState) => {
-    const { onChange, isMobile, editorElem, editorDefaultClassName } = this.props;
+    const { onChange, isMobile, editorElem } = this.props;
     this.defaultValue[classState] = this.defaultValue[classState] ||
       this.getDefaultValue(editorElem, isMobile, classState);
     this.currentData[classState] = this.currentData[classState] ||
@@ -123,7 +125,6 @@ class EditorList extends Component {
     this.defaultData = this.getDefaultData(this.defaultValue[classState]);
 
     const { cssName, cssValue } = this.state;
-
     this.setState({
       cssValue: {
         ...cssValue,
@@ -137,30 +138,30 @@ class EditorList extends Component {
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
-      cssName: `${this.editClassName}-${editorDefaultClassName}`,
+      cssName,
+      editClassName: this.editClassName,
       cssString: this.cssString,
+      currentEditCssString: this.currentEditCssString,
     });
   }
 
   onClassNameChange = (cssName) => {
     const { cssValue } = this.state;
-    const { editorElem, isMobile, editorDefaultClassName } = this.props;
-    const dom = editorElem;
-    const className = dom.className;
+    const { editorElem, isMobile } = this.props;
     const classState = 'default';
-    const inDomStyle = cssName !== this.editClassName ? false : className.split(' ')
-      .some(c => c === `${cssName}-${editorDefaultClassName}`);
     const domStyle = getClassNameCssRule(
       { dom: editorElem, className: cssName, isMobile, state: null, getObject: true }
     );
     const value = this.getDefaultData(domStyle);
+    this.setDefaultData({
+      isMobile, dom: editorElem, classState, domStyle, value, cssName
+    });
     if (!cssValue[cssName]) {
       const state = {
         cssName,
         classState,
       };
-      const newCssValue = this.getStateCSSValue(cssName, className, inDomStyle,
-        classState, domStyle, value);
+      const newCssValue = this.getStateCSSValue(cssName, classState, domStyle, value);
       this.setState({
         ...state,
         cssValue: {
@@ -168,15 +169,12 @@ class EditorList extends Component {
           ...newCssValue,
         },
       });
-    } else {
-      this.setDefaultData({
-        inDomStyle, isMobile, className, dom, classState, value, domStyle,
-      });
     }
     this.setState({
       cssName,
       classState: 'default',
     });
+    // 变更样式时不回调
   }
 
   onCssChange = ($cssValue) => {
@@ -258,18 +256,17 @@ class EditorList extends Component {
     }, this.setCssToDom);
   };
 
+  getEditId = (str) => `${this.parentClassName}${str}`.replace(/>/g, '_').replace(/\s+|\./ig, '');
+
   getStateCSSValue = (
-    cssName, className, inDomStyle, classState, domStyle, value, props = this.props
+    cssName, classState, domStyle, value, props = this.props
   ) => {
-    const dom = props.editorElem;
-    const { editorDefaultClassName, isMobile } = props;
-    this.setDefaultData({
-      inDomStyle, isMobile, className, dom, classState, value, domStyle,
-    });
-    const css = this.getDefaultCssData(dom, inDomStyle, cssName === this.editClassName ?
+    const { editorDefaultClassName } = props;
+    // 获取已插入在 dom 里的编辑值；
+    const css = this.getDefaultCssData(cssName === this.editClassName ?
       `${cssName}-${editorDefaultClassName}` : cssName);
     this.currentData = {};
-    if (this.props.useClassName) {
+    if (props.useClassName) {
       this.currentData[classState] = this.getDefaultData(domStyle);
     } else {
       this.currentData.default = value;
@@ -299,39 +296,33 @@ class EditorList extends Component {
     return domStyle;
   }
 
-  setDefaultData = ({ inDomStyle, isMobile, className, dom, classState, domStyle, value }) => {
-    if (inDomStyle) {
-      dom.className = this.defaultDomClass;
+  setDefaultData = ({ isMobile, dom, classState, domStyle, value, cssName }) => {
+    // 删除所有编辑的样式，，获取当前 dom 自身的值；
+    const className = dom.className;
+    if (cssName === this.editClassName || !cssName) {
+      const editStyle = {};
+      className.split(' ').filter(c => c).forEach(str => {
+        const id = this.getEditId(str);
+        const style = document.getElementById(id);
+        if (style) {
+          editStyle[id] = style.innerHTML;
+          style.innerHTML = '';
+        }
+      })
       this.defaultValue[classState] = this.getDefaultValue(dom, isMobile, classState);
       this.defaultData = this.getDefaultData(this.defaultValue[classState]);
-      dom.className = className;
+      Object.keys(editStyle).forEach(id => {
+        const style = document.getElementById(id);
+        style.innerHTML = editStyle[id];
+      });
     } else {
       this.defaultValue[classState] = domStyle;
       this.defaultData = value;
     }
   }
 
-  setCssToDom = () => {
+  getAllCssString = () => {
     const { cssName, cssValue } = this.state;
-    const { css } = cssValue[cssName];
-    const { editorElem, onChange, cssToDom, editorDefaultClassName } = this.props;
-
-    if (cssName) {
-      this.setStyleToDom(cssToDom);
-    } else {
-      editorElem.style.cssText = css.default;
-    }
-
-    onChange({
-      parentClassName: this.parentClassName,
-      cssValue,
-      cssName: `${this.editClassName}-${editorDefaultClassName}`,
-      cssString: this.cssString,
-    });
-  }
-
-  setStyleToDom = (cssToDom) => {
-    const { cssValue, cssName } = this.state;
     let cssStr = '';
     const cssValueArray = Object.keys(cssValue).sort((a, b) => b === cssName ? -1 : 0);
     cssValueArray.forEach(key => {
@@ -346,18 +337,60 @@ class EditorList extends Component {
       cssStr += '\n';
     });
     cssStr += '\n}';
-    this.cssString = cssStr;
-    if (cssToDom) {
-      // 如果是自定义样式或生成的样式插入到 body
-      // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
-      let style = this.ownerDocument.querySelector(`#${this.dataId}`);
-      // 通用插入到 head;
-      if (style) {
-        style.remove();
+    return cssStr;
+  }
+
+  getCurrentEditCssString = () => {
+    const { cssName, cssValue } = this.state;
+    let currentCss = '';
+    const value = cssValue[cssName];
+    currentCss += this.cssObjectToString(value.css, cssName);
+    currentCss += '\n';
+    currentCss += `\n${mobileTitle}\n`;
+    currentCss += this.cssObjectToString(value.mobileCss, cssName);
+    currentCss += '\n}';
+    return currentCss;
+  }
+
+  setCssToDom = () => {
+    const { cssName, cssValue } = this.state;
+    const { css } = cssValue[cssName];
+    const { editorElem, onChange, cssToDom } = this.props;
+    this.cssString = this.getAllCssString();
+    this.currentEditCssString = this.getCurrentEditCssString();
+    if (cssName) {
+      if (cssToDom) {
+        this.setStyleToDom();
       }
-      style = this.createStyle();
-      style.innerHTML = cssStr;
+
+    } else {
+      editorElem.style.cssText = css.default;
     }
+
+    onChange({
+      parentClassName: this.parentClassName,
+      cssValue,
+      cssName,
+      editClassName: this.editClassName,
+      allCssString: this.cssString,
+      currentEditCssString: this.currentEditCssString,
+    });
+  }
+
+  setStyleToDom = () => {
+    const { cssName } = this.state;
+    const { editorDefaultClassName } = this.props
+    // 如果是自定义样式或生成的样式插入到 body
+    // const noDefault = !this.classNameInDefaultDomClass(cssName, editorDefaultClassName);
+    const id = this.getEditId(cssName === this.editClassName ?
+      `${cssName}-${editorDefaultClassName}` : cssName);// `${this.parentClassName} .${cssName}`;
+    let style = this.ownerDocument.getElementById(id);
+    // 通用插入到 head;
+    if (style) {
+      style.remove();
+    }
+    style = this.createStyle(id);
+    style.innerHTML = this.currentEditCssString;
   }
 
   setEditorElemClassName = (props = this.props) => {
@@ -371,23 +404,32 @@ class EditorList extends Component {
   }
 
   setDefaultState = (dom, props) => {
-    const { editorDefaultClassName, isMobile } = props;
+    const {
+      editorDefaultClassName,
+      isMobile,
+      parentClassNameCanUseTagName,
+      parentClassNameLength
+    } = props;
     this.ownerDocument = dom.ownerDocument;
     this.editClassName = this.getClassName(props);
+    this.parentClassName = getParentClassName(dom,
+      parentClassNameCanUseTagName, parentClassNameLength);
+    // 当前带样式的 value;
     const classState = 'default';
     const domStyle = this.getDefaultValue(dom, isMobile, classState);
     const value = this.getDefaultData(domStyle);
-    const className = dom.className;
-    this.defaultDomClass = dom.className ?
-      removeEditClassName(dom.className, editorDefaultClassName) : '';
-    const cssName = this.getClassName(props);
-    const inDomStyle = className.split(' ')
-      .some(c => c === `${cssName}-${editorDefaultClassName}`);
-    const cssValue = this.getStateCSSValue(cssName, className,
-      inDomStyle, classState, domStyle, value, props);
+    // 获取默认初始化；
+    this.setDefaultData({
+      isMobile, dom, classState,
+    });
+    // 获取初始化样式
+    this.defaultDomClass = removeEditClassName(dom.className || '', editorDefaultClassName);
+    // 获取当前样式的初始值；
+    const cssValue = this.getStateCSSValue(this.editClassName,
+      classState, domStyle, value, props);
     return {
       cssValue,
-      cssName,
+      cssName: this.editClassName,
       classState,
     };
   }
@@ -395,8 +437,7 @@ class EditorList extends Component {
   getClassName = (props) => {
     const {
       editorElem,
-      parentClassNameCanUseTagName,
-      parentClassNameLength,
+
       editorDefaultClassName,
     } = props;
     const currentEditorCssName = (editorElem.className || '').split(' ')
@@ -404,13 +445,10 @@ class EditorList extends Component {
       .map(name => name.replace(`-${editorDefaultClassName}`, ''))[0];
     const random = currentEditorCssName ||
       editorElem.getAttribute('data-editor_css_rand') || getRandomKey();
-    this.dataId = `${editorDefaultClassName}-${random}`;
     editorElem.setAttribute('data-editor_css_rand', random);
-    this.parentClassName = getParentClassName(editorElem,
-      parentClassNameCanUseTagName, parentClassNameLength);
     return this.props.useClassName ? random : '';
   };
-  getDefaultCssData = (dom, inDomStyle, className) => {
+  getDefaultCssData = (className) => {
     const css = {
       css: {
         default: '',
@@ -424,19 +462,21 @@ class EditorList extends Component {
         focus: '',
       },
     };
-    if (this.props.useClassName && inDomStyle) {
+    const id = this.getEditId(className);
+    const style = document.getElementById(id);
+    if (this.props.useClassName && style) {
       // 样式叠加型式。
-      Object.keys(css).forEach(name => {
+      const styleText = style.innerHTML;
+      const cssArr = styleText.split(mobileTitle);
+      Object.keys(css).forEach((name, i) => {
+        let string = cssArr[i];
+        string = string.replace(/\}[\n|\s+]\}/, '}');
         Object.keys(css[name]).forEach(key => {
-          css[name][key] = getClassNameCssRule(
-            {
-              dom,
-              className,
-              isMobile: name === 'mobileCss',
-              onlyMobile: name === 'mobileCss',
-              state: key !== 'default' && key,
-            }
-          );
+          const regName = `${className}${key !== 'default' ? `:${key}` : ''}`;
+          if (string.match(new RegExp(regName, 'ig'))) {
+            const str = getCssStr(string, regName);
+            css[name][key] = str || '';
+          }
         });
       });
     }
@@ -691,9 +731,9 @@ class EditorList extends Component {
     }).join('\n');
   }
 
-  createStyle = () => {
+  createStyle = (id) => {
     const style = this.ownerDocument.createElement('style');
-    style.id = this.dataId;
+    style.id = id;
     // this.ownerDocument[n ? 'body' : 'head'].appendChild(style);
     this.ownerDocument.body.appendChild(style);
     return style;
