@@ -248,7 +248,6 @@ export function convertBorderData(d, width, isRadius) {
     }
     return { top, right, bottom, left };
   }
-  console.log(d);
   return convertData(d);
 }
 
@@ -655,13 +654,12 @@ export function getCssStr(cssString, className) {
   const reStr = `\.${className}[\\s\\n?]*\\{\\n?([^\\}]+?)\\n?\\}`;
   const re = new RegExp(reStr, "gi");
   const css = cssString.match(re);
+  let str = '';
   if (css) {
-    let str = '';
     css.forEach(string => {
       const reg = new RegExp(reStr, 'gm');
       str += string.replace(reg, '$1');
     })
-    return str;
   }
-  return null;
+  return str;
 }

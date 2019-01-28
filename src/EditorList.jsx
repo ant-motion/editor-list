@@ -474,8 +474,7 @@ class EditorList extends Component {
         Object.keys(css[name]).forEach(key => {
           const regName = `${className}${key !== 'default' ? `:${key}` : ''}`;
           if (string.match(new RegExp(regName, 'ig'))) {
-            const str = getCssStr(string, regName);
-            css[name][key] = str || '';
+            css[name][key] = getCssStr(string, regName);
           }
         });
       });
