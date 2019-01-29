@@ -115,7 +115,7 @@ class EditorList extends Component {
   }
 
   onChangeCssState = (classState) => {
-    const { onChange, isMobile, editorElem } = this.props;
+    const { onChange, isMobile, editorElem, editorDefaultClassName } = this.props;
     this.defaultValue[classState] = this.defaultValue[classState] ||
       this.getDefaultValue(editorElem, isMobile, classState);
     this.currentData[classState] = this.currentData[classState] ||
@@ -135,10 +135,13 @@ class EditorList extends Component {
       },
       classState,
     });
+    const $cssName = cssName === this.editClassName ?
+      `${cssName}-${editorDefaultClassName}` : cssName;
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
-      cssName,
+      cssName: $cssName,
+      id: this.getEditId($cssName),
       editClassName: this.editClassName,
       cssString: this.cssString,
       currentEditCssString: this.currentEditCssString,
@@ -354,7 +357,7 @@ class EditorList extends Component {
   setCssToDom = () => {
     const { cssName, cssValue } = this.state;
     const { css } = cssValue[cssName];
-    const { editorElem, onChange, cssToDom } = this.props;
+    const { editorElem, onChange, cssToDom, editorDefaultClassName } = this.props;
     this.cssString = this.getAllCssString();
     this.currentEditCssString = this.getCurrentEditCssString();
     if (cssName) {
@@ -365,11 +368,13 @@ class EditorList extends Component {
     } else {
       editorElem.style.cssText = css.default;
     }
-
+    const $cssName = cssName === this.editClassName ?
+    `${cssName}-${editorDefaultClassName}` : cssName;
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
-      cssName,
+      cssName: $cssName,
+      id: this.getEditId($cssName),
       editClassName: this.editClassName,
       allCssString: this.cssString,
       currentEditCssString: this.currentEditCssString,
