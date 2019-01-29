@@ -26878,7 +26878,7 @@ var Demo = function (_React$Component) {
         { className: 'box' },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
-          { onClick: this.onClick, className: 'a c editor-user-css jeply9mvwlk-editor_css' },
+          { onClick: this.onClick, className: 'a c editor-user-css' },
           '\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5',
           __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
           '---------\u8BF7\u70B9\u51FB---------'
@@ -50853,7 +50853,8 @@ var _initialiseProps = function _initialiseProps() {
     var _props = _this3.props,
         onChange = _props.onChange,
         isMobile = _props.isMobile,
-        editorElem = _props.editorElem;
+        editorElem = _props.editorElem,
+        editorDefaultClassName = _props.editorDefaultClassName;
 
     _this3.defaultValue[classState] = _this3.defaultValue[classState] || _this3.getDefaultValue(editorElem, isMobile, classState);
     _this3.currentData[classState] = _this3.currentData[classState] || _this3.getDefaultData(_this3.defaultValue[classState]);
@@ -50871,10 +50872,12 @@ var _initialiseProps = function _initialiseProps() {
       }))),
       classState: classState
     });
+    var $cssName = cssName === _this3.editClassName ? cssName + '-' + editorDefaultClassName : cssName;
     onChange({
       parentClassName: _this3.parentClassName,
       cssValue: cssValue,
-      cssName: cssName,
+      cssName: $cssName,
+      id: _this3.getEditId($cssName),
       editClassName: _this3.editClassName,
       cssString: _this3.cssString,
       currentEditCssString: _this3.currentEditCssString
@@ -51107,7 +51110,8 @@ var _initialiseProps = function _initialiseProps() {
     var _props4 = _this3.props,
         editorElem = _props4.editorElem,
         onChange = _props4.onChange,
-        cssToDom = _props4.cssToDom;
+        cssToDom = _props4.cssToDom,
+        editorDefaultClassName = _props4.editorDefaultClassName;
 
     _this3.cssString = _this3.getAllCssString();
     _this3.currentEditCssString = _this3.getCurrentEditCssString();
@@ -51118,11 +51122,12 @@ var _initialiseProps = function _initialiseProps() {
     } else {
       editorElem.style.cssText = css['default'];
     }
-
+    var $cssName = cssName === _this3.editClassName ? cssName + '-' + editorDefaultClassName : cssName;
     onChange({
       parentClassName: _this3.parentClassName,
       cssValue: cssValue,
-      cssName: cssName,
+      cssName: $cssName,
+      id: _this3.getEditId($cssName),
       editClassName: _this3.editClassName,
       allCssString: _this3.cssString,
       currentEditCssString: _this3.currentEditCssString
