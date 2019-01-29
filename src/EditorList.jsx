@@ -348,9 +348,12 @@ class EditorList extends Component {
     const value = cssValue[cssName];
     currentCss += this.cssObjectToString(value.css, cssName);
     currentCss += '\n';
-    currentCss += `\n${mobileTitle}\n`;
-    currentCss += this.cssObjectToString(value.mobileCss, cssName);
-    currentCss += '\n}';
+    const mobileCss = this.cssObjectToString(value.mobileCss, cssName);
+    if (mobileCss) {
+      currentCss += `\n${mobileTitle}\n`;
+      currentCss += mobileCss;
+      currentCss += '\n}';
+    }
     return currentCss;
   }
 
@@ -727,11 +730,11 @@ class EditorList extends Component {
     )).map(key => {
       switch (key) {
         case 'default':
-          return `${this.parentClassName} .${cssName} {\n${css[key]}\n}`;
+          return css[key] ? `${this.parentClassName} .${cssName} {\n${css[key]}\n}` : '';
         default:
-          return `${this.parentClassName} .${cssName}:${key} {\n${css[key]}\n}`;
+          return css[key] ? `${this.parentClassName} .${cssName}:${key} {\n${css[key]}\n}` : '';
       }
-    }).join('\n');
+    }).filter(c => c).join('\n');
   }
 
   createStyle = (id) => {
