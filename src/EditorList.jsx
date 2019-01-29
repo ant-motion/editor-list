@@ -305,7 +305,7 @@ class EditorList extends Component {
     const editStyle = {};
     className.split(' ').filter(c => c).forEach(str => {
       const id = this.getEditId(str);
-      const style = document.getElementById(id);
+      const style = this.ownerDocument.getElementById(id);
       if (style) {
         editStyle[id] = style.innerHTML;
         style.innerHTML = '';
@@ -318,7 +318,7 @@ class EditorList extends Component {
       );;
     this.defaultData = this.getDefaultData(this.defaultValue[classState]);
     Object.keys(editStyle).forEach(id => {
-      const style = document.getElementById(id);
+      const style = this.ownerDocument.getElementById(id);
       style.innerHTML = editStyle[id];
     });
   }
@@ -467,7 +467,7 @@ class EditorList extends Component {
       },
     };
     const id = this.getEditId(className);
-    const style = document.getElementById(id);
+    const style = this.ownerDocument.getElementById(id);
     if (this.props.useClassName && style) {
       // 样式叠加型式。
       const styleText = style.innerHTML;

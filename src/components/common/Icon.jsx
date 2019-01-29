@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, react/prop-types */
 import React from 'react';
 import Icon from 'antd/lib/icon';
 import Tooltip from 'antd/lib/tooltip';
