@@ -52454,9 +52454,12 @@ var _initialiseProps = function _initialiseProps() {
     var value = cssValue[cssName];
     currentCss += _this3.cssObjectToString(value.css, cssName);
     currentCss += '\n';
-    currentCss += '\n' + __WEBPACK_IMPORTED_MODULE_21__utils__["q" /* mobileTitle */] + '\n';
-    currentCss += _this3.cssObjectToString(value.mobileCss, cssName);
-    currentCss += '\n}';
+    var mobileCss = _this3.cssObjectToString(value.mobileCss, cssName);
+    if (mobileCss) {
+      currentCss += '\n' + __WEBPACK_IMPORTED_MODULE_21__utils__["q" /* mobileTitle */] + '\n';
+      currentCss += mobileCss;
+      currentCss += '\n}';
+    }
     return currentCss;
   };
 
@@ -52807,10 +52810,12 @@ var _initialiseProps = function _initialiseProps() {
     }).map(function (key) {
       switch (key) {
         case 'default':
-          return _this3.parentClassName + ' .' + cssName + ' {\n' + css[key] + '\n}';
+          return css[key] ? _this3.parentClassName + ' .' + cssName + ' {\n' + css[key] + '\n}' : '';
         default:
-          return _this3.parentClassName + ' .' + cssName + ':' + key + ' {\n' + css[key] + '\n}';
+          return css[key] ? _this3.parentClassName + ' .' + cssName + ':' + key + ' {\n' + css[key] + '\n}' : '';
       }
+    }).filter(function (c) {
+      return c;
     }).join('\n');
   };
 
