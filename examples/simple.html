@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-editor-list@1.2.7</title>
+  <title>simple.js - example - rc-editor-list@1.3.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,94 +263,96 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-editor-list@1.2.7</h1>
+      <h1>rc-editor-list@1.3.0</h1>
 
       <p>editor-list ui component for react</p>
     </div>
     <div class="example" id="__react-content"></div>
 
-    <div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
-<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> EditorList <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-editor-list'</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">'rc-editor-list/assets/index.css'</span>;
-<span class="hljs-keyword">import</span> <span class="hljs-string">'./less/index.less'</span>;
+    <div class="highlight"><pre><code language="undefined">import React from 'react';
+import ReactDOM from 'react-dom';
+import EditorList from 'rc-editor-list';
+import 'rc-editor-list/assets/index.css';
+import './less/index.less';
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+class Demo extends React.Component {
   constructor(props) {
-    <span class="hljs-keyword">super</span>(props);
-    <span class="hljs-keyword">this</span>.state = {
-      editorDom: <span class="hljs-literal">null</span>,
-      state: <span class="hljs-string">'web'</span>,
+    super(props);
+    this.state = {
+      editorDom: null,
+      state: 'web',
     };
   }
 
   onClick = (e) =&gt; {
-    <span class="hljs-keyword">const</span> dom = e.target;
-    <span class="hljs-keyword">this</span>.setState({
+    const dom = e.target;
+    this.setState({
       editorDom: dom,
     });
   }
 
   onChange = (e) =&gt; {
-    <span class="hljs-built_in">console</span>.log(e);
+    console.log(e);
   }
 
   onSwicth = () =&gt; {
-    <span class="hljs-keyword">this</span>.setState({
-      state: <span class="hljs-keyword">this</span>.state.state === <span class="hljs-string">'web'</span> ? <span class="hljs-string">'mobile'</span> : <span class="hljs-string">'web'</span>,
-      <span class="hljs-comment">// editorDom: null,</span>
+    this.setState({
+      state: this.state.state === 'web' ? 'mobile' : 'web',
+      // editorDom: null,
     });
   }
   closeEdit = () =&gt; {
-    <span class="hljs-keyword">this</span>.setState({
-      editorDom: <span class="hljs-literal">null</span>,
+    this.setState({
+      editorDom: null,
     });
   }
 
   render() {
-    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"box"</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onClick}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"a c editor-user-css jeply9mvwlk-editor_css"</span>&gt;</span>
-        测试测试测试测试测试测试测试<span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+    return (&lt;div className="box"&gt;
+      &lt;div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css"&gt;
+        测试测试测试测试测试测试测试&lt;br /&gt;
         ---------请点击---------
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onClick}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"a c"</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">background:</span> '#<span class="hljs-attribute">0000ff</span>' }}&gt;</span>
-        bbbbbbbbbbbbbbbbbbbbbb<span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+      &lt;/div&gt;
+      &lt;div onClick={this.onClick} className="a c" style={{ background: '#0000ff' }}&gt;
+        bbbbbbbbbbbbbbbbbbbbbb&lt;br /&gt;
         ---------请点击---------
-      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.closeEdit}</span>&gt;</span>关闭<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onSwicth}</span>&gt;</span>切换模式：{this.state.state}<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+      &lt;/div&gt;
+      &lt;button onClick={this.closeEdit}&gt;关闭&lt;/button&gt;
+      &lt;button onClick={this.onSwicth}&gt;切换模式：{this.state.state}&lt;/button&gt;
 
       {this.state.editorDom &amp;&amp; (
-        <span class="hljs-tag">&lt;<span class="hljs-title">EditorList</span>
-          <span class="hljs-attribute">style</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">width:</span> <span class="hljs-attribute">280</span>, <span class="hljs-attribute">margin:</span> <span class="hljs-attribute">50</span>, <span class="hljs-attribute">position:</span> '<span class="hljs-attribute">absolute</span>', <span class="hljs-attribute">top:</span> <span class="hljs-attribute">0</span>, <span class="hljs-attribute">right:</span> <span class="hljs-attribute">0</span>, <span class="hljs-attribute">zIndex:</span> <span class="hljs-attribute">1</span> }}
-          <span class="hljs-attribute">editorElem</span>=<span class="hljs-value">{this.state.editorDom}</span>
-          <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span>
-          <span class="hljs-attribute">isMobile</span>=<span class="hljs-value">{this.state.state</span> =<span class="hljs-value">==</span> '<span class="hljs-attribute">mobile</span>'}
-        /&gt;</span>)</span>}
-      &lt;style
-        dangerouslySetInnerHTML={
-          {
-            __html: <span class="hljs-string">`.jeply9mvwlk-editor_css{
-              text-decoration: underline;
-            }
-        .jeply9mvwlk-editor_css:focus{
-          font-size: 64px;
-        }
-        @media screen and (max-width: 767px) {
-          .jeply9mvwlk-editor_css{
-            color: #00ff00;
-          }
-        }
-        `</span>,
-          }
-        }
-      /&gt;
-    <span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+        &lt;EditorList
+          style={{ width: 280, margin: 50, position: 'absolute', top: 0, right: 0, zIndex: 1 }}
+          editorElem={this.state.editorDom}
+          onChange={this.onChange}
+          isMobile={this.state.state === 'mobile'}
+        /&gt;)}
+    &lt;/div&gt;);
   }
 }
 
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Demo</span> /&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre></div>
+ReactDOM.render(&lt;Demo /&gt;, document.getElementById('__react-content'));
+
+
+const t = document.createElement('style');
+t.innerHTML = `
+.demo &gt; .box &gt; .jeply9mvwlk-editor_css{
+  text-decoration: underline;
+  top: 20px;
+}
+.demo &gt; .box &gt; .jeply9mvwlk-editor_css:focus{
+font-size: 64px;
+}
+@media screen and (max-width: 767px) {
+  .demo &gt; .box &gt; .jeply9mvwlk-editor_css{
+color: #00ff00;
+}
+}`;
+t.id = 'demo_box_jeply9mvwlk-editor_css'
+
+document.body.append(t);
+
+</code></pre></div>
   </div>
   <a href="https://github.com/ant-motion/editor-list">
     <img style="position: absolute; top: 0; right: 0; border: 0;"
