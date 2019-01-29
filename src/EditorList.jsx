@@ -154,7 +154,7 @@ class EditorList extends Component {
     );
     const value = this.getDefaultData(domStyle);
     this.setDefaultData({
-      isMobile, dom: editorElem, classState, domStyle, value, cssName
+      isMobile, dom: editorElem, classState, cssName
     });
     if (!cssValue[cssName]) {
       const state = {
@@ -296,29 +296,28 @@ class EditorList extends Component {
     return domStyle;
   }
 
-  setDefaultData = ({ isMobile, dom, classState, domStyle, value, cssName }) => {
+  setDefaultData = ({ isMobile, dom, classState, cssName }) => {
     // 删除所有编辑的样式，，获取当前 dom 自身的值；
     const className = dom.className;
-    if (cssName === this.editClassName || !cssName) {
-      const editStyle = {};
-      className.split(' ').filter(c => c).forEach(str => {
-        const id = this.getEditId(str);
-        const style = document.getElementById(id);
-        if (style) {
-          editStyle[id] = style.innerHTML;
-          style.innerHTML = '';
-        }
-      })
-      this.defaultValue[classState] = this.getDefaultValue(dom, isMobile, classState);
-      this.defaultData = this.getDefaultData(this.defaultValue[classState]);
-      Object.keys(editStyle).forEach(id => {
-        const style = document.getElementById(id);
-        style.innerHTML = editStyle[id];
-      });
-    } else {
-      this.defaultValue[classState] = domStyle;
-      this.defaultData = value;
-    }
+    const editStyle = {};
+    className.split(' ').filter(c => c).forEach(str => {
+      const id = this.getEditId(str);
+      const style = document.getElementById(id);
+      if (style) {
+        editStyle[id] = style.innerHTML;
+        style.innerHTML = '';
+      }
+    })
+    this.defaultValue[classState] = cssName === this.editClassName || !cssName ?
+      this.getDefaultValue(dom, isMobile, classState)
+      : getClassNameCssRule(
+        { dom, className: cssName, isMobile, state: null, getObject: true }
+      );;
+    this.defaultData = this.getDefaultData(this.defaultValue[classState]);
+    Object.keys(editStyle).forEach(id => {
+      const style = document.getElementById(id);
+      style.innerHTML = editStyle[id];
+    });
   }
 
   getAllCssString = () => {
