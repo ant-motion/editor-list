@@ -52587,13 +52587,15 @@ var _initialiseProps = function _initialiseProps() {
       var cssArr = styleText.split(__WEBPACK_IMPORTED_MODULE_21__utils__["q" /* mobileTitle */]);
       Object.keys(css).forEach(function (name, i) {
         var string = cssArr[i];
-        string = string.replace(/\}[\n|\s+]\}/, '}');
-        Object.keys(css[name]).forEach(function (key) {
-          var regName = '' + className + (key !== 'default' ? ':' + key : '');
-          if (string.match(new RegExp(regName, 'ig'))) {
-            css[name][key] = Object(__WEBPACK_IMPORTED_MODULE_21__utils__["h" /* getCssStr */])(string, regName);
-          }
-        });
+        if (string) {
+          string = string.replace(/\}[\n|\s+]\}/, '}');
+          Object.keys(css[name]).forEach(function (key) {
+            var regName = '' + className + (key !== 'default' ? ':' + key : '');
+            if (string.match(new RegExp(regName, 'ig'))) {
+              css[name][key] = Object(__WEBPACK_IMPORTED_MODULE_21__utils__["h" /* getCssStr */])(string, regName);
+            }
+          });
+        }
       });
     }
     return css;
