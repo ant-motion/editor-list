@@ -372,7 +372,7 @@ class EditorList extends Component {
       editorElem.style.cssText = css.default;
     }
     const $cssName = cssName === this.editClassName ?
-    `${cssName}-${editorDefaultClassName}` : cssName;
+      `${cssName}-${editorDefaultClassName}` : cssName;
     onChange({
       parentClassName: this.parentClassName,
       cssValue,
@@ -477,13 +477,15 @@ class EditorList extends Component {
       const cssArr = styleText.split(mobileTitle);
       Object.keys(css).forEach((name, i) => {
         let string = cssArr[i];
-        string = string.replace(/\}[\n|\s+]\}/, '}');
-        Object.keys(css[name]).forEach(key => {
-          const regName = `${className}${key !== 'default' ? `:${key}` : ''}`;
-          if (string.match(new RegExp(regName, 'ig'))) {
-            css[name][key] = getCssStr(string, regName);
-          }
-        });
+        if (string) {
+          string = string.replace(/\}[\n|\s+]\}/, '}');
+          Object.keys(css[name]).forEach(key => {
+            const regName = `${className}${key !== 'default' ? `:${key}` : ''}`;
+            if (string.match(new RegExp(regName, 'ig'))) {
+              css[name][key] = getCssStr(string, regName);
+            }
+          });
+        }
       });
     }
     return css;
