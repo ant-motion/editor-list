@@ -1527,7 +1527,7 @@ function contrastParent(node, d) {
 }
 
 function cssRulesForEach(item, i, newStyleState, styleObj, dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
-  var rep = state === 'active' ? new RegExp(':' + state + '|:hover') : ':' + state;
+  var rep = new RegExp(state === 'active' ? '(:' + state + '|:hover)$' : ':' + state + '$');
   // `\\.${className}(:(hover|focus|active))?\s*(?=(,|$))`
   var repClassName = className || dom.className.split(' ').join('|');
   var classRep = new RegExp('\\.' + (state ? '(' + (className || repClassName) + '):' + state : '(' + repClassName + ')') + '?s*(?=(,|$))');
@@ -27732,7 +27732,7 @@ var Demo = function (_React$Component) {
         { className: 'box' },
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
           'div',
-          { onClick: this.onClick, className: 'a c editor-user-css' },
+          { onClick: this.onClick, className: 'a c editor-user-css jeply9mvwlk-editor_css' },
           '\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5\u6D4B\u8BD5',
           __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('br', null),
           '---------\u8BF7\u70B9\u51FB---------'
@@ -27771,7 +27771,7 @@ var Demo = function (_React$Component) {
 __WEBPACK_IMPORTED_MODULE_5_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(Demo, null), document.getElementById('__react-content'));
 
 var t = document.createElement('style');
-t.innerHTML = '\n.demo > .box > .jeply9mvwlk-editor_css{\n  text-decoration: underline;\n  top: 20px;\n}\n.demo > .box > .jeply9mvwlk-editor_css:focus{\nfont-size: 64px;\n}\n@media screen and (max-width: 767px) {\n  .demo > .box > .jeply9mvwlk-editor_css{\ncolor: #00ff00;\n}\n}';
+t.innerHTML = '\n.demo > .box > .jeply9mvwlk-editor_css{\n  text-decoration: underline;\n  color: #00ffff;\n}\n.demo > .box > .jeply9mvwlk-editor_css:focus{\nfont-size: 64px;\n}\n@media screen and (max-width: 767px) {\n  .demo > .box > .jeply9mvwlk-editor_css{\ncolor: #00ff00;\n}\n}';
 t.id = 'demo_box_jeply9mvwlk-editor_css';
 
 document.body.append(t);
@@ -52229,6 +52229,8 @@ var _initialiseProps = function _initialiseProps() {
         cssName = _state2.cssName,
         cssValue = _state2.cssValue;
 
+    _this3.cssString = _this3.getAllCssString();
+    _this3.currentEditCssString = _this3.getCurrentEditCssString();
     _this3.setState({
       cssValue: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, cssName, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue[cssName], {
         value: value
