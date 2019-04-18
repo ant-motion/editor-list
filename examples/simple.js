@@ -38,7 +38,7 @@ class Demo extends React.Component {
 
   render() {
     return (<div className="box">
-      <div onClick={this.onClick} className="a c editor-user-css">
+      <div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css">
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
       </div>
@@ -67,7 +67,7 @@ const t = document.createElement('style');
 t.innerHTML = `
 .demo > .box > .jeply9mvwlk-editor_css{
   text-decoration: underline;
-  top: 20px;
+  color: #00ffff;
 }
 .demo > .box > .jeply9mvwlk-editor_css:focus{
 font-size: 64px;

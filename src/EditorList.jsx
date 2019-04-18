@@ -125,6 +125,8 @@ class EditorList extends Component {
     this.defaultData = this.getDefaultData(this.defaultValue[classState]);
 
     const { cssName, cssValue } = this.state;
+    this.cssString = this.getAllCssString();
+    this.currentEditCssString = this.getCurrentEditCssString();
     this.setState({
       cssValue: {
         ...cssValue,
