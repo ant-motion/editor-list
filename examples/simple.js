@@ -52279,9 +52279,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.onCssChange = function ($cssValue) {
-    var _props3 = _this3.props,
-        editorElem = _props3.editorElem,
-        isMobile = _props3.isMobile;
+    var isMobile = _this3.props.isMobile;
     var _state3 = _this3.state,
         cssValue = _state3.cssValue,
         cssName = _state3.cssName,
@@ -52294,25 +52292,35 @@ var _initialiseProps = function _initialiseProps() {
 
     _this3.setState({
       cssValue: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, cssName, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue[cssName], __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, isMobile ? 'mobileCss' : 'css', __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, myCss, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, classState, $cssValue))))))
-    }, function () {
-      _this3.setCssToDom();
-      // 关联编辑器里的参性, 后期忧化;
-      var domStyle = _this3.getDefaultValue(editorElem, isMobile, classState);
-      var value = _this3.getDefaultData(domStyle);
-      _this3.currentData[classState] = value;
-      _this3.setState({
-        cssValue: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, cssName, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue[cssName], {
-          value: value
-        })))
-      });
+    }, _this3.onCssChangeAfter);
+  };
+
+  this.onCssChangeAfter = function () {
+    var _props3 = _this3.props,
+        editorElem = _props3.editorElem,
+        isMobile = _props3.isMobile;
+    var _state4 = _this3.state,
+        cssValue = _state4.cssValue,
+        cssName = _state4.cssName,
+        classState = _state4.classState;
+
+    _this3.setCssToDom();
+    // 关联编辑器里的参性, 后期忧化;
+    var domStyle = _this3.getDefaultValue(editorElem, isMobile, classState);
+    var value = _this3.getDefaultData(domStyle);
+    _this3.currentData[classState] = value;
+    _this3.setState({
+      cssValue: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, cssName, __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, cssValue[cssName], {
+        value: value
+      })))
     });
   };
 
   this.onChange = function (key, data) {
-    var _state4 = _this3.state,
-        cssValue = _state4.cssValue,
-        classState = _state4.classState,
-        cssName = _state4.cssName;
+    var _state5 = _this3.state,
+        cssValue = _state5.cssValue,
+        classState = _state5.classState,
+        cssName = _state5.cssName;
     var _cssValue$cssName2 = cssValue[cssName],
         value = _cssValue$cssName2.value,
         css = _cssValue$cssName2.css,
@@ -52429,9 +52437,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.getAllCssString = function () {
-    var _state5 = _this3.state,
-        cssName = _state5.cssName,
-        cssValue = _state5.cssValue;
+    var _state6 = _this3.state,
+        cssName = _state6.cssName,
+        cssValue = _state6.cssValue;
 
     var cssStr = '';
     var cssValueArray = Object.keys(cssValue).sort(function (a, b) {
@@ -52453,9 +52461,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.getCurrentEditCssString = function () {
-    var _state6 = _this3.state,
-        cssName = _state6.cssName,
-        cssValue = _state6.cssValue;
+    var _state7 = _this3.state,
+        cssName = _state7.cssName,
+        cssValue = _state7.cssValue;
 
     var currentCss = '';
     var value = cssValue[cssName];
@@ -52471,9 +52479,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.setCssToDom = function () {
-    var _state7 = _this3.state,
-        cssName = _state7.cssName,
-        cssValue = _state7.cssValue;
+    var _state8 = _this3.state,
+        cssName = _state8.cssName,
+        cssValue = _state8.cssValue;
     var css = cssValue[cssName].css;
     var _props4 = _this3.props,
         editorElem = _props4.editorElem,
@@ -52698,10 +52706,10 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.getChildren = function (props) {
-    var _state8 = _this3.state,
-        cssValue = _state8.cssValue,
-        cssName = _state8.cssName,
-        classState = _state8.classState;
+    var _state9 = _this3.state,
+        cssValue = _state9.cssValue,
+        cssName = _state9.cssName,
+        classState = _state9.classState;
     var _cssValue$cssName3 = cssValue[cssName],
         css = _cssValue$cssName3.css,
         mobileCss = _cssValue$cssName3.mobileCss,
@@ -52843,6 +52851,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 };
 
+EditorList.ClassName = __WEBPACK_IMPORTED_MODULE_19__components_ClassName__["a" /* default */];
 EditorList.State = __WEBPACK_IMPORTED_MODULE_18__components_State__["a" /* default */];
 EditorList.Font = __WEBPACK_IMPORTED_MODULE_10__components_Font__["a" /* default */];
 EditorList.BackGround = __WEBPACK_IMPORTED_MODULE_11__components_BackGround__["a" /* default */];
