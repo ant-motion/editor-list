@@ -52750,7 +52750,7 @@ var _initialiseProps = function _initialiseProps() {
           itemProps.value = cssName;
           itemProps.editClassName = _this3.editClassName;
           itemProps.placeholder = _this3.props.editorDefaultClassName;
-          item.classNameArray = classNameArray;
+          itemProps.classNameArray = classNameArray;
         } else {
           itemProps.onChange = _this3.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
@@ -82339,7 +82339,7 @@ EditorState.propTypes = {
   showClassState: __WEBPACK_IMPORTED_MODULE_7_prop_types___default.a.bool
 };
 EditorState.defaultProps = {
-  value: '',
+  value: {},
   onChange: function onChange() {}
 };
 /* harmony default export */ __webpack_exports__["a"] = (EditorState);
