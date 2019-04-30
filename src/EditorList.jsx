@@ -183,7 +183,7 @@ class EditorList extends Component {
   }
 
   onCssChange = ($cssValue) => {
-    const { editorElem, isMobile } = this.props;
+    const { isMobile } = this.props;
     const { cssValue, cssName, classState } = this.state;
     const { css, mobileCss } = cssValue[cssName];
     const myCss = isMobile ? mobileCss : css;
@@ -199,21 +199,25 @@ class EditorList extends Component {
           },
         },
       },
-    }, () => {
-      this.setCssToDom();
-      // 关联编辑器里的参性, 后期忧化;
-      const domStyle = this.getDefaultValue(editorElem, isMobile, classState);
-      const value = this.getDefaultData(domStyle);
-      this.currentData[classState] = value;
-      this.setState({
-        cssValue: {
-          ...cssValue,
-          [cssName]: {
-            ...cssValue[cssName],
-            value,
-          },
+    }, this.onCssChangeAfter);
+  }
+
+  onCssChangeAfter = () => {
+    const { editorElem, isMobile } = this.props;
+    const { cssValue, cssName, classState } = this.state;
+    this.setCssToDom();
+    // 关联编辑器里的参性, 后期忧化;
+    const domStyle = this.getDefaultValue(editorElem, isMobile, classState);
+    const value = this.getDefaultData(domStyle);
+    this.currentData[classState] = value;
+    this.setState({
+      cssValue: {
+        ...cssValue,
+        [cssName]: {
+          ...cssValue[cssName],
+          value,
         },
-      });
+      },
     });
   }
 
@@ -762,6 +766,7 @@ class EditorList extends Component {
     </Collapse>);
   }
 }
+EditorList.ClassName = ClassName;
 EditorList.State = State;
 EditorList.Font = Font;
 EditorList.BackGround = BackGround;
