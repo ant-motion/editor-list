@@ -22,7 +22,7 @@ export default class EditorState extends Component {
   };
 
   static defaultProps = {
-    value: '',
+    value: {},
     onChange: () => {
     },
   };

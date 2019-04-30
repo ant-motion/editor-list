@@ -649,7 +649,7 @@ class EditorList extends Component {
           itemProps.value = cssName;
           itemProps.editClassName = this.editClassName;
           itemProps.placeholder = this.props.editorDefaultClassName;
-          item.classNameArray = classNameArray;
+          itemProps.classNameArray = classNameArray;
         } else {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
