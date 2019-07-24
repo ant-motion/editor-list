@@ -507,9 +507,10 @@ class EditorList extends Component {
       || style.borderRightStyle !== 'none' && style.borderRightColor !== '0px'
       || style.borderBottomStyle !== 'none' && style.borderBottomColor !== '0px'
       || style.borderLeftStyle !== 'none' && style.borderLeftColor !== '0px';
+    console.log(style)
     return {
       state: {
-        cursor: style.cursor,
+        cursor: style.cursor || 'auto',
       },
       layout: {
         display: style.display,
@@ -520,7 +521,7 @@ class EditorList extends Component {
       font: {
         family: style.fontFamily,
         size: style.fontSize,
-        weight: convertData(style.fontWeight),
+        weight: convertData(style.fontWeight) || 'normal',
         lineHeight: convertData(style.lineHeight),
         color: convertDefaultData(style.color),
         letterSpacing: convertData(style.letterSpacing),
@@ -528,26 +529,29 @@ class EditorList extends Component {
         decoration: convertData(style.textDecoration || style.textDecorationLine),
       },
       interface: {
-        overflow: convertDefaultData(style.overflow),
+        overflow: convertDefaultData(style.overflow) || 'visible',
         width: convertData(style.width),
         maxWidth: convertData(style.maxWidth),
         minWidth: convertData(style.minWidth),
         height: convertData(style.height),
         maxHeight: convertData(style.maxHeight),
         minHeight: convertData(style.minHeight),
-        position: convertDefaultData(style.position),
+        position: convertDefaultData(style.position) || 'static',
         top: convertDefaultData(convertData(style.top, true)),
         right: convertDefaultData(convertData(style.right, true)),
         bottom: convertDefaultData(convertData(style.bottom, true)),
         left: convertDefaultData(convertData(style.left, true)),
+        zIndex: style.index || 0,
+        float: style.float || 'none',
+        clear: style.clear || 'none',
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
         image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''),
-        repeat: convertDefaultData(style.backgroundRepeat),
+        repeat: convertDefaultData(style.backgroundRepeat) || 'repeat',
         position: convertDefaultData(style.backgroundPosition),
         size: convertDefaultData(style.backgroundSize),
-        attachment: convertDefaultData(style.backgroundAttachment),
+        attachment: convertDefaultData(style.backgroundAttachment) || 'scroll',
       },
       border: {
         style: convertBorderData(style.borderStyle || (

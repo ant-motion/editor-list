@@ -89,7 +89,7 @@ class EditorBg extends Component {
         <Col span={21}>
           <Select
             style={{ width: '100%' }}
-            value={value.repeat || 'repeat'}
+            value={value.repeat}
             size="small"
             onChange={(e) => {
               this.onChange('repeat', e);
@@ -98,7 +98,7 @@ class EditorBg extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(locale.repeat_select)}
+            {getOption(locale.repeatSelect)}
           </Select>
         </Col>
       </Row>
@@ -140,7 +140,7 @@ class EditorBg extends Component {
         </Col>
         <Col span={21}>
           <RadioGroup
-            value={value.attachment || 'scroll'}
+            value={value.attachment}
             size="small"
             onChange={(e) => {
               const v = e.target.value;

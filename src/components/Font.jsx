@@ -144,7 +144,7 @@ class EditorFont extends Component {
         <Col span={9}>
           <Select
             style={{ width: '100%' }}
-            value={value.weight || 'normal'}
+            value={value.weight}
             size="small"
             getPopupContainer={node => getParentNode(node, 'editor-list')}
             onChange={(e) => {

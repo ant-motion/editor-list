@@ -44,7 +44,7 @@ export default {
   EditorState: {
     header: '状态',
     cursor: '鼠标光标状态',
-    cursor_select: {
+    cursorSelect: {
       auto: '默认光标 - auto',
       pointer: '手型光标 - pointer',
       crosshair: '十字线光标 - crosshair',
@@ -54,7 +54,7 @@ export default {
       help: '帮助光标 - help',
     },
     style: '样式状态',
-    style_select: {
+    styleSelect: {
       default: '默认',
       hover: '经过',
       active: '按下',
@@ -74,7 +74,7 @@ export default {
   EditorInterface: {
     header: '界面',
     overflow: '溢出',
-    overflow_select: {
+    overflowSelect: {
       visible: '不裁剪溢出部份 - visible',
       hidden: '裁剪溢出部份 - hidden',
       scroll: '裁剪并出现滚动条 - scroll',
@@ -83,13 +83,27 @@ export default {
     width: '宽度',
     height: '高度',
     position: '定位',
-    position_select: {
+    positionSelect: {
       static: '没有定位 - static',
       absolute: '绝对定位 - absolute',
       relative: '相对定位 - relative',
       fixed: '窗口定位 - fixed',
     },
     position_help: '请选择当前相应的定位，如为绝对定位，请开启父级的相对定位，否则将以有相对定位的顶级为定位。',
+    float: '浮动',
+    floatSelect: {
+      none: '元素不浮动',
+      left: '元素浮动在区块左侧',
+      right: '元素浮动在区块右侧',
+    },
+    clear: '清除浮动',
+    clearSelect: {
+      none: '不清除浮动',
+      left: '清除元素左侧浮动',
+      right: '元素右侧浮动',
+      both: '清除元素浮动',
+    },
+    zIndex: '当前元素的层级深度',
   },
   EditorBackGround: {
     header: '背景',
@@ -101,11 +115,11 @@ export default {
     size: '背景尺寸',
     size_help: '可设置自定义值(width, height), 如: 50px 100px',
     attachment: '锁定背景',
-    repeat_select: {
-      repeat: '重复 - repeat',
-      'repeat-x': 'x 轴重复 - repeat-x',
-      'repeat-y': 'y 轴重复 - repeat-y',
-      'no-repeat': '不重复 - no-repeat',
+    repeatSelect: {
+      repeat: '重复',
+      'repeat-x': 'x 轴重复',
+      'repeat-y': 'y 轴重复',
+      'no-repeat': '不重复',
     },
   },
   EditorBorder: {

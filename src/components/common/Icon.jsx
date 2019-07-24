@@ -111,7 +111,7 @@ const icon = {
       </svg>
     );
   },
-  'inline-block': function() {
+  'inline-block'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path fillRule="evenodd" clipRule="evenodd" d="M4 4h8v8H4V4zm6 2H6v4h4V6z" />
@@ -127,7 +127,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-stretch': function() {
+  'alignItems-stretch'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 0h16v1H0zm0 15h16v1H0z" />
@@ -135,7 +135,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-flex-start': function() {
+  'alignItems-flex-start'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 0h16v1H0z" />
@@ -143,7 +143,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-center': function() {
+  'alignItems-center'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M3.5 3.5h3v8h-3zm5 1h3v6h-3z" />
@@ -151,7 +151,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-flex-end': function() {
+  'alignItems-flex-end'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 15h16v1H0z" />
@@ -159,7 +159,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-baseline': function() {
+  'alignItems-baseline'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 7h16v1H0z" />
@@ -167,7 +167,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-flex-start': function() {
+  'justifyContent-flex-start'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm5 0h3v7h-3z" />
@@ -175,7 +175,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-center': function() {
+  'justifyContent-center'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm7 0h3v7h-3z" />
@@ -183,7 +183,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-flex-end': function() {
+  'justifyContent-flex-end'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1z" />
@@ -191,7 +191,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-space-between': function() {
+  'justifyContent-space-between'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
@@ -199,14 +199,71 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-space-around': function() {
+  'justifyContent-space-around'() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
         <path stroke="currentColor" d="M9.5 4.5h3v7h-3zm-6 0h3v7h-3z" />
       </svg>
     );
-  }
+  },
+  float() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 1024 1024" fill="currentColor">
+        <path d="M512 1024a512 512 0 1 1 512-512 512 512 0 0 1-512 512z m438.857143-512a436.224 436.224 0 0 0-81.298286-254.098286l-106.057143 106.057143a286.683429 286.683429 0 0 1 0 295.972572l106.057143 106.057142A436.187429 436.187429 0 0 0 950.857143 512zM512 292.571429a219.428571 219.428571 0 1 0 219.428571 219.428571 219.428571 219.428571 0 0 0-219.428571-219.428571z m0 658.285714a436.224 436.224 0 0 0 254.098286-81.298286l-106.057143-106.057143a286.72 286.72 0 0 1-295.972572 0l-106.057142 106.057143A436.224 436.224 0 0 0 512 950.857143zM73.142857 512a436.187429 436.187429 0 0 0 81.298286 254.098286l106.057143-106.057143a286.683429 286.683429 0 0 1 0-295.972572l-106.057143-106.057142A436.224 436.224 0 0 0 73.142857 512z m184.758857-357.558857l106.057143 106.057143a286.683429 286.683429 0 0 1 295.972572 0l106.057142-106.057143a437.686857 437.686857 0 0 0-508.086857 0z" />
+      </svg>
+    );
+  },
+  'float-left'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fill="currentColor" d="M0 4h8v8H0z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M10 4h6v2h-6V4zm0 3h6v2h-6V7zm4 3h-4v2h4v-2z" />
+      </svg>
+    );
+  },
+  'float-right'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 4h8v8H8z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M0 4h6v2H0V4zm0 3h6v2H0V7zm4 3H0v2h4v-2z" />
+      </svg>
+    );
+  },
+  'float-close'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M9.414 8l3.293-3.293-1.414-1.414L8 6.586 4.707 3.293 3.293 4.707 6.586 8l-3.293 3.293 1.414 1.414L8 9.414l3.293 3.293 1.414-1.414L9.414 8z" />
+      </svg>
+    );
+  },
+  'clear-left'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" d="M1 3h4v4H1z" />
+        <path d="M7 3h8v4H7z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M10 8v1a2 2 0 0 1-2 2H4v2h4a4 4 0 0 0 4-4V8h-2zm-6.01 5L4 15l-3-3 3-3-.01 2v2z" fill="currentColor" />
+      </svg>
+    );
+  },
+  'clear-right'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fill="currentColor" d="M11 3h4v4h-4z" />
+        <path fill="currentColor" d="M1 3h8v4H1z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M6 8v1a2 2 0 0 0 2 2h4v2H8a4 4 0 0 1-4-4V8h2zm6.01 5L12 15l3-3-3-3 .01 2v2z" fill="currentColor" />
+      </svg>
+    );
+  },
+  'clear-both'() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fill="currentColor" d="M2 3h12v4H2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M9 8v1a2 2 0 0 0 2 2h2v2h-2a4 4 0 0 1-4-4V8h2zm4.01 5L13 15l3-3-3-3 .01 2v2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7 8v1a2 2 0 0 1-2 2H3v2h2a4 4 0 0 0 4-4V8H7zm-4.01 5L3 15l-3-3 3-3-.01 2v2z" />
+      </svg>
+    );
+  },
 };
 
 export default ({ type, prompt, children }) => {

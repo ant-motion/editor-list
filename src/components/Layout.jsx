@@ -45,7 +45,7 @@ class Layout extends Component {
     const { flexSelect, flexName } = locale;
     const getItemToChild = (data, $key) => {
       return Object.keys(data).map(key => (
-        <RadioButton value={key} className={`${this.props.className}-radio-button`} key={key}>
+        <RadioButton value={key} key={key}>
           <Icon type={`${$key}-${key}`} prompt={data[key]} />
         </RadioButton>
       ));
@@ -87,7 +87,7 @@ class Layout extends Component {
         }}
       >
         {Object.keys(locale.displaySelect).map(key => (
-          <RadioButton value={key} className={`${this.props.className}-radio-button`} key={key}>
+          <RadioButton value={key} key={key}>
             <Icon type={key === 'none' ? 'eye-invisible' : key} prompt={locale.displaySelect[key]} />
           </RadioButton>
         ))}

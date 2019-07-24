@@ -34,8 +34,8 @@ export default class EditorState extends Component {
     const { ...props } = this.props;
     const { value, showClassState, locale, isMobile } = props;
     ['value', 'onChange'].map(key => delete props[key]);
-    const childrenToRender = Object.keys(locale.style_select).map(key => {
-      const item = locale.style_select;
+    const childrenToRender = Object.keys(locale.styleSelect).map(key => {
+      const item = locale.styleSelect;
       if (isMobile && item[key] === 'hover') {
         return null;
       }
@@ -62,7 +62,7 @@ export default class EditorState extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(locale.cursor_select, true)}
+            {getOption(locale.cursorSelect, true)}
           </Select>
         </Col>
       </Row>

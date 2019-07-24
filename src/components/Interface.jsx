@@ -4,12 +4,20 @@ import Collapse from 'antd/lib/collapse';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Select from 'antd/lib/select';
+import InputNumber from 'antd/lib/input-number';
+import Tooltip from 'antd/lib/tooltip';
+import Radio from 'antd/lib/radio';
+import AntIcon from 'antd/lib/icon';
+import { TweenOneGroup } from 'rc-tween-one';
+
 import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import RowHelp from './common/RowHelp';
 import BoxModel from './common/BoxModel';
 import { getOption, getParentNode } from '../utils';
 
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 
 export default class EditorInterface extends Component {
@@ -50,9 +58,88 @@ export default class EditorInterface extends Component {
   }
 
   render() {
-    const { ...props } = this.props;
-    const { value, locale } = props;
-    ['value', 'font'].map(key => delete props[key]);
+    const { value, locale, ...props } = this.props;
+    const posChild = value.position !== 'static' ? (
+      <div key="pos" style={{ overflow: 'hidden' }}>
+        <BoxModel keys={['top', 'right', 'bottom', 'left']}
+          value={{
+            top: value.top,
+            right: value.right,
+            bottom: value.bottom,
+            left: value.left,
+          }}
+          onChange={(e) => {
+            this.onChange('offset', e);
+          }}
+        />
+        <Row gutter={8}>
+          <Col span={4} offset={5}>
+            zIndex
+              </Col>
+          <Col span={7}>
+            <InputNumber
+              min={0}
+              size="small"
+              style={{ width: '100%' }}
+              value={value.zIndex}
+              onChange={(e) => {
+                this.onChange('zIndex', e);
+              }}
+            />
+          </Col>
+          <Col span={3}>
+            <Tooltip arrowPointAtCenter title={locale.zIndex}>
+              <AntIcon type="question-circle" />
+            </Tooltip>
+          </Col>
+        </Row>
+      </div>
+    ) : null;
+    const floatChild = value.position === 'static' ? (
+      <div key="float" style={{ overflow: 'hidden' }}>
+        <Row gutter={8}>
+          <Col span={3}>
+            <Icon type="float" prompt={locale.float} />
+          </Col>
+          <Col span={21}>
+            <RadioGroup
+              value={value.float}
+              size="small"
+              onChange={(e) => {
+                console.log(e)
+                this.onChange('float', e.target.value);
+              }}
+            >
+              {Object.keys(locale.floatSelect).map(key => (
+                <RadioButton value={key} key={key}>
+                  <Icon type={key === 'none' ? 'float-close' : `float-${key}`} prompt={locale.floatSelect[key]} />
+                </RadioButton>
+              ))}
+            </RadioGroup>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col span={3}>
+            <Icon type="minus-circle" prompt={locale.clear} />
+          </Col>
+          <Col span={21}>
+            <RadioGroup
+              value={value.clear}
+              size="small"
+              onChange={(e) => {
+                console.log(e)
+                this.onChange('clear', e.target.value);
+              }}
+            >
+              {Object.keys(locale.clearSelect).map(key => (
+                <RadioButton value={key} key={key}>
+                  <Icon type={key === 'none' ? 'float-close' : `clear-${key}`} prompt={locale.clearSelect[key]} />
+                </RadioButton>
+              ))}
+            </RadioGroup>
+          </Col>
+        </Row>
+      </div>) : null;
     return (
       <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
@@ -62,7 +149,7 @@ export default class EditorInterface extends Component {
           <Col span={21}>
             <Select
               style={{ width: '100%' }}
-              value={value.overflow || 'visible'}
+              value={value.overflow}
               size="small"
               onChange={(e) => {
                 this.onChange('overflow', e);
@@ -71,7 +158,7 @@ export default class EditorInterface extends Component {
               dropdownMatchSelectWidth={false}
               dropdownClassName="editor-list-dropdown"
             >
-              {getOption(locale.overflow_select, true)}
+              {getOption(locale.overflowSelect, true)}
             </Select>
           </Col>
         </Row>
@@ -143,25 +230,13 @@ export default class EditorInterface extends Component {
             />
           </Col>
         </Row>
-        {/* <Row>
-          <Col>
-            位置 - Position
-            <Tooltip
-              placement="topRight"
-              arrowPointAtCenter
-              title={<span>1. 如需设定位置，请先设置定位; <br /> 2. 如果 4 个都有值，以 top left 为准;</span>}
-            >
-              <Icon type="question-circle" style={{ marginLeft: 5 }} />
-            </Tooltip>
-          </Col>
-        </Row> */}
         <RowHelp
           title={<Icon type="position" prompt={locale.position} />}
           help={locale.position_help}
         >
           <Select
             style={{ width: '100%' }}
-            value={value.position || 'static'}
+            value={value.position}
             size="small"
             onChange={(e) => {
               this.onChange('position', e);
@@ -170,21 +245,23 @@ export default class EditorInterface extends Component {
             dropdownMatchSelectWidth={false}
             dropdownClassName="editor-list-dropdown"
           >
-            {getOption(locale.position_select, true)}
+            {getOption(locale.positionSelect, true)}
           </Select>
         </RowHelp>
-        <BoxModel keys={['top', 'right', 'bottom', 'left']}
-          value={{
-            top: value.top,
-            right: value.right,
-            bottom: value.bottom,
-            left: value.left,
-          }}
-          onChange={(e) => {
-            this.onChange('offset', e);
-          }}
-          disabled={!value.position || value.position === 'static'}
-        />
+        <TweenOneGroup
+          enter={{ height: 0, type: 'from', duration: 300, ease: 'easeInOutCirc' }}
+          leave={{ height: 0, duration: 300, ease: 'easeInOutCirc' }}
+          style={{ overflow: 'hidden' }}
+        >
+          {floatChild}
+        </TweenOneGroup>
+        <TweenOneGroup
+          enter={{ height: 0, type: 'from', duration: 300, ease: 'easeInOutCirc' }}
+          leave={{ height: 0, duration: 300, ease: 'easeInOutCirc' }}
+          style={{ overflow: 'hidden' }}
+        >
+          {posChild}
+        </TweenOneGroup>
       </Panel>
     );
   }

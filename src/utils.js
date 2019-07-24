@@ -121,6 +121,9 @@ export const styleInUse = {
   display: 1,
   'align-items': 1,
   'justify-content': 1,
+  'z-index': 1,
+  float: 1,
+  clear: 1,
 };
 
 export function toArrayChildren(children) {
@@ -215,8 +218,7 @@ export function convertDefaultData(d) {
   if (!d || d === 'rgba(0, 0, 0, 0)' ||
     d === 'repeat' || d === '0% 0%' ||
     d === 'auto' || d === 'scroll' ||
-    d === 'start' || d === 'visible' ||
-    d === 'static'
+    d === 'start' || d === 'visible' 
   ) {
     return null;
   }

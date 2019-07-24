@@ -7,7 +7,7 @@ export default {
   EditorState: {
     header: 'Status',
     cursor: 'Mouse cursor status',
-    cursor_select: {
+    cursorSelect: {
       auto: 'auto',
       pointer: 'pointer',
       crosshair: 'crosshair',
@@ -17,7 +17,7 @@ export default {
       help: 'help',
     },
     style: 'Style status',
-    style_select: {
+    styleSelect: {
       default: 'default',
       hover: 'hover',
       active: 'active',
@@ -74,7 +74,7 @@ export default {
   EditorInterface: {
     header: 'Interface',
     overflow: 'Overflow',
-    overflow_select: {
+    overflowSelect: {
       visible: 'visible',
       hidden: 'hidden',
       scroll: 'scroll',
@@ -83,7 +83,7 @@ export default {
     width: 'Width',
     height: 'Height',
     position: 'Position',
-    position_select: {
+    positionSelect: {
       static: 'static',
       absolute: 'absolute',
       relative: 'relative',
@@ -92,6 +92,7 @@ export default {
     position_help: 'Please select the current corresponding positioning. ' +
       'If it is absolute positioning, please turn on the relative positioning of the parent, ' +
       'otherwise it will be positioned with the top level with relative positioning.',
+    zIndex: 'zIndex, current element depth.',
   },
   EditorBackGround: {
     header: 'Background',
@@ -103,7 +104,7 @@ export default {
     size: 'Size',
     size_help: 'Custom values (width, height) can be set, such as: 50px 100px',
     attachment: 'Attachment',
-    repeat_select: {
+    repeatSelect: {
       repeat: 'repeat',
       'repeat-x': 'repeat-x',
       'repeat-y': 'repeat-y',
