@@ -24,14 +24,52 @@ export default {
       focus: 'focus',
     },
   },
+  EditorLayout: {
+    header: 'Layout',
+    name: 'Current display',
+    displaySelect: {
+      block: 'Displays an element as a block element.',
+      flex: 'Displays an element as a block-level flex container.',
+      'inline-block': 'Displays an element as an inline-level block container.',
+      inline: 'plays an element as an inline element.',
+      none: 'The element is completely removed.',
+    },
+    flexName: {
+      alignItems: {
+        name: 'Vertical',
+        icon: 'column-height',
+      },
+      justifyContent: {
+        name: 'Horizontal',
+        icon: 'column-width',
+      },
+    },
+    flexSelect: {
+      alignItems: {
+        stretch: 'Element are stretched to fit the container.',
+        'flex-start': 'Element are positioned at the beginning of the container.',
+        center: 'Element are positioned at the center of the container.',
+        'flex-end': 'Element are positioned at the end of the container.',
+        baseline: 'Element are positioned at the baseline of the container.',
+      },
+      justifyContent: {
+        'flex-start': 'Element are positioned at the beginning of the container.',
+        center: 'Element are positioned at the center of the container.',
+        'flex-end': 'Element are positioned at the end of the container.',
+        'space-between': 'Element are positioned with space between the lines.',
+        'space-around': 'Element are positioned with space before, between, and after the lines.',
+      },
+    },
+  },
   EditorFont: {
     header: 'Font',
     font: 'Font family',
     size: 'Size',
-    blod: 'Blod',
+    bold: 'Bold',
     lineHeight: 'Line height',
     letterSpacing: 'Letter spacing',
     color: 'Color',
+    placeholder: 'Please input',
   },
   EditorInterface: {
     header: 'Interface',

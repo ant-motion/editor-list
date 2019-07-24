@@ -57,7 +57,7 @@
     "react-dom": "16.x"
   },
   "dependencies": {
-    "antd": "^3.10.2",
+    "antd": "^3.20.5",
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "codemirror": "^5.42.0",

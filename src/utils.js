@@ -80,6 +80,7 @@ const classInherited = [
 
 export const mobileTitle = '@media screen and (max-width: 767px) {';
 
+// 当跟默认值相同时，用于清除样式;
 export const styleInUse = {
   'background-attachment': 1,
   'background-color': 1,
@@ -117,6 +118,9 @@ export const styleInUse = {
   'text-shadow': 1,
   cursor: 1,
   transition: 1,
+  display: 1,
+  'align-items': 1,
+  'justify-content': 1,
 };
 
 export function toArrayChildren(children) {
@@ -388,7 +392,7 @@ function backgroundToCss(d, current) {
   }).filter(item => item).join('\n');
 }
 
-function interfaceToCss(d, current) {
+function defaultToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
     if (!data || current[key] === data) {
@@ -407,11 +411,15 @@ export function toCss(newData, currentData) {
         addCss = newData[key] && newData[key].cursor !== currentData[key].cursor ?
           `cursor: ${newData[key].cursor};` : '';
         break;
+      case 'layout':
+        addCss = defaultToCss(newData[key], currentData[key]);
+
+        break;
       case 'font':
         addCss = fontToCss(newData[key], currentData[key]);
         break;
       case 'interface':
-        addCss = interfaceToCss(newData[key], currentData[key]);
+        addCss = defaultToCss(newData[key], currentData[key]);
         break;
       case 'background':
         addCss = backgroundToCss(newData[key], currentData[key]);
@@ -452,7 +460,7 @@ function contrastParent(node, d) {
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
   dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
-  const rep =  new RegExp(state === 'active' ? `(\:${state}|\:hover)$` : `\:${state}$`) ;
+  const rep = new RegExp(state === 'active' ? `(\:${state}|\:hover)$` : `\:${state}$`);
   // `\\.${className}(:(hover|focus|active))?\s*(?=(,|$))`
   const repClassName = className || dom.className.split(' ').join('|');
   const classRep = new RegExp(`\\.${state ?
@@ -594,9 +602,12 @@ export function getDomCssRule({ dom, isMobile, state, onlyMobile }) {
   const style = `${getCssPropertyForRuleToCss({
     dom, ownerDocument,
     isMobile, state, onlyMobile,
-  })}display:none;`;
+  })}`;
   // 给 style 去重;
   div.style = `${style}${dom.style.cssText}`;
+  if (!div.style.display) {
+    div.style.display = window.getComputedStyle(div).display;
+  }
   // 获取当前 div 带 vh 的样式；
   const styleObject = removeEmptyStyle(div.style);
   div.remove();

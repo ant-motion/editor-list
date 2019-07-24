@@ -11,6 +11,7 @@ import Css from './components/Css';
 import Transition from './components/Transition';
 import State from './components/State';
 import ClassName from './components/ClassName';
+import Layout from './components/Layout';
 import Locale from './locale/zh_CN';
 import {
   styleInUse,
@@ -510,6 +511,12 @@ class EditorList extends Component {
       state: {
         cursor: style.cursor,
       },
+      layout: {
+        display: style.display,
+        // 只支持 row 布局
+        alignItems: style.alignItems || 'stretch',
+        justifyContent: style.justifyContent || 'flex-start',
+      },
       font: {
         family: style.fontFamily,
         size: style.fontSize,
@@ -678,6 +685,12 @@ class EditorList extends Component {
         value={stateValue}
         isMobile={this.props.isMobile}
       />,
+      <Layout 
+        onChange={this.onChange}
+        key="EditorLayout"
+        locale={props.locale.EditorLayout}
+        value={value.layout}
+      />,
       <Font
         onChange={this.onChange}
         key="EditorFont"
@@ -776,4 +789,5 @@ EditorList.Margin = Margin;
 EditorList.Shadow = Shadow;
 EditorList.Css = Css;
 EditorList.Transition = Transition;
+EditorList.Layout = Layout;
 export default EditorList;

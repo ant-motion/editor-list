@@ -117,7 +117,7 @@ class EditorFont extends Component {
         </Col>
         <Col span={21}>
           <SelectInput
-            placeholder="选择字体"
+            placeholder={locale.placeholder}
             style={{ width: '100%' }}
             value={value.family}
             size="small"
@@ -140,7 +140,7 @@ class EditorFont extends Component {
             }}
           />
         </Col>
-        <Col span={3}><Icon type="bold" prompt={locale.blod} /></Col>
+        <Col span={3}><Icon type="bold" prompt={locale.bold} /></Col>
         <Col span={9}>
           <Select
             style={{ width: '100%' }}
@@ -187,12 +187,12 @@ class EditorFont extends Component {
         }}
       />
       <Row>
-        <Col span={24} style={{ textAlign: 'center' }}>
+        <Col span={21} offset={3}>
           {this.getFontDecoration()}
         </Col>
       </Row>
       <Row>
-        <Col span={24} style={{ textAlign: 'center' }}>
+        <Col span={21} offset={3}>
           {this.getFontAlign()}
         </Col>
       </Row>

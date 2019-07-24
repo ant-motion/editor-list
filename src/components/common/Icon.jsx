@@ -8,8 +8,8 @@ const icon = {
     return (
       <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
         <path d="M603.99999969 476.00000031h156l-79.99999969-156z" />
-        <path d="M104 164.00000031v495.99999937h828V164.00000031H104z m244.00000031 456c-12 0-24-7.99999969-28.00000031-20.00000063L152 260.00000031c-7.99999969-16.00000031-4.00000031-36 12-48 16.00000031-7.99999969 36 0 43.99999969 15.99999937l140.00000062 284.00000063 139.99999969-284.00000063c4.00000031-16.00000031 24-24 40.00000031-15.99999937 16.00000031 7.99999969 19.99999969 28.00000031 12 48l-168 339.99999937c-4.00000031 12-12 19.99999969-24 20.00000063z m516-4.00000031c-4.00000031 4.00000031-7.99999969 4.00000031-16.00000031 4.00000031-12 0-24-7.99999969-28.00000031-20.00000063l-27.99999938-55.99999968h-224.00000062l-27.99999938 55.99999968c-7.99999969 16.00000031-28.00000031 24-44.00000062 16.00000032-16.00000031-7.99999969-19.99999969-28.00000031-12-48l168-340.00000032c12-24 43.99999969-24 56.00000062 0l168 340.00000032c7.99999969 19.99999969 4.00000031 40.00000031-12 48z"  />
-        <path d="M104 824l120 91.99999969v-63.99999938h580.00000031v63.99999938l127.99999969-91.99999969-127.99999969-96V792.00000031H224v-64.00000031z"  />
+        <path d="M104 164.00000031v495.99999937h828V164.00000031H104z m244.00000031 456c-12 0-24-7.99999969-28.00000031-20.00000063L152 260.00000031c-7.99999969-16.00000031-4.00000031-36 12-48 16.00000031-7.99999969 36 0 43.99999969 15.99999937l140.00000062 284.00000063 139.99999969-284.00000063c4.00000031-16.00000031 24-24 40.00000031-15.99999937 16.00000031 7.99999969 19.99999969 28.00000031 12 48l-168 339.99999937c-4.00000031 12-12 19.99999969-24 20.00000063z m516-4.00000031c-4.00000031 4.00000031-7.99999969 4.00000031-16.00000031 4.00000031-12 0-24-7.99999969-28.00000031-20.00000063l-27.99999938-55.99999968h-224.00000062l-27.99999938 55.99999968c-7.99999969 16.00000031-28.00000031 24-44.00000062 16.00000032-16.00000031-7.99999969-19.99999969-28.00000031-12-48l168-340.00000032c12-24 43.99999969-24 56.00000062 0l168 340.00000032c7.99999969 19.99999969 4.00000031 40.00000031-12 48z" />
+        <path d="M104 824l120 91.99999969v-63.99999938h580.00000031v63.99999938l127.99999969-91.99999969-127.99999969-96V792.00000031H224v-64.00000031z" />
       </svg>
     );
   },
@@ -95,6 +95,118 @@ const icon = {
       </svg>
     );
   },
+  block() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M2 4h12v8H2V4zm10 2H4v4h8V6z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M2 1h12v1H2V1zm0 13h12v1H2v-1z" />
+      </svg>
+    );
+  },
+  flex() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M2 2h12v12H2V2zM1 1h14v14H1V1z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7 4H4v8h3V4zm2 0h3v8H9V4z" />
+      </svg>
+    );
+  },
+  'inline-block': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M4 4h8v8H4V4zm6 2H6v4h4V6z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 2h1v12H1V2zm14 0h-1v12h1V2z" />
+      </svg>
+    );
+  },
+  inline() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 2h1v12H1V2zm14 0h-1v12h1V2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7.25 3L3.5 13h2l1-3h3l1 3h2L8.75 3h-1.5zm1.917 6L8 5.5 6.833 9h2.334z" />
+      </svg>
+    );
+  },
+  'alignItems-stretch': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 0h16v1H0zm0 15h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 2.5h3v11h-3zm5 0h3v11h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-flex-start': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 0h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 2.5h3v7h-3zm5 0h3v5h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-center': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M3.5 3.5h3v8h-3zm5 1h3v6h-3z" />
+        <path d="M0 7h16v1H0z" />
+      </svg>
+    );
+  },
+  'alignItems-flex-end': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 15h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 6.5h3v7h-3zm5 2h3v5h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-baseline': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 7h16v1H0z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M12 3H8v7h4V3zm-1 1H9v3h2V4zM7 3H3v9h4V3zM6 4H4v3h2V4z" />
+      </svg>
+    );
+  },
+  'justifyContent-flex-start': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm5 0h3v7h-3z" />
+        <path d="M0 0h1v16H0z" />
+      </svg>
+    );
+  },
+  'justifyContent-center': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm7 0h3v7h-3z" />
+        <path d="M7 0h1v16H7z" />
+      </svg>
+    );
+  },
+  'justifyContent-flex-end': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1z" />
+        <path stroke="currentColor" d="M5.5 4.5h3v7h-3zm5 0h3v7h-3z" />
+      </svg>
+    );
+  },
+  'justifyContent-space-between': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
+        <path stroke="currentColor" d="M10.5 4.5h3v7h-3zm-8 0h3v7h-3z" />
+      </svg>
+    );
+  },
+  'justifyContent-space-around': function() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
+        <path stroke="currentColor" d="M9.5 4.5h3v7h-3zm-6 0h3v7h-3z" />
+      </svg>
+    );
+  }
 };
 
 export default ({ type, prompt, children }) => {
