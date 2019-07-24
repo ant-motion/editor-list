@@ -72,7 +72,7 @@ export default class EditorInterface extends Component {
             this.onChange('offset', e);
           }}
         />
-        <Row gutter={8}>
+        <Row gutter={8} style={{ marginBottom: 0, marginTop: 28 }}>
           <Col span={4} offset={5}>
             zIndex
               </Col>
@@ -118,7 +118,7 @@ export default class EditorInterface extends Component {
             </RadioGroup>
           </Col>
         </Row>
-        <Row gutter={8}>
+        <Row gutter={8} style={{ marginBottom: 0 }}>
           <Col span={3}>
             <Icon type="minus-circle" prompt={locale.clear} />
           </Col>

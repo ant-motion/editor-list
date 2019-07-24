@@ -525,8 +525,8 @@ class EditorList extends Component {
         lineHeight: convertData(style.lineHeight),
         color: convertDefaultData(style.color),
         letterSpacing: convertData(style.letterSpacing),
-        align: convertDefaultData(style.textAlign),
-        decoration: convertData(style.textDecoration || style.textDecorationLine),
+        align: convertDefaultData(style.textAlign) || 'left',
+        decoration: convertData(style.textDecoration || style.textDecorationLine) || 'none',
       },
       interface: {
         overflow: convertDefaultData(style.overflow) || 'visible',

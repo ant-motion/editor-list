@@ -67,7 +67,7 @@ class EditorFont extends Component {
     align = align === 'end' ? 'right' : align;
     return (
       <RadioGroup
-        value={align || 'left'}
+        value={align}
         size="small"
         onChange={(e) => {
           const target = e.target;
@@ -85,7 +85,7 @@ class EditorFont extends Component {
 
   getFontDecoration = () => (
     <RadioGroup value={this.props.value.decoration &&
-      this.props.value.decoration.split(' ')[0] || 'none'} size="small" onChange={(e) => {
+      this.props.value.decoration.split(' ')[0]} size="small" onChange={(e) => {
         const target = e.target;
         this.onChange('decoration', target.value);
       }}
