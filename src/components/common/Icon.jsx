@@ -111,7 +111,7 @@ const icon = {
       </svg>
     );
   },
-  'inline-block'() {
+  'inline-block': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path fillRule="evenodd" clipRule="evenodd" d="M4 4h8v8H4V4zm6 2H6v4h4V6z" />
@@ -127,7 +127,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-stretch'() {
+  'alignItems-stretch': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 0h16v1H0zm0 15h16v1H0z" />
@@ -135,7 +135,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-flex-start'() {
+  'alignItems-flex-start': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 0h16v1H0z" />
@@ -143,7 +143,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-center'() {
+  'alignItems-center': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M3.5 3.5h3v8h-3zm5 1h3v6h-3z" />
@@ -151,7 +151,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-flex-end'() {
+  'alignItems-flex-end': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 15h16v1H0z" />
@@ -159,7 +159,7 @@ const icon = {
       </svg>
     );
   },
-  'alignItems-baseline'() {
+  'alignItems-baseline': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M0 7h16v1H0z" />
@@ -167,7 +167,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-flex-start'() {
+  'justifyContent-flex-start': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm5 0h3v7h-3z" />
@@ -175,7 +175,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-center'() {
+  'justifyContent-center': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm7 0h3v7h-3z" />
@@ -183,7 +183,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-flex-end'() {
+  'justifyContent-flex-end': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1z" />
@@ -191,7 +191,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-space-between'() {
+  'justifyContent-space-between': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
@@ -199,7 +199,7 @@ const icon = {
       </svg>
     );
   },
-  'justifyContent-space-around'() {
+  'justifyContent-space-around': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
@@ -214,7 +214,7 @@ const icon = {
       </svg>
     );
   },
-  'float-left'() {
+  'float-left': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path fill="currentColor" d="M0 4h8v8H0z" />
@@ -222,7 +222,7 @@ const icon = {
       </svg>
     );
   },
-  'float-right'() {
+  'float-right': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path d="M8 4h8v8H8z" />
@@ -230,14 +230,14 @@ const icon = {
       </svg>
     );
   },
-  'float-close'() {
+  'float-close': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path fillRule="evenodd" clipRule="evenodd" d="M9.414 8l3.293-3.293-1.414-1.414L8 6.586 4.707 3.293 3.293 4.707 6.586 8l-3.293 3.293 1.414 1.414L8 9.414l3.293 3.293 1.414-1.414L9.414 8z" />
       </svg>
     );
   },
-  'clear-left'() {
+  'clear-left': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path opacity=".6" d="M1 3h4v4H1z" />
@@ -246,7 +246,7 @@ const icon = {
       </svg>
     );
   },
-  'clear-right'() {
+  'clear-right': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path opacity=".6" fill="currentColor" d="M11 3h4v4h-4z" />
@@ -255,7 +255,7 @@ const icon = {
       </svg>
     );
   },
-  'clear-both'() {
+  'clear-both': function() {
     return (
       <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
         <path fill="currentColor" d="M2 3h12v4H2z" />
