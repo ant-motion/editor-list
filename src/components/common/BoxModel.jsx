@@ -35,7 +35,7 @@ export default class BoxModel extends Component {
       return (
         <AutoComplete
           key={key}
-          style={{ width: 50 }}
+          style={{ width: 60 }}
           value={v}
           className={key}
           disabled={this.props.disabled}
@@ -52,7 +52,7 @@ export default class BoxModel extends Component {
       return (
         <Color
           key={key}
-          style={{ width: 50 }}
+          style={{ width: 60 }}
           type="cut"
           className={key}
           color={v}

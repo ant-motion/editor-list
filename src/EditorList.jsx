@@ -18,6 +18,7 @@ import {
   toArrayChildren,
   convertData,
   convertDefaultData,
+  getBgDefaultData,
   convertBorderData,
   convertShadowData,
   toCss,
@@ -507,7 +508,6 @@ class EditorList extends Component {
       || style.borderRightStyle !== 'none' && style.borderRightColor !== '0px'
       || style.borderBottomStyle !== 'none' && style.borderBottomColor !== '0px'
       || style.borderLeftStyle !== 'none' && style.borderLeftColor !== '0px';
-    console.log(style)
     return {
       state: {
         cursor: style.cursor || 'auto',
@@ -547,11 +547,7 @@ class EditorList extends Component {
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
-        image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''),
-        repeat: convertDefaultData(style.backgroundRepeat) || 'repeat',
-        position: convertDefaultData(style.backgroundPosition),
-        size: convertDefaultData(style.backgroundSize),
-        attachment: convertDefaultData(style.backgroundAttachment) || 'scroll',
+        image: getBgDefaultData(style),
       },
       border: {
         style: convertBorderData(style.borderStyle || (
@@ -661,6 +657,8 @@ class EditorList extends Component {
           itemProps.editClassName = this.editClassName;
           itemProps.placeholder = this.props.editorDefaultClassName;
           itemProps.classNameArray = classNameArray;
+        } else if (key === 'EditorBackGround') {
+          itemProps.editorElem = props.editorElem;
         } else {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
@@ -689,7 +687,7 @@ class EditorList extends Component {
         value={stateValue}
         isMobile={this.props.isMobile}
       />,
-      <Layout 
+      <Layout
         onChange={this.onChange}
         key="EditorLayout"
         locale={props.locale.EditorLayout}
@@ -712,6 +710,7 @@ class EditorList extends Component {
         key="EditorBackGround"
         value={value.background}
         locale={props.locale.EditorBackGround}
+        editorElem={props.editorElem}
       />,
       <Border
         onChange={this.onChange}
@@ -776,10 +775,10 @@ class EditorList extends Component {
   )
 
   render() {
-    const { ...props } = this.props;
-    ['useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
+    const { useClassName, editorElem, onChange, ...props } = this.props;
+
     return (<Collapse bordered={false} {...props}>
-      {this.getChildren(props)}
+      {this.getChildren(this.props)}
     </Collapse>);
   }
 }

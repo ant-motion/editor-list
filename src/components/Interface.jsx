@@ -106,7 +106,6 @@ export default class EditorInterface extends Component {
               value={value.float}
               size="small"
               onChange={(e) => {
-                console.log(e)
                 this.onChange('float', e.target.value);
               }}
             >
@@ -127,7 +126,6 @@ export default class EditorInterface extends Component {
               value={value.clear}
               size="small"
               onChange={(e) => {
-                console.log(e)
                 this.onChange('clear', e.target.value);
               }}
             >

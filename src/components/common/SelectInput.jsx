@@ -63,24 +63,23 @@ export default class SelectInput extends React.Component {
 
   render() {
     return (
-      <div className="select-input">
-        <AutoComplete
-          {...this.props}
-          style={{ width: '100%' }}
-          placeholder={this.props.placeholder || '--'}
-          filterOption={this.filterOption}
-          onBlur={this.onBlur}
-          onFocus={this.onFocus}
-          onChange={this.onChange}
-          value={this.props.value}
-          getPopupContainer={node => getParentNode(node, 'editor-list')}
-          size="small"
-          dropdownMatchSelectWidth={false}
-          dropdownClassName="editor-list-dropdown"
-        >
-          {this.props.children}
-        </AutoComplete>
-      </div>
+      <AutoComplete
+        className="select-input"
+        style={{ width: '100%' }}
+        {...this.props}
+        placeholder={this.props.placeholder || '--'}
+        filterOption={this.filterOption}
+        onBlur={this.onBlur}
+        onFocus={this.onFocus}
+        onChange={this.onChange}
+        value={this.props.value}
+        getPopupContainer={node => getParentNode(node, 'editor-list')}
+        size="small"
+        dropdownMatchSelectWidth={false}
+        dropdownClassName="editor-list-dropdown"
+      >
+        {this.props.children}
+      </AutoComplete>
     );
   }
 }

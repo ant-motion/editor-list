@@ -1,16 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Input from 'antd/lib/input';
 import Icon from 'antd/lib/icon';
-import TweenOne from 'rc-tween-one';
+import Popover from 'antd/lib/popover';
 import classnames from 'classnames';
 import { SketchPicker } from 'react-color';
-import { alphaBg, isColor, currentScrollTop } from '../../utils';
-
-const TweenOneGroup = TweenOne.TweenOneGroup;
+import { alphaBg, isColor } from '../../utils';
 
 class Color extends React.Component {
   static propTypes = {
@@ -19,141 +16,59 @@ class Color extends React.Component {
     color: PropTypes.string,
     onChange: PropTypes.func,
     type: PropTypes.string,
+    span: PropTypes.array,
+    gutter: PropTypes.number,
   };
 
   static defaultProps = {
     title: '颜色',
-    onChange: () => {},
+    onChange: () => { },
+    span: [3, 9, 12],
+    gutter: 8,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      color: this.props.color,
       showPicker: false,
     };
   }
 
-  componentDidMount() {
-    this.container = this.defaultGetContainer();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.color !== this.state.color) {
-      this.setState({
-        color: nextProps.color,
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    const colorRect = this.colorDom.getBoundingClientRect();
-    const windowRect = {
-      width: document.body.scrollWidth,
-      height: document.body.scrollHeight,
-      scrollTop: currentScrollTop(),
-    };
-    this.renderPickerComponent({ windowRect, colorRect });
-  }
-
-  componentWillUnmount() {
-    if (this.container) {
-      ReactDOM.unmountComponentAtNode(this.container);
-      this.container.parentNode.removeChild(this.container);
-      this.container = null;
-    }
-  }
-
-  getStyle = (rect) => {
-    const r = {
-      w: 220,
-      h: 309,
-    };
-    const w = rect.windowRect;
-    const c = rect.colorRect;
-    let top = w.scrollTop + c.top + 20;
-    let left = c.left - r.w / 2 + c.width / 2;
-    let transformOrigin = '50% 0';
-    left = left < 10 ? 10 : left;
-    if (c.top + r.h > w.height) {
-      top = c.top - r.h - 10;
-      transformOrigin = '50% 100%';
-    }
-    if (left + r.w > w.width) {
-      left = w.width - r.w - 10;
-    }
-    return {
-      top,
-      left,
-      transformOrigin,
-    };
-  };
-
-  getColorPicker = (rect) => {
-    const { color } = this.state;
-    const className = classnames({
-      'editor-color-picker-wrapper': true,
-      'editor-color-picker-show': this.state.showPicker,
-    });
-    const style = this.getStyle(rect);
-    const pos = {
-      top: style.top,
-      left: style.left,
-    };
-    const origin = style.transformOrigin;
+  getColorPicker = () => {
+    const { color } = this.props;
     return (
-      <div className={className}>
-        <div className="editor-color-mask" onClick={this.closeColorPicker} />
-        <TweenOneGroup
-          className="editor-color-picker"
-          enter={{ scaleY: 0.8, opacity: 0, type: 'from', duration: 300, ease: 'easeOutCirc' }}
-          leave={{ scaleY: 0.8, opacity: 0, duration: 300, ease: 'easeInOutCirc' }}
-          style={pos}
-        >
-          {this.state.showPicker &&
-          <div style={{ transformOrigin: origin }} key="picker">
-            <SketchPicker
-              color={color && isColor(color) ? color : 'rgba(0,0,0,0)'}
-              presetColors={[
-                '#f04134',
-                '#00a854',
-                '#108ee9',
-                '#f5317f',
-                '#f56a00',
-                '#7265e6',
-                '#ffbf00',
-                '#00a2ae',
-                '#222222',
-                '#404040',
-                // '#5a5a5a',
-                '#919191',
-                '#bfbfbf',
-                '#d9d9d9',
-                '#e9e9e9',
-                // '#f5f5f5',
-                // '#f7f7f7',
-                '#fbfbfb',
-                'transparent',
-              ]}
-              onChange={this.colorHandleChange}
-            />
-          </div>}
-        </TweenOneGroup>
+      <div key="picker">
+        <SketchPicker
+          color={color && isColor(color) ? color : 'rgba(0,0,0,0)'}
+          presetColors={[
+            '#f04134',
+            '#00a854',
+            '#108ee9',
+            '#f5317f',
+            '#f56a00',
+            '#7265e6',
+            '#ffbf00',
+            '#00a2ae',
+            '#222222',
+            '#404040',
+            // '#5a5a5a',
+            '#919191',
+            '#bfbfbf',
+            '#d9d9d9',
+            '#e9e9e9',
+            // '#f5f5f5',
+            // '#f7f7f7',
+            '#fbfbfb',
+            'transparent',
+          ]}
+          onChange={this.colorHandleChange}
+        />
       </div>);
   }
-
-  defaultGetContainer = () => {
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    return container;
-  };
 
   colorHandleChange = (value) => {
     const rgb = value.rgb;
     const color = rgb.a === 1 ? value.hex : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
-    this.setState({
-      color,
-    });
     this.props.onChange(color);
   };
 
@@ -163,62 +78,51 @@ class Color extends React.Component {
     });
   };
 
-  colorClick = () => {
-    this.setState({
-      showPicker: true,
-    });
+  handleVisibleChange = showPicker => {
+    this.setState({ showPicker });
   };
 
   inputChange = (e) => {
     const target = e.target;
-    this.setState({
-      color: target.value,
-    });
     this.props.onChange(target.value);
   };
 
   removeColor = () => {
-    this.setState({
-      color: 'transparent',
-    });
-    this.props.onChange('transparent');
+    this.props.onChange('initial');
   }
 
-  renderPickerComponent = (rect) => {
-    // 后期改用 React createPortal;
-    ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getColorPicker(rect), this.container);
-  }
 
   render() {
-    const { ...props } = this.props;
-    ['title', 'color', 'onChange', 'type'].map(key => delete props[key]);
-
-    const { color } = this.state;
+    const { title, color, onChange, type, span, ...props } = this.props;
     const className = classnames({
       'editor-color': true,
       active: this.state.showPicker,
     });
     const children = (
-      <a
-        className={className}
-        style={{ background: `#fff url(${alphaBg})` }}
-        onClick={this.colorClick}
-        ref={c => {
-          this.colorDom = c;
-        }}
+      <Popover
+        title={false}
+        content={this.getColorPicker()}
+        trigger="click"
+        visible={this.state.showPicker}
+        onVisibleChange={this.handleVisibleChange}
+        overlayClassName="editor-list-popover"
       >
-        <i
-          style={{ background: color }}
-          className={`${!color ? 'no-color' : ''}`}
+        <a
+          className={className}
+          style={{ background: `#fff url(${alphaBg})` }}
         >
-          {!color && (<svg width="100%" height="100%" viewBox="0 0 60 20" id="no-color">
-            <g id="Page-1">
-              <path d="M0.5,19.5 L59.5,0.5" id="Line" stroke="#FF0000" />
-            </g>
-          </svg>)}
-        </i>
-
-      </a>
+          <i
+            style={{ background: color }}
+            className={`${!color || color === 'initial' ? 'no-color' : ''}`}
+          >
+            {(!color || color === 'initial') && (<svg width="100%" height="100%" viewBox="0 0 60 20" id="no-color">
+              <g id="Page-1">
+                <path d="M0.5,19.5 L59.5,0.5" id="Line" stroke="#FF0000" />
+              </g>
+            </svg>)}
+          </i>
+        </a>
+      </Popover>
     );
     const classNameWrapper = classnames({
       'editor-color-wrapper': true,
@@ -234,14 +138,14 @@ class Color extends React.Component {
     }
 
     return (
-      <Row {...props} className={classNameWrapper} gutter={8}>
-        <Col span={3}>
+      <Row {...props} className={classNameWrapper}>
+        <Col span={span[0]}>
           {this.props.title}
         </Col>
-        <Col span={9} style={{ position: 'relative' }}>
+        <Col span={span[1]} style={{ position: 'relative' }}>
           {children}
         </Col>
-        <Col span={12}>
+        <Col span={span[2]}>
           <Input value={color} onChange={this.inputChange} size="small" placeholder="Add color" />
         </Col>
       </Row>

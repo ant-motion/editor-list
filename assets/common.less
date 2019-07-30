@@ -2,9 +2,11 @@
 
 @editor: editor-list;
 
-.@{editor} {
+.@{editor},
+.@{editor}-popover .ant-popover-inner {
   line-height: 22px;
   font-size: 12px;
+
   .icon {
     font-size: 16px;
     height: 22px;
@@ -12,89 +14,126 @@
     align-items: center;
     justify-content: center;
   }
+
   &-dropdown {
     font-size: 12px;
+
     .ant-dropdown-menu-item {
       font-size: 12px;
     }
   }
+
   .ant-radio-group-small .ant-radio-button-wrapper {
     padding: 0 8px;
   }
+
   .ant-row {
     margin-bottom: 8px;
   }
+
   .ant-collapse-content-box {
     position: relative;
   }
-  .ant-input-number, .ant-input {
+
+  .ant-input-number,
+  .ant-input {
     width: 100%;
     background: transparent;
     border-color: @input-line-color;
     color: @text-color;
+
     &.ant-input-disabled {
       color: fade(@text-color, 10);
       border-color: fade(@input-line-color, 10);
     }
+
     input {
       background: transparent !important;
       color: @text-color;
       border-color: @input-line-color;
     }
-    &:hover, &:focus, &-focused {
+
+    &:hover,
+    &:focus,
+    &-focused {
       border-color: @input-line-color-hover;
       box-shadow: 0 0 4px @input-line-color-hover;
     }
+
     &::-moz-placeholder {
       color: fade(@text-color, 15);
       opacity: 1;
     }
+
     &:-ms-input-placeholder {
       color: fade(@text-color, 15);
     }
+
     &::-webkit-input-placeholder {
       color: fade(@text-color, 15);
     }
   }
-  .ant-select-selection {
+
+  .ant-input-group {
+    &-addon {
+      padding: 0 4px;
+      color: @text-color;
+      border-color: @text-color;
+      background-color: @bgColor;
+    }
+  }
+
+  .ant-select-selection, .ant-select-auto-complete.ant-select {
     background: transparent;
     color: @text-color;
     border-color: @input-line-color;
-    &:hover, &:focus {
+
+    &:hover,
+    &:focus {
       border-color: @input-line-color-hover;
     }
+
     .ant-select-selection-selected-value {
       padding-right: 8px;
     }
+
     .ant-select-arrow {
       right: 4px;
       color: @text-color;
     }
+
     input {
-      padding: 0;
-      &:hover, &:focus, &-focused {
-        border: none;
-        box-shadow: none;
+      padding: 1px 7px;
+      &:hover,
+      &:focus,
+      &-focused {
+        border-color: @input-line-color-hover;
       }
     }
   }
+
   .ant-select-focused .ant-select-selection,
   .ant-select-open .ant-select-selection {
     border-color: @input-line-color-hover;
     box-shadow: 0 0 4px @input-line-color-hover;
   }
+
   .ant-select-selection {
     .ant-select-selection__placeholder {
       color: fade(@text-color, 15);
       width: 100%;
     }
   }
+
   .ant-input-number-handler-wrap {
     background: transparent;
+
     .ant-input-number-handler {
+
       .ant-input-number-handler-up-inner,
       .ant-input-number-handler-down-inner {
         color: @text-color;
+
         &:hover {
           color: @text-color;
         }
@@ -109,12 +148,16 @@
     width: 42px;
     text-align: center;
   }
+
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child,
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover,
   .ant-radio-button-wrapper-checked {
     color: @text-color-hover;
     background: @heiColor;
     border-color: @input-line-color-hover;
     box-shadow: -1px 0 0 0 @input-line-color-hover;
   }
+
   .ant-radio-button-wrapper:not(:first-child)::before {
     background-color: fade(@input-line-color, 30);
   }
@@ -125,6 +168,7 @@
 
   .select-input {
     position: relative;
+
     & .anticon {
       position: absolute;
       right: 4px;
@@ -135,9 +179,11 @@
       z-index: 2;
     }
   }
+
   .ant-switch-checked {
     background-color: @input-line-color;
   }
+
   .add-button {
     display: block;
     width: 100%;
@@ -150,38 +196,99 @@
     font-size: 24px;
     box-shadow: 0 0 0 fade(#000, 0);
     transition: transform .3s @ease-out, box-shadow .3s @ease-out, color .3s @ease-out, background .3s @ease-out;
+
     &:hover {
       transform: translateY(-2px) scale(1.01);
       box-shadow: 0 2px 3px fade(#000, 35);
       color: @text-color-hover;
       background: @huiColor;
     }
+
     &:active {
       transform: translateY(-1px) scale(1.005);
       box-shadow: 0 1px 3px fade(#000, 35);
     }
   }
+
   .icon-button {
     cursor: pointer;
     display: block;
   }
+
   .editor-transition-tween {
     .ant-row {
       overflow: hidden;
     }
   }
+
   .ant-tag-checkable {
     color: @text-color;
     margin-bottom: 8px;
     border: 1px solid @input-line-color;
+
     &:hover {
       color: @text-color;
     }
 
-    &:active, &.ant-tag-checkable-checked {
+    &:active,
+    &.ant-tag-checkable-checked {
       border-color: @input-line-color-hover;
       color: @text-color-hover;
       background: @heiColor;
     }
+  }
+
+  .ant-popover-inner-content {
+    padding: 0;
+    color: @text-color;
+  }
+
+  .sketch-picker {
+    box-shadow: none !important;
+    color: @bgColor;
+    input {
+      color: @bgColor;
+    }
+  }
+
+  .ant-row {
+    margin-bottom: 8px;
+  }
+
+  .ant-checkbox {
+    color: @text-color;
+
+    &+span {
+      color: @text-color;
+    }
+
+    &-wrapper:hover {
+      .ant-checkbox-inner {
+        border-color: @text-color;
+      }
+    }
+
+    &-checked {
+      .ant-checkbox-inner {
+        border-color: @text-color;
+        background-color: @heiColor;
+      }
+
+    }
+  }
+}
+
+.@{editor}-popover .ant-popover-content {
+  .ant-popover-inner {
+    background-color: @huiColor;
+    box-shadow: 0 0 16px fade(@huiColor, 70);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ant-popover-arrow {
+    border-right-color: @huiColor;
+    border-bottom-color: @huiColor;
+    box-shadow: 0 0 16px fade(@huiColor, 70);
   }
 }

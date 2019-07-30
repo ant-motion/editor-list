@@ -264,6 +264,90 @@ const icon = {
       </svg>
     );
   },
+  'bg-type': () => (
+    <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
+      <path d="M203.629 173.072h273.397v273.401h-273.397v-273.401zM823.632 308.669l-129.652-127.415-127.415 129.646 129.655 127.41 127.41-129.642zM200.368 542.497h273.401v273.401h-273.401v-273.401zM548.629 542.497h273.397v273.401h-273.397v-273.401zM548.629 542.497z" />
+    </svg>
+  ),
+  'bg-type-linear': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <defs>
+        <linearGradient id="svg-type-background-linear-gradient" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 10 -10 0 10 0)">
+          <stop stopColor="currentColor" />
+          <stop offset="1" stopColor="currentColor" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path transform="translate(3 3)" fill="url(#svg-type-background-linear-gradient)" d="M0 0h10v10H0z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M15 1H1v14h14V1zm-1 1H2v12h12V2z" />
+    </svg>
+  ),
+  'bg-type-radial': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <defs>
+        <radialGradient id="svg-type-background-radial-gradient" cx=".5" cy=".5" r=".5" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 10 -10 0 10 0)">
+          <stop stopColor="currentColor" stopOpacity="0" />
+          <stop offset=".1" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="1" stopColor="currentColor" />
+        </radialGradient>
+      </defs>
+      <path transform="translate(3 3)" fill="url(#svg-type-background-radial-gradient)" d="M0 0h10v10H0z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M15 1H1v14h14V1zm-1 1H2v12h12V2z" />
+    </svg>
+  ),
+  clip: () => (
+    <svg viewBox="0 0 1024 1024" width="18px" fill="currentColor">
+      <path d="M682.666667 256 341.333333 256C315.733333 256 298.666667 238.933333 298.666667 213.333333s17.066667-42.666667 42.666667-42.666667l341.333333 0c25.6 0 42.666667 17.066667 42.666667 42.666667S708.266667 256 682.666667 256z" />
+      <path d="M682.666667 853.333333 341.333333 853.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667s17.066667-42.666667 42.666667-42.666667l341.333333 0c25.6 0 42.666667 17.066667 42.666667 42.666667S708.266667 853.333333 682.666667 853.333333z" />
+      <path d="M810.666667 725.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667L768 341.333333c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 341.333333C853.333333 708.266667 836.266667 725.333333 810.666667 725.333333z" />
+      <path d="M213.333333 725.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667L170.666667 341.333333c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 341.333333C256 708.266667 238.933333 725.333333 213.333333 725.333333z" />
+      <path d="M832 64H192c-70.7 0-128 57.3-128 128v640c0 70.7 57.3 128 128 128h640c70.7 0 128-57.3 128-128V192c0-70.7-57.3-128-128-128z m64 768c0 35.3-28.7 64-64 64H192c-35.3 0-64-28.7-64-64V192c0-35.3 28.7-64 64-64h640c35.3 0 64 28.7 64 64v640z" />
+    </svg>
+  ),
+  extent: () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H2v12h9v1H1V1h14v10h-1V2z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M11 13.12V14H2V2h12v9h-.88L8.976 6.854a2.5 2.5 0 1 0-2.12 2.12L11 13.122z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" fill="currentColor" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.586 7.88c-.186.28-.427.52-.707.706L13.29 14H12v1h3v-3h-1v1.293L8.586 7.88z" />
+    </svg>
+  ),
+  'farthest-corner': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H2v12h9v1H1V1h14v10h-1V2z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M11 13.12V14H2V2h12v9h-.88L8.976 6.854a2.5 2.5 0 1 0-2.12 2.12L11 13.122z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" fill="currentColor" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.586 7.88c-.186.28-.427.52-.707.706L13.29 14H12v1h3v-3h-1v1.293L8.586 7.88z" />
+    </svg>
+  ),
+  'farthest-side': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M13 2H2v12h11v1H1V1h12v1z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M13.85 5a7.465 7.465 0 0 0-1.35-3H2v10.5A7.503 7.503 0 0 0 13.85 8H8.5a2.5 2.5 0 1 1 0-3h5.35z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M14 1h1v14h-1V7H8.95a2.513 2.513 0 0 0 0-1H14V1z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+    </svg>
+  ),
+  'closest-corner': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H5V1h10v14H1V5h1v9h12V2z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M2 1H1v3h1V2.707L4.414 5.12c.186-.28.427-.52.707-.706L2.71 2H4V1H2z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M2 5v6.19A6.5 6.5 0 0 0 11.19 2H5v.88l1.146 1.145a2.5 2.5 0 1 1-2.12 2.12L2.878 5H2z" />
+    </svg>
+  ),
+  'closest-side': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 3v12h14V3h-1v11H2V3H1z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M8 4.5a2.5 2.5 0 1 1-3 0V2H3.337A5.53 5.53 0 0 0 2 3.337v6.326A5.5 5.5 0 1 0 9.663 2H8v2.5z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M1 1h14v1H7v2.05a2.51 2.51 0 0 0-1 0V2H1V1z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+    </svg>
+  ),
+  shape: () => (
+    <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
+      <path d="M832 337.6 832 106.688C832 83.072 812.864 64 789.376 64L106.688 64C83.072 64 64 83.072 64 106.688l0 682.688C64 812.928 83.072 832 106.688 832l251.456 0c62.912 96.192 171.328 160 294.592 160 194.112 0 352-157.952 352-352C1004.736 511.424 935.232 399.04 832 337.6zM128 768 128 128l640 0 0 179.776C731.776 295.168 693.12 288 652.736 288 458.688 288 300.8 445.952 300.8 640c0 45.184 8.896 88.256 24.448 128L128 768zM652.736 928C494.016 928 364.8 798.784 364.8 640s129.216-288 287.936-288 288 129.216 288 288S811.52 928 652.736 928z" />
+    </svg>
+  )
 };
 
 export default ({ type, prompt, children }) => {

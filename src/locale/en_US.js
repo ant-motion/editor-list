@@ -92,10 +92,28 @@ export default {
     position_help: 'Please select the current corresponding positioning. ' +
       'If it is absolute positioning, please turn on the relative positioning of the parent, ' +
       'otherwise it will be positioned with the top level with relative positioning.',
+    float: 'Float',
+    floatSelect: {
+      none: 'none',
+      left: 'Left',
+      right: 'Right',
+    },
+    clear: 'Clear Float',
+    clearSelect: {
+      none: 'None',
+      left: 'Left',
+      right: 'Right',
+      both: 'Both',
+    },
     zIndex: 'zIndex, current element depth.',
   },
   EditorBackGround: {
+    type: 'Type',
     header: 'Background',
+    add: 'Add Image Or Gradient',
+    img: 'Image',
+    linear: 'Linear Gradient',
+    radial: 'Radial Gradient',
     image: 'Image url',
     color: 'Color',
     repeat: 'Repeat',
@@ -110,6 +128,28 @@ export default {
       'repeat-y': 'repeat-y',
       'no-repeat': 'no-repeat',
     },
+    blendMode: 'Filter(blend-mode)',
+    blendModeHelp: 'Layer filters are only valid for multiple backgrounds',
+    clip: 'Clip',
+    clipHelp: 'Set whether the background of the element extends below the border',
+    clipSelect: {
+      'border-box': 'Start with border',
+      'padding-box': 'Start with padding',
+      'content-box': 'Start with content',
+    },
+    barHelp: 'Gradient point drags out the corresponding range (40px), delete the gradient point',
+    shape: 'Gradient of circle or ellipse',
+    extent: 'Size',
+    extentSelect: {
+      'farthest-corner': 'The gradient\'s ending shape is sized so that it exactly meets the farthest corner of the box from its center.',
+      'farthest-side': 'Similar to closest-side, except the ending shape is sized to meet the side of the box farthest from its center (or vertical and horizontal sides).',
+      'closest-corner': 'The gradient\'s ending shape is sized so that it exactly meets the closest corner of the box from its center.',
+      'closest-side': 'The gradient\'s ending shape meets the side of the box closest to its center (for circles) or meets both the vertical and horizontal sides closest to the center (for ellipses).',
+    },
+    radialPosition: "position of the center of a circle",
+    repeatGradient: "Repeated Gradient",
+    angle: "Angle",
+    angleHelp: "Custom values can be set (0 - 360). Note: Units can be selected when the value is not empty."
   },
   EditorBorder: {
     header: 'Border',
