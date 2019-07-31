@@ -289,7 +289,7 @@ export function getBgDefaultData(style) {
     Object.keys(data).forEach(key => {
       let item = data[key][i];
       if (!item) {
-        item = data[key][0];
+        item = data[key][0] || defaultBgImageValue[key];
         data[key][i] = item;
       }
       if (item.trim() === 'initial') {

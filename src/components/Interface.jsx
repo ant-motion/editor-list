@@ -61,6 +61,9 @@ export default class EditorInterface extends Component {
     const { value, locale, ...props } = this.props;
     const posChild = value.position !== 'static' ? (
       <div key="pos" style={{ overflow: 'hidden' }}>
+        <Row>
+          <Col>{locale.position} - top, right, bottom, left</Col>
+        </Row>
         <BoxModel keys={['top', 'right', 'bottom', 'left']}
           value={{
             top: value.top,

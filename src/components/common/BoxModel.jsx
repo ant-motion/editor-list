@@ -38,6 +38,7 @@ export default class BoxModel extends Component {
           style={{ width: 60 }}
           value={v}
           className={key}
+          placeholder={key}
           disabled={this.props.disabled}
         />
       );
