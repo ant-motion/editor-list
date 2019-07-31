@@ -277,7 +277,7 @@ export function getBgDefaultData(style) {
   Object.keys(defaultBgImageValue).forEach($key => {
     const key = `background-${toCssLowerCase($key)}`;
     const item = style[key];
-    if (item && style.backgroundImage) {
+    if (item && style.backgroundImage && style.backgroundImage !== 'none') {
       data[$key] = $key === 'image' ? item.replace(/\),(\s?)(?=(url|linear|radial|repeating))/, ')&EditorListUrlPlaceholder&')
         .split('&EditorListUrlPlaceholder&') : item.split(',');
     } else {
