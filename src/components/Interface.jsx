@@ -95,7 +95,7 @@ export default class EditorInterface extends Component {
         </Row>
       </div>
     ) : null;
-    const floatChild = value.position !== 'absolute' ? (
+    const floatChild = value.position === 'static' || value.position === 'relative' ? (
       <div key="float" style={{ overflow: 'hidden' }}>
         <Row gutter={8}>
           <Col span={3}>
