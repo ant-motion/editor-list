@@ -9075,6 +9075,9 @@ li.CodeMirror-hint-active {
 .editor-list-popover .ant-popover-inner .ant-select-selection .ant-select-selection__placeholder {
   color: rgba(255, 255, 255, 0.15);
   width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1px 7px;
 }
 .editor-list .ant-input-number-handler-wrap,
 .editor-list-popover .ant-popover-inner .ant-input-number-handler-wrap {
@@ -9443,8 +9446,8 @@ li.CodeMirror-hint-active {
 .editor-bg-image-list {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 16px 24px auto 16px;
-      grid-template-columns: 16px 24px auto 16px;
+  -ms-grid-columns: 24px 24px auto 24px;
+      grid-template-columns: 24px 24px auto 24px;
   -ms-grid-rows: 32px;
       grid-template-rows: 32px;
   gap: 0 4px;
@@ -9577,26 +9580,6 @@ li.CodeMirror-hint-active {
 .editor-list .box-model .bottom-right .ant-select-selection,
 .editor-list .box-model .bottom-left .ant-select-selection {
   background: #262626;
-}
-.editor-list .box-model .top .ant-select-selection .ant-input,
-.editor-list .box-model .right .ant-select-selection .ant-input,
-.editor-list .box-model .bottom .ant-select-selection .ant-input,
-.editor-list .box-model .left .ant-select-selection .ant-input,
-.editor-list .box-model .center .ant-select-selection .ant-input,
-.editor-list .box-model .top-left .ant-select-selection .ant-input,
-.editor-list .box-model .top-right .ant-select-selection .ant-input,
-.editor-list .box-model .bottom-right .ant-select-selection .ant-input,
-.editor-list .box-model .bottom-left .ant-select-selection .ant-input,
-.editor-list .box-model .top .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .right .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .bottom .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .left .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .center .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .top-left .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .top-right .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .bottom-right .ant-select-selection .ant-select-selection__placeholder,
-.editor-list .box-model .bottom-left .ant-select-selection .ant-select-selection__placeholder {
-  text-align: center;
 }
 .editor-list .box-model .top {
   top: -11px;
