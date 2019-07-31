@@ -8,9 +8,9 @@ const Option = Select.Option;
 
 const RadioButton = Radio.Button;
 
-const colorExp = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$|(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))/ig;// eslint-disable-line max-len
+export const colorExp = /^rgba?\(((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?)\)$|(#[\d\w]+|\w+\((?:\d+%?(?:,\s)*){3}(?:\d*\.?\d+)?\))|^hsla?\(((\d+),\s*([\d.]+)%,\s*([\d.]+)%(?:,\s*(\d+(?:\.\d+)?))?)\)$/ig;// eslint-disable-line max-len
 
-const colorLookup = {
+export const colorLookup = {
   aqua: 'rgb(0, 255, 255)',
   lime: 'rgb(0, 255, 0)',
   silver: 'rgb(192, 192, 192)',
@@ -80,6 +80,15 @@ const classInherited = [
 
 export const mobileTitle = '@media screen and (max-width: 767px) {';
 
+export const getBgImageUrl = (image) => image.replace(/url\((('|"|&quot;)?)([^\s]+)\2\)/ig, '$3');
+
+export const getBgImageType = (url) => {
+  let type = url && url.match(/^(repeating-)?linear-gradient\(/i) ? 'linear' : 'img';
+  type = url && url.match(/^(repeating-)?radial-gradient\(/i) ? 'radial' : type;
+  return type;
+}
+
+// 当跟默认值相同时，用于清除样式;
 export const styleInUse = {
   'background-attachment': 1,
   'background-color': 1,
@@ -87,6 +96,7 @@ export const styleInUse = {
   'background-repeat': 1,
   'background-position': 1,
   'background-size': 1,
+  'background-blend-mode': 1,
   'border-color': 1,
   'border-radius': 1,
   'border-style': 1,
@@ -117,6 +127,12 @@ export const styleInUse = {
   'text-shadow': 1,
   cursor: 1,
   transition: 1,
+  display: 1,
+  'align-items': 1,
+  'justify-content': 1,
+  'z-index': 1,
+  float: 1,
+  clear: 1,
 };
 
 export function toArrayChildren(children) {
@@ -132,7 +148,7 @@ export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCA
   'gAAAABJRU5ErkJggg==';
 
 export function isColor(v) {
-  return v.match(colorExp);
+  return v.match(colorExp) || colorLookup[v];
 }
 
 export function getRandomKey() {
@@ -211,12 +227,70 @@ export function convertDefaultData(d) {
   if (!d || d === 'rgba(0, 0, 0, 0)' ||
     d === 'repeat' || d === '0% 0%' ||
     d === 'auto' || d === 'scroll' ||
-    d === 'start' || d === 'visible' ||
-    d === 'static'
+    d === 'start' || d === 'visible'
   ) {
     return null;
   }
   return d;
+}
+
+export const linearGradientToDeg = {
+  'to top': 0,
+  'to right': 90,
+  'to bottom': 180,
+  'to left': 270,
+  'to top right': 45,
+  'to bottom right': 135,
+  'to bottom left': 225,
+  'to top left': 315,
+  'to right top': 45,
+  'to right bottom': 135,
+  'to left top': 315,
+  'to left bottom': 225,
+};
+
+export const defaultBgImageOrGradient = {
+  img: 'url("https://zos.alipayobjects.com/rmsportal/gGlUMYGEIvjDOOw.jpg")',
+  linear: 'linear-gradient(to bottom, black 0%, white 100%)',
+  radial: 'radial-gradient(circle at center, black 0%, white 100%)',
+}
+
+export const defaultBgImageValue = {
+  image: defaultBgImageOrGradient.img,
+  attachment: 'scroll',
+  blendMode: 'normal',
+  position: '0% 0%',
+  repeat: 'repeat',
+  size: 'auto',
+  clip: 'padding-box',
+}
+
+export function getBgDefaultData(style) {
+  const data = {};
+  Object.keys(defaultBgImageValue).forEach($key => {
+    const key = `background-${$key}`;
+    const item = style[key];
+    if (item) {
+      data[$key] = $key === 'image' ? item.replace(/\),(\s?)(?=(url|linear|radial|repeating))/, ')&EditorListUrlPlaceholder&')
+        .split('&EditorListUrlPlaceholder&') : item.split(',');
+    } else {
+      data[$key] = [defaultBgImageValue[$key]]
+    }
+  });
+  const length = Object.keys(data).map(item => data[item].length).sort((a, b) => a - b > 0)[0];
+  (new Array(length)).fill(1).forEach((_, i) => {
+    Object.keys(data).forEach(key => {
+      let item = data[key][i];
+      if (!item) {
+        item = data[key][0];
+        data[key][i] = item;
+      }
+      if (item.trim() === 'initial') {
+        data[key][i] = defaultBgImageValue[key];
+      }
+    });
+  });
+  return data;
 }
 
 export function convertBorderData(d, width, isRadius) {
@@ -378,17 +452,25 @@ function backgroundToCss(d, current) {
     const data = d[key];
     if (!data || current[key] === data) {
       return null;
-    } else if (key === 'image') {
-      if (data === 'none') {
-        return `background-${key}: none`;
-      }
-      return `background-${key}: url(${data});`;
+    } if (key === 'image') {
+      const t = Object.keys(data).map($key => {
+        const item = data[$key];
+        const currentItem = current[key][$key];
+        if (!item || item.join() === currentItem.join()) {
+          return null;
+        }
+        if (item === 'none') {
+          return `background-${toCssLowerCase($key)}: none;`;
+        }
+        return `background-${toCssLowerCase($key)}: ${item.join(',')};`
+      }).filter(c => c);
+      return t.join('\n')
     }
     return `background-${key}: ${data};`;
   }).filter(item => item).join('\n');
 }
 
-function interfaceToCss(d, current) {
+function defaultToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
     if (!data || current[key] === data) {
@@ -407,11 +489,15 @@ export function toCss(newData, currentData) {
         addCss = newData[key] && newData[key].cursor !== currentData[key].cursor ?
           `cursor: ${newData[key].cursor};` : '';
         break;
+      case 'layout':
+        addCss = defaultToCss(newData[key], currentData[key]);
+
+        break;
       case 'font':
         addCss = fontToCss(newData[key], currentData[key]);
         break;
       case 'interface':
-        addCss = interfaceToCss(newData[key], currentData[key]);
+        addCss = defaultToCss(newData[key], currentData[key]);
         break;
       case 'background':
         addCss = backgroundToCss(newData[key], currentData[key]);
@@ -452,7 +538,7 @@ function contrastParent(node, d) {
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
   dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
-  const rep =  new RegExp(state === 'active' ? `(\:${state}|\:hover)$` : `\:${state}$`) ;
+  const rep = new RegExp(state === 'active' ? `(\:${state}|\:hover)$` : `\:${state}$`);
   // `\\.${className}(:(hover|focus|active))?\s*(?=(,|$))`
   const repClassName = className || dom.className.split(' ').join('|');
   const classRep = new RegExp(`\\.${state ?
@@ -576,6 +662,14 @@ const removeEmptyStyle = (s) => {
     const key = s[i];
     const value = s[key];
     if (value && value !== 'initial' && value !== 'normal') {
+      if (key.indexOf('background-repeat') >= 0) {
+        style['background-repeat'] = s['background-repeat'];
+        style.backgroundRepeat = s.backgroundRepeat;
+      }
+      if (key.indexOf('background-position') >= 0) {
+        style['background-position'] = s['background-position'];
+        style.backgroundPosition = s.backgroundPosition;
+      }
       style[key] = s[key];
       style[toStyleUpperCase(key)] = s[key];
       if (key.indexOf('transition') >= 0) {
@@ -594,9 +688,12 @@ export function getDomCssRule({ dom, isMobile, state, onlyMobile }) {
   const style = `${getCssPropertyForRuleToCss({
     dom, ownerDocument,
     isMobile, state, onlyMobile,
-  })}display:none;`;
+  })}`;
   // 给 style 去重;
   div.style = `${style}${dom.style.cssText}`;
+  if (!div.style.display) {
+    div.style.display = getComputedStyle(div).display;
+  }
   // 获取当前 div 带 vh 的样式；
   const styleObject = removeEmptyStyle(div.style);
   div.remove();
@@ -663,4 +760,33 @@ export function getCssStr(cssString, className) {
     })
   }
   return str;
+}
+
+export function unitToPercent(dom, value, unit) {
+  if (unit === '%') {
+    return value;
+  }
+  let pix = parseFloat(value);
+  let computedStyle;
+  switch (unit) {
+    case 'em':
+      computedStyle = getComputedStyle(dom);
+      pix *= parseFloat(computedStyle.fontSize);
+      break;
+    case 'rem':
+      computedStyle = getComputedStyle(document.getElementsByTagName('html')[0]);
+      pix *= parseFloat(computedStyle.fontSize);
+      break;
+    case 'vw':
+      pix = pix * document.body.clientWidth / 100;
+      break;
+    case 'vh':
+      pix = pix * document.body.clientHeight / 100;
+      break;
+    default:
+      break;
+  }
+  const rect = dom.getBoundingClientRect();
+  pix = pix / rect.width * 100;
+  return `${pix}%`;
 }

@@ -11,12 +11,14 @@ import Css from './components/Css';
 import Transition from './components/Transition';
 import State from './components/State';
 import ClassName from './components/ClassName';
+import Layout from './components/Layout';
 import Locale from './locale/zh_CN';
 import {
   styleInUse,
   toArrayChildren,
   convertData,
   convertDefaultData,
+  getBgDefaultData,
   convertBorderData,
   convertShadowData,
   toCss,
@@ -508,39 +510,44 @@ class EditorList extends Component {
       || style.borderLeftStyle !== 'none' && style.borderLeftColor !== '0px';
     return {
       state: {
-        cursor: style.cursor,
+        cursor: style.cursor || 'auto',
+      },
+      layout: {
+        display: style.display,
+        // 只支持 row 布局
+        alignItems: style.alignItems || 'stretch',
+        justifyContent: style.justifyContent || 'flex-start',
       },
       font: {
         family: style.fontFamily,
         size: style.fontSize,
-        weight: convertData(style.fontWeight),
+        weight: convertData(style.fontWeight) || 'normal',
         lineHeight: convertData(style.lineHeight),
         color: convertDefaultData(style.color),
         letterSpacing: convertData(style.letterSpacing),
-        align: convertDefaultData(style.textAlign),
-        decoration: convertData(style.textDecoration || style.textDecorationLine),
+        align: convertDefaultData(style.textAlign) || 'left',
+        decoration: convertData(style.textDecoration || style.textDecorationLine) || 'none',
       },
       interface: {
-        overflow: convertDefaultData(style.overflow),
+        overflow: convertDefaultData(style.overflow) || 'visible',
         width: convertData(style.width),
         maxWidth: convertData(style.maxWidth),
         minWidth: convertData(style.minWidth),
         height: convertData(style.height),
         maxHeight: convertData(style.maxHeight),
         minHeight: convertData(style.minHeight),
-        position: convertDefaultData(style.position),
+        position: convertDefaultData(style.position) || 'static',
         top: convertDefaultData(convertData(style.top, true)),
         right: convertDefaultData(convertData(style.right, true)),
         bottom: convertDefaultData(convertData(style.bottom, true)),
         left: convertDefaultData(convertData(style.left, true)),
+        zIndex: style.index || 0,
+        float: style.float || 'none',
+        clear: style.clear || 'none',
       },
       background: {
         color: convertDefaultData(style.backgroundColor),
-        image: (convertData(style.backgroundImage) || '').replace(/^url\(|"|\)?/ig, ''),
-        repeat: convertDefaultData(style.backgroundRepeat),
-        position: convertDefaultData(style.backgroundPosition),
-        size: convertDefaultData(style.backgroundSize),
-        attachment: convertDefaultData(style.backgroundAttachment),
+        image: getBgDefaultData(style),
       },
       border: {
         style: convertBorderData(style.borderStyle || (
@@ -650,6 +657,8 @@ class EditorList extends Component {
           itemProps.editClassName = this.editClassName;
           itemProps.placeholder = this.props.editorDefaultClassName;
           itemProps.classNameArray = classNameArray;
+        } else if (key === 'EditorBackGround') {
+          itemProps.editorElem = props.editorElem;
         } else {
           itemProps.onChange = this.onChange;
           itemProps.value = value[key.toLocaleLowerCase().replace('editor', '')];
@@ -678,6 +687,12 @@ class EditorList extends Component {
         value={stateValue}
         isMobile={this.props.isMobile}
       />,
+      <Layout
+        onChange={this.onChange}
+        key="EditorLayout"
+        locale={props.locale.EditorLayout}
+        value={value.layout}
+      />,
       <Font
         onChange={this.onChange}
         key="EditorFont"
@@ -695,6 +710,7 @@ class EditorList extends Component {
         key="EditorBackGround"
         value={value.background}
         locale={props.locale.EditorBackGround}
+        editorElem={props.editorElem}
       />,
       <Border
         onChange={this.onChange}
@@ -759,10 +775,10 @@ class EditorList extends Component {
   )
 
   render() {
-    const { ...props } = this.props;
-    ['useClassName', 'editorElem', 'onChange'].map(key => delete props[key]);
+    const { useClassName, editorElem, onChange, ...props } = this.props;
+
     return (<Collapse bordered={false} {...props}>
-      {this.getChildren(props)}
+      {this.getChildren(this.props)}
     </Collapse>);
   }
 }
@@ -776,4 +792,5 @@ EditorList.Margin = Margin;
 EditorList.Shadow = Shadow;
 EditorList.Css = Css;
 EditorList.Transition = Transition;
+EditorList.Layout = Layout;
 export default EditorList;

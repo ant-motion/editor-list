@@ -8,8 +8,8 @@ const icon = {
     return (
       <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
         <path d="M603.99999969 476.00000031h156l-79.99999969-156z" />
-        <path d="M104 164.00000031v495.99999937h828V164.00000031H104z m244.00000031 456c-12 0-24-7.99999969-28.00000031-20.00000063L152 260.00000031c-7.99999969-16.00000031-4.00000031-36 12-48 16.00000031-7.99999969 36 0 43.99999969 15.99999937l140.00000062 284.00000063 139.99999969-284.00000063c4.00000031-16.00000031 24-24 40.00000031-15.99999937 16.00000031 7.99999969 19.99999969 28.00000031 12 48l-168 339.99999937c-4.00000031 12-12 19.99999969-24 20.00000063z m516-4.00000031c-4.00000031 4.00000031-7.99999969 4.00000031-16.00000031 4.00000031-12 0-24-7.99999969-28.00000031-20.00000063l-27.99999938-55.99999968h-224.00000062l-27.99999938 55.99999968c-7.99999969 16.00000031-28.00000031 24-44.00000062 16.00000032-16.00000031-7.99999969-19.99999969-28.00000031-12-48l168-340.00000032c12-24 43.99999969-24 56.00000062 0l168 340.00000032c7.99999969 19.99999969 4.00000031 40.00000031-12 48z"  />
-        <path d="M104 824l120 91.99999969v-63.99999938h580.00000031v63.99999938l127.99999969-91.99999969-127.99999969-96V792.00000031H224v-64.00000031z"  />
+        <path d="M104 164.00000031v495.99999937h828V164.00000031H104z m244.00000031 456c-12 0-24-7.99999969-28.00000031-20.00000063L152 260.00000031c-7.99999969-16.00000031-4.00000031-36 12-48 16.00000031-7.99999969 36 0 43.99999969 15.99999937l140.00000062 284.00000063 139.99999969-284.00000063c4.00000031-16.00000031 24-24 40.00000031-15.99999937 16.00000031 7.99999969 19.99999969 28.00000031 12 48l-168 339.99999937c-4.00000031 12-12 19.99999969-24 20.00000063z m516-4.00000031c-4.00000031 4.00000031-7.99999969 4.00000031-16.00000031 4.00000031-12 0-24-7.99999969-28.00000031-20.00000063l-27.99999938-55.99999968h-224.00000062l-27.99999938 55.99999968c-7.99999969 16.00000031-28.00000031 24-44.00000062 16.00000032-16.00000031-7.99999969-19.99999969-28.00000031-12-48l168-340.00000032c12-24 43.99999969-24 56.00000062 0l168 340.00000032c7.99999969 19.99999969 4.00000031 40.00000031-12 48z" />
+        <path d="M104 824l120 91.99999969v-63.99999938h580.00000031v63.99999938l127.99999969-91.99999969-127.99999969-96V792.00000031H224v-64.00000031z" />
       </svg>
     );
   },
@@ -95,6 +95,259 @@ const icon = {
       </svg>
     );
   },
+  block() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M2 4h12v8H2V4zm10 2H4v4h8V6z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M2 1h12v1H2V1zm0 13h12v1H2v-1z" />
+      </svg>
+    );
+  },
+  flex() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M2 2h12v12H2V2zM1 1h14v14H1V1z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7 4H4v8h3V4zm2 0h3v8H9V4z" />
+      </svg>
+    );
+  },
+  'inline-block': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M4 4h8v8H4V4zm6 2H6v4h4V6z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 2h1v12H1V2zm14 0h-1v12h1V2z" />
+      </svg>
+    );
+  },
+  inline() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 2h1v12H1V2zm14 0h-1v12h1V2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7.25 3L3.5 13h2l1-3h3l1 3h2L8.75 3h-1.5zm1.917 6L8 5.5 6.833 9h2.334z" />
+      </svg>
+    );
+  },
+  'alignItems-stretch': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 0h16v1H0zm0 15h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 2.5h3v11h-3zm5 0h3v11h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-flex-start': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 0h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 2.5h3v7h-3zm5 0h3v5h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-center': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M3.5 3.5h3v8h-3zm5 1h3v6h-3z" />
+        <path d="M0 7h16v1H0z" />
+      </svg>
+    );
+  },
+  'alignItems-flex-end': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 15h16v1H0z" />
+        <path stroke="currentColor" d="M3.5 6.5h3v7h-3zm5 2h3v5h-3z" />
+      </svg>
+    );
+  },
+  'alignItems-baseline': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M0 7h16v1H0z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M12 3H8v7h4V3zm-1 1H9v3h2V4zM7 3H3v9h4V3zM6 4H4v3h2V4z" />
+      </svg>
+    );
+  },
+  'justifyContent-flex-start': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm5 0h3v7h-3z" />
+        <path d="M0 0h1v16H0z" />
+      </svg>
+    );
+  },
+  'justifyContent-center': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path stroke="currentColor" d="M2.5 4.5h3v7h-3zm7 0h3v7h-3z" />
+        <path d="M7 0h1v16H7z" />
+      </svg>
+    );
+  },
+  'justifyContent-flex-end': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1z" />
+        <path stroke="currentColor" d="M5.5 4.5h3v7h-3zm5 0h3v7h-3z" />
+      </svg>
+    );
+  },
+  'justifyContent-space-between': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
+        <path stroke="currentColor" d="M10.5 4.5h3v7h-3zm-8 0h3v7h-3z" />
+      </svg>
+    );
+  },
+  'justifyContent-space-around': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M15 0h1v16h-1zM0 0h1v16H0z" />
+        <path stroke="currentColor" d="M9.5 4.5h3v7h-3zm-6 0h3v7h-3z" />
+      </svg>
+    );
+  },
+  float() {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 1024 1024" fill="currentColor">
+        <path d="M512 1024a512 512 0 1 1 512-512 512 512 0 0 1-512 512z m438.857143-512a436.224 436.224 0 0 0-81.298286-254.098286l-106.057143 106.057143a286.683429 286.683429 0 0 1 0 295.972572l106.057143 106.057142A436.187429 436.187429 0 0 0 950.857143 512zM512 292.571429a219.428571 219.428571 0 1 0 219.428571 219.428571 219.428571 219.428571 0 0 0-219.428571-219.428571z m0 658.285714a436.224 436.224 0 0 0 254.098286-81.298286l-106.057143-106.057143a286.72 286.72 0 0 1-295.972572 0l-106.057142 106.057143A436.224 436.224 0 0 0 512 950.857143zM73.142857 512a436.187429 436.187429 0 0 0 81.298286 254.098286l106.057143-106.057143a286.683429 286.683429 0 0 1 0-295.972572l-106.057143-106.057142A436.224 436.224 0 0 0 73.142857 512z m184.758857-357.558857l106.057143 106.057143a286.683429 286.683429 0 0 1 295.972572 0l106.057142-106.057143a437.686857 437.686857 0 0 0-508.086857 0z" />
+      </svg>
+    );
+  },
+  'float-left': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fill="currentColor" d="M0 4h8v8H0z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M10 4h6v2h-6V4zm0 3h6v2h-6V7zm4 3h-4v2h4v-2z" />
+      </svg>
+    );
+  },
+  'float-right': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 4h8v8H8z" />
+        <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M0 4h6v2H0V4zm0 3h6v2H0V7zm4 3H0v2h4v-2z" />
+      </svg>
+    );
+  },
+  'float-close': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fillRule="evenodd" clipRule="evenodd" d="M9.414 8l3.293-3.293-1.414-1.414L8 6.586 4.707 3.293 3.293 4.707 6.586 8l-3.293 3.293 1.414 1.414L8 9.414l3.293 3.293 1.414-1.414L9.414 8z" />
+      </svg>
+    );
+  },
+  'clear-left': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" d="M1 3h4v4H1z" />
+        <path d="M7 3h8v4H7z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M10 8v1a2 2 0 0 1-2 2H4v2h4a4 4 0 0 0 4-4V8h-2zm-6.01 5L4 15l-3-3 3-3-.01 2v2z" fill="currentColor" />
+      </svg>
+    );
+  },
+  'clear-right': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path opacity=".6" fill="currentColor" d="M11 3h4v4h-4z" />
+        <path fill="currentColor" d="M1 3h8v4H1z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M6 8v1a2 2 0 0 0 2 2h4v2H8a4 4 0 0 1-4-4V8h2zm6.01 5L12 15l3-3-3-3 .01 2v2z" fill="currentColor" />
+      </svg>
+    );
+  },
+  'clear-both': () => {
+    return (
+      <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+        <path fill="currentColor" d="M2 3h12v4H2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M9 8v1a2 2 0 0 0 2 2h2v2h-2a4 4 0 0 1-4-4V8h2zm4.01 5L13 15l3-3-3-3 .01 2v2z" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M7 8v1a2 2 0 0 1-2 2H3v2h2a4 4 0 0 0 4-4V8H7zm-4.01 5L3 15l-3-3 3-3-.01 2v2z" />
+      </svg>
+    );
+  },
+  'bg-type': () => (
+    <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
+      <path d="M203.629 173.072h273.397v273.401h-273.397v-273.401zM823.632 308.669l-129.652-127.415-127.415 129.646 129.655 127.41 127.41-129.642zM200.368 542.497h273.401v273.401h-273.401v-273.401zM548.629 542.497h273.397v273.401h-273.397v-273.401zM548.629 542.497z" />
+    </svg>
+  ),
+  'bg-type-linear': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <defs>
+        <linearGradient id="svg-type-background-linear-gradient" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 10 -10 0 10 0)">
+          <stop stopColor="currentColor" />
+          <stop offset="1" stopColor="currentColor" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path transform="translate(3 3)" fill="url(#svg-type-background-linear-gradient)" d="M0 0h10v10H0z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M15 1H1v14h14V1zm-1 1H2v12h12V2z" />
+    </svg>
+  ),
+  'bg-type-radial': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <defs>
+        <radialGradient id="svg-type-background-radial-gradient" cx=".5" cy=".5" r=".5" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 10 -10 0 10 0)">
+          <stop stopColor="currentColor" stopOpacity="0" />
+          <stop offset=".1" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="1" stopColor="currentColor" />
+        </radialGradient>
+      </defs>
+      <path transform="translate(3 3)" fill="url(#svg-type-background-radial-gradient)" d="M0 0h10v10H0z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M15 1H1v14h14V1zm-1 1H2v12h12V2z" />
+    </svg>
+  ),
+  clip: () => (
+    <svg viewBox="0 0 1024 1024" width="18px" fill="currentColor">
+      <path d="M682.666667 256 341.333333 256C315.733333 256 298.666667 238.933333 298.666667 213.333333s17.066667-42.666667 42.666667-42.666667l341.333333 0c25.6 0 42.666667 17.066667 42.666667 42.666667S708.266667 256 682.666667 256z" />
+      <path d="M682.666667 853.333333 341.333333 853.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667s17.066667-42.666667 42.666667-42.666667l341.333333 0c25.6 0 42.666667 17.066667 42.666667 42.666667S708.266667 853.333333 682.666667 853.333333z" />
+      <path d="M810.666667 725.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667L768 341.333333c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 341.333333C853.333333 708.266667 836.266667 725.333333 810.666667 725.333333z" />
+      <path d="M213.333333 725.333333c-25.6 0-42.666667-17.066667-42.666667-42.666667L170.666667 341.333333c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 341.333333C256 708.266667 238.933333 725.333333 213.333333 725.333333z" />
+      <path d="M832 64H192c-70.7 0-128 57.3-128 128v640c0 70.7 57.3 128 128 128h640c70.7 0 128-57.3 128-128V192c0-70.7-57.3-128-128-128z m64 768c0 35.3-28.7 64-64 64H192c-35.3 0-64-28.7-64-64V192c0-35.3 28.7-64 64-64h640c35.3 0 64 28.7 64 64v640z" />
+    </svg>
+  ),
+  extent: () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H2v12h9v1H1V1h14v10h-1V2z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M11 13.12V14H2V2h12v9h-.88L8.976 6.854a2.5 2.5 0 1 0-2.12 2.12L11 13.122z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" fill="currentColor" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.586 7.88c-.186.28-.427.52-.707.706L13.29 14H12v1h3v-3h-1v1.293L8.586 7.88z" />
+    </svg>
+  ),
+  'farthest-corner': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H2v12h9v1H1V1h14v10h-1V2z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M11 13.12V14H2V2h12v9h-.88L8.976 6.854a2.5 2.5 0 1 0-2.12 2.12L11 13.122z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" fill="currentColor" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M8.586 7.88c-.186.28-.427.52-.707.706L13.29 14H12v1h3v-3h-1v1.293L8.586 7.88z" />
+    </svg>
+  ),
+  'farthest-side': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M13 2H2v12h11v1H1V1h12v1z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M13.85 5a7.465 7.465 0 0 0-1.35-3H2v10.5A7.503 7.503 0 0 0 13.85 8H8.5a2.5 2.5 0 1 1 0-3h5.35z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M14 1h1v14h-1V7H8.95a2.513 2.513 0 0 0 0-1H14V1z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+    </svg>
+  ),
+  'closest-corner': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M14 2H5V1h10v14H1V5h1v9h12V2z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M2 1H1v3h1V2.707L4.414 5.12c.186-.28.427-.52.707-.706L2.71 2H4V1H2z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M2 5v6.19A6.5 6.5 0 0 0 11.19 2H5v.88l1.146 1.145a2.5 2.5 0 1 1-2.12 2.12L2.878 5H2z" />
+    </svg>
+  ),
+  'closest-side': () => (
+    <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor">
+      <path opacity=".6" fillRule="evenodd" clipRule="evenodd" d="M1 3v12h14V3h-1v11H2V3H1z" />
+      <path opacity=".4" fillRule="evenodd" clipRule="evenodd" d="M8 4.5a2.5 2.5 0 1 1-3 0V2H3.337A5.53 5.53 0 0 0 2 3.337v6.326A5.5 5.5 0 1 0 9.663 2H8v2.5z" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M1 1h14v1H7v2.05a2.51 2.51 0 0 0-1 0V2H1V1z" />
+      <circle cx="1.5" cy="1.5" r="1.5" transform="translate(5 5)" />
+    </svg>
+  ),
+  shape: () => (
+    <svg viewBox="0 0 1024 1024" width="18" fill="currentColor">
+      <path d="M832 337.6 832 106.688C832 83.072 812.864 64 789.376 64L106.688 64C83.072 64 64 83.072 64 106.688l0 682.688C64 812.928 83.072 832 106.688 832l251.456 0c62.912 96.192 171.328 160 294.592 160 194.112 0 352-157.952 352-352C1004.736 511.424 935.232 399.04 832 337.6zM128 768 128 128l640 0 0 179.776C731.776 295.168 693.12 288 652.736 288 458.688 288 300.8 445.952 300.8 640c0 45.184 8.896 88.256 24.448 128L128 768zM652.736 928C494.016 928 364.8 798.784 364.8 640s129.216-288 287.936-288 288 129.216 288 288S811.52 928 652.736 928z" />
+    </svg>
+  )
 };
 
 export default ({ type, prompt, children }) => {

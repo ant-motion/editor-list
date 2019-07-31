@@ -4,10 +4,47 @@ export default {
     exclusive: '专属样式',
     common: '标签上其它样式编辑',
   },
+  EditorLayout: {
+    header: '布局',
+    name: '当前布局 - display',
+    displaySelect: {
+      block: 'block 块元素，元素前后会有换行符',
+      flex: 'flex 布局，水平或垂直布置子元素',
+      'inline-block': 'inline-block 行内块元素，单行多元素',
+      inline: 'inline 内联元素，元素前后没换行符',
+      none: 'none 隐藏元素',
+    },
+    flexName: {
+      alignItems: {
+        name: '竖向',
+        icon: 'column-height',
+      },
+      justifyContent: {
+        name: '横向',
+        icon: 'column-width',
+      },
+    },
+    flexSelect: {
+      alignItems: {
+        stretch: '元素被拉伸以适应容器',
+        'flex-start': '素位于容器的开头',
+        center: '元素位于容器的中心',
+        'flex-end': '元素位于容器的结尾',
+        baseline: '元素位于容器的基线上',
+      },
+      justifyContent: {
+        'flex-start': '项目位于容器的开头',
+        center: '项目位于容器的中心',
+        'flex-end': '项目位于容器的结尾',
+        'space-between': '项目位于各行之间留有空白的容器内',
+        'space-around': '项目位于各行之前、之间、之后都留有空白的容器内',
+      },
+    },
+  },
   EditorState: {
     header: '状态',
     cursor: '鼠标光标状态',
-    cursor_select: {
+    cursorSelect: {
       auto: '默认光标 - auto',
       pointer: '手型光标 - pointer',
       crosshair: '十字线光标 - crosshair',
@@ -17,7 +54,7 @@ export default {
       help: '帮助光标 - help',
     },
     style: '样式状态',
-    style_select: {
+    styleSelect: {
       default: '默认',
       hover: '经过',
       active: '按下',
@@ -28,15 +65,16 @@ export default {
     header: '字体',
     font: '字体选择',
     size: '文字大小',
-    blod: '文字加粗',
+    bold: '文字加粗',
     lineHeight: '文字行距',
     letterSpacing: '文字间距',
     color: '颜色',
+    placeholder: '请输入'
   },
   EditorInterface: {
     header: '界面',
     overflow: '溢出',
-    overflow_select: {
+    overflowSelect: {
       visible: '不裁剪溢出部份 - visible',
       hidden: '裁剪溢出部份 - hidden',
       scroll: '裁剪并出现滚动条 - scroll',
@@ -45,16 +83,35 @@ export default {
     width: '宽度',
     height: '高度',
     position: '定位',
-    position_select: {
+    positionSelect: {
       static: '没有定位 - static',
       absolute: '绝对定位 - absolute',
       relative: '相对定位 - relative',
       fixed: '窗口定位 - fixed',
     },
     position_help: '请选择当前相应的定位，如为绝对定位，请开启父级的相对定位，否则将以有相对定位的顶级为定位。',
+    float: '浮动',
+    floatSelect: {
+      none: '元素不浮动',
+      left: '元素浮动在区块左侧',
+      right: '元素浮动在区块右侧',
+    },
+    clear: '清除浮动',
+    clearSelect: {
+      none: '不清除浮动',
+      left: '清除元素左侧浮动',
+      right: '元素右侧浮动',
+      both: '清除元素浮动',
+    },
+    zIndex: '当前元素的层级深度',
   },
   EditorBackGround: {
+    type: '填充类型',
     header: '背景',
+    add: '添加图片或渐变',
+    img: '图片',
+    linear: '线性渐变', 
+    radial: '圆形渐变',
     image: '图片地址',
     color: '背景颜色',
     repeat: '平辅背景',
@@ -63,12 +120,34 @@ export default {
     size: '背景尺寸',
     size_help: '可设置自定义值(width, height), 如: 50px 100px',
     attachment: '锁定背景',
-    repeat_select: {
-      repeat: '重复 - repeat',
-      'repeat-x': 'x 轴重复 - repeat-x',
-      'repeat-y': 'y 轴重复 - repeat-y',
-      'no-repeat': '不重复 - no-repeat',
+    repeatSelect: {
+      repeat: '重复',
+      'repeat-x': 'x 轴重复',
+      'repeat-y': 'y 轴重复',
+      'no-repeat': '不重复',
     },
+    blendMode: '滤镜',
+    blendModeHelp: '图层的滤镜，多个背景时才有效',
+    clip: '填充方式',
+    clipHelp: '设置元素的背景是否延伸到边框下面',
+    clipSelect: {
+      'border-box': '从边框开始',
+      'padding-box': '从内边开始',
+      'content-box': '从内容开始',
+    },
+    barHelp: '渐变点拖出相应范围(40px)，即删除渐变点',
+    shape: '圆形或椭圆形渐变',
+    extent: '面积大小',
+    extentSelect: {
+      'farthest-corner': '渐变的边缘形状与容器距离渐变中心点最远的一个角相交',
+      'farthest-side': '边缘形状与容器距离渐变中心点最远的一边相切',
+      'closest-corner': '渐变的边缘形状与容器距离渐变中心点最近的一个角相交',
+      'closest-side': '渐变的边缘形状与容器距离渐变中心点最近的一边相切（圆形）',
+    },
+    radialPosition: "圆心点的位置",
+    repeatGradient: "重复平辅渐变",
+    angle: "渐变角度",
+    angleHelp: "可设置自定义值(0 - 360), 注：单位在值不为空时才能选择。"
   },
   EditorBorder: {
     header: '边框',
