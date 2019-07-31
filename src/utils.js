@@ -134,6 +134,17 @@ export const styleInUse = {
   float: 1,
   clear: 1,
 };
+export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/' +
+  '9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0p' +
+  'gAAAABJRU5ErkJggg==';
+
+function toCssLowerCase(d) {
+  return d.replace(/[A-Z]/, ($1) => (`-${$1.toLocaleLowerCase()}`));
+}
+
+function toStyleUpperCase(d) {
+  return d.replace(/-(.?)/g, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
+}
 
 export function toArrayChildren(children) {
   const ret = [];
@@ -142,10 +153,6 @@ export function toArrayChildren(children) {
   });
   return ret;
 }
-
-export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/' +
-  '9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0p' +
-  'gAAAABJRU5ErkJggg==';
 
 export function isColor(v) {
   return v.match(colorExp) || colorLookup[v];
@@ -268,13 +275,13 @@ export const defaultBgImageValue = {
 export function getBgDefaultData(style) {
   const data = {};
   Object.keys(defaultBgImageValue).forEach($key => {
-    const key = `background-${$key}`;
+    const key = `background-${toCssLowerCase($key)}`;
     const item = style[key];
-    if (item) {
+    if (item && style.backgroundImage) {
       data[$key] = $key === 'image' ? item.replace(/\),(\s?)(?=(url|linear|radial|repeating))/, ')&EditorListUrlPlaceholder&')
         .split('&EditorListUrlPlaceholder&') : item.split(',');
     } else {
-      data[$key] = [defaultBgImageValue[$key]]
+      data[$key] = [];
     }
   });
   const length = Object.keys(data).map(item => data[item].length).sort((a, b) => a - b > 0)[0];
@@ -344,14 +351,6 @@ export function convertShadowData(d) {
     value[keys[i]] = i === 3 ? convertData(data) : data;
   });
   return value;
-}
-
-function toCssLowerCase(d) {
-  return d.replace(/[A-Z]/, ($1) => (`-${$1.toLocaleLowerCase()}`));
-}
-
-function toStyleUpperCase(d) {
-  return d.replace(/-(.?)/g, ($1) => ($1.replace('-', '').toLocaleUpperCase()));
 }
 
 function fontToCss(d, current) {
