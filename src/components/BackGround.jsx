@@ -24,11 +24,11 @@ class EditorBg extends Component {
     value: {
       color: null,
       image: {
-        url: '',
-        repeat: 'repeat',
-        position: 'center',
-        size: 'contain',
-        attachment: 'scroll',
+        url: [''],
+        repeat: ['repeat'],
+        position: ['center'],
+        size: ['contain'],
+        attachment: ['scroll'],
       }
     },
     onChange: () => { },
