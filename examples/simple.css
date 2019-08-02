@@ -8928,6 +8928,10 @@ li.CodeMirror-hint-active {
   -ms-flex-pack: center;
       justify-content: center;
 }
+.editor-list .ant-tag,
+.editor-list-popover .ant-popover-inner .ant-tag {
+  cursor: pointer;
+}
 .editor-list-dropdown,
 .editor-list-popover .ant-popover-inner-dropdown {
   font-size: 12px;
