@@ -657,6 +657,7 @@ class EditorList extends Component {
           itemProps.editClassName = this.editClassName;
           itemProps.placeholder = this.props.editorDefaultClassName;
           itemProps.classNameArray = classNameArray;
+          itemProps.onChange = this.onClassNameChange;
         } else if (key === 'EditorBackGround') {
           itemProps.editorElem = props.editorElem;
           itemProps.value = value.background;
