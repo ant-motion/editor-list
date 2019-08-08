@@ -88,6 +88,7 @@ export default {
       absolute: 'absolute',
       relative: 'relative',
       fixed: 'fixed',
+      sticky: 'sticky',
     },
     position_help: 'Please select the current corresponding positioning. ' +
       'If it is absolute positioning, please turn on the relative positioning of the parent, ' +
