@@ -119,7 +119,6 @@ export default class EditorShadow extends Component {
   render() {
     const { value, locale, onChange, ...props } = this.props;
     const { key, open } = this.state;
-    console.log(value)
     return (<Panel {...props} header={props.header || locale.header}>
       {this.getTabs()}
       <div key={key} style={{ marginTop: 10 }}>
