@@ -70,7 +70,12 @@ export default class EditorShadow extends Component {
     };
     const { value } = this.props;
     const mValue = { ...value };
-    mValue[this.state.key] = keyValue;
+    mValue[this.state.key][key] = v;
+    Object.keys(keyValue).forEach($key => {
+      if (!mValue[this.state.key][$key]) {
+        mValue[this.state.key][$key] = keyValue[$key];
+      }
+    });
     this.props.onChange('shadow', mValue);
     this.setState({
       open: {
@@ -112,10 +117,9 @@ export default class EditorShadow extends Component {
   };
 
   render() {
-    const { ...props } = this.props;
-    const { value, locale } = props;
+    const { value, locale, onChange, ...props } = this.props;
     const { key, open } = this.state;
-    ['value', 'tags', 'onChange'].map(str => delete props[str]);
+    console.log(value)
     return (<Panel {...props} header={props.header || locale.header}>
       {this.getTabs()}
       <div key={key} style={{ marginTop: 10 }}>
