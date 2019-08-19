@@ -295,7 +295,8 @@ class EditorList extends Component {
     }, this.setCssToDom);
   };
 
-  getEditId = (str) => `${this.parentClassName}${str}`.replace(/>/g, '_').replace(/\s+|\./ig, '');
+  getEditId = (str) => `${this.parentClassName}.${str}`.replace(/>/g, '_j_')
+    .replace(/\s+/g, '_e_').replace(/\./g, '_p_').replace(/#/g, 'id_')
 
   getStateCSSValue = (
     cssName, classState, domStyle, value, props = this.props
@@ -783,16 +784,20 @@ class EditorList extends Component {
   }
 
   cssObjectToString = (css, name) => {
+    const { rootSelector } = this.props;
     const cssName = !this.classNameInDefaultDomClass(name, this.props.editorDefaultClassName)
       ? `${name}-${this.props.editorDefaultClassName}` : name;
     return Object.keys(css).sort((a, b) => (
       stateSort[a] > stateSort[b]
     )).map(key => {
+      const className = this.parentClassName === rootSelector
+        ? `${this.parentClassName}.${cssName}`
+        : `${this.parentClassName} .${cssName}`
       switch (key) {
         case 'default':
-          return css[key] ? `${this.parentClassName} .${cssName} {\n${css[key]}\n}` : '';
+          return css[key] ? `${className} {\n${css[key]}\n}` : '';
         default:
-          return css[key] ? `${this.parentClassName} .${cssName}:${key} {\n${css[key]}\n}` : '';
+          return css[key] ? `${className}:${key} {\n${css[key]}\n}` : '';
       }
     }).filter(c => c).join('\n');
   }

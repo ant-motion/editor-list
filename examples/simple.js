@@ -55,7 +55,7 @@ class Demo extends React.Component {
           editorElem={this.state.editorDom}
           onChange={this.onChange}
           isMobile={this.state.state === 'mobile'}
-          rootSelector=".box"
+          rootSelector="#abc"
         />)}
     </div>);
   }

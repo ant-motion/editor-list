@@ -734,7 +734,9 @@ export function getParentClassName(dom, rootSelector, useTagName = true, length 
       getParentClass(d.parentNode);
     }
   }
-  getParentClass(dom.parentNode);
+  if (rootDom !== dom) {
+    getParentClass(dom.parentNode);
+  }
   return rootSelector ? `${rootSelector} ${className}`.trim() : className;
 }
 
