@@ -2,10 +2,11 @@ import React from 'react';
 import codeMirror from 'codemirror';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { polyfill } from 'react-lifecycles-compat';
 
 function noop() { }
 
-export default class RcCodeMirror extends React.Component {
+class RcCodeMirror extends React.Component {
 
   static propTypes = {
     className: PropTypes.string,
@@ -23,6 +24,24 @@ export default class RcCodeMirror extends React.Component {
     onKeyDown: noop,
     onKeyUp: noop,
   };
+
+  static getDerivedStateFromProps(props, { prevProps, $self }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && props.value && props.value !==  $self.editor.getValue()) {
+      $self.updated = true;
+      $self.editor.setValue(props.value);
+    }
+    return nextState;
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      $self: this,
+    };
+  }
 
   componentDidMount() {
     this.editor = codeMirror(this.ref);
@@ -46,13 +65,6 @@ export default class RcCodeMirror extends React.Component {
     this.editor.setValue(this.props.value);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value && nextProps.value !== this.editor.getValue()) {
-      this.updated = true;
-      this.editor.setValue(nextProps.value);
-    }
-  }
-
   render() {
     const className = classnames({
       'react-codemirror': true,
@@ -63,3 +75,5 @@ export default class RcCodeMirror extends React.Component {
     );
   }
 }
+
+export default polyfill(RcCodeMirror);

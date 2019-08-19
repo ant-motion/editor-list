@@ -7,6 +7,7 @@ import Radio from 'antd/lib/radio';
 import Switch from 'antd/lib/switch';
 import Tooltip from 'antd/lib/tooltip';
 import AntIcon from 'antd/lib/icon';
+import { polyfill } from 'react-lifecycles-compat';
 import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import Color from './common/Color';
@@ -15,7 +16,7 @@ const Panel = Collapse.Panel;
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-export default class EditorShadow extends Component {
+class EditorShadow extends Component {
   static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
@@ -32,6 +33,23 @@ export default class EditorShadow extends Component {
     },
   };
 
+  static getDerivedStateFromProps(props, { prevProps }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.value !== props.value) {
+      const boxShadow = props.value.boxShadow !== 'none' &&
+        !!Object.keys(props.value.boxShadow).length;
+      const textShadow = props.value.textShadow !== 'none' &&
+        !!Object.keys(props.value.textShadow).length;
+      nextState.open = {
+        boxShadow,
+        textShadow,
+      };
+    }
+    return nextState;
+  }
+
   constructor(props) {
     super(props);
     this.defaultShadow = {
@@ -47,20 +65,6 @@ export default class EditorShadow extends Component {
         textShadow: !!Object.keys(props.value.textShadow).length,
       },
     };
-  }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      const boxShadow = nextProps.value.boxShadow !== 'none' &&
-        !!Object.keys(nextProps.value.boxShadow).length;
-      const textShadow = nextProps.value.textShadow !== 'none' &&
-        !!Object.keys(nextProps.value.textShadow).length;
-      this.setState({
-        open: {
-          boxShadow,
-          textShadow,
-        },
-      });
-    }
   }
 
   onChange = (key, v) => {
@@ -218,3 +222,5 @@ export default class EditorShadow extends Component {
 }
 
 EditorShadow.componentName = 'EditorShadow';
+
+export default polyfill(EditorShadow);

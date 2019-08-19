@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Input from 'antd/lib/input';
+import { polyfill } from 'react-lifecycles-compat';
 import { toArrayChildren } from '../../utils';
 
 const Group = Input.Group;
 
-export default class InputGroup extends React.Component {
+class InputGroup extends React.Component {
   static propTypes = {
     children: PropTypes.any,
     onChange: PropTypes.func,
@@ -16,19 +17,24 @@ export default class InputGroup extends React.Component {
     },
   };
 
+  static getDerivedStateFromProps(props, { prevProps, getValues }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.children !== props.children) {
+      const values = getValues(props);
+      nextState.values = values;
+    }
+    return nextState;
+  }
+
   constructor(props) {
     super(props);
     const values = this.getValues(props);
     this.state = {
       values,
+      getValues: this.getValues, // eslint-disable-line
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const values = this.getValues(nextProps);
-    this.setState({
-      values,
-    });
   }
 
   onChange = (key, e) => {
@@ -73,3 +79,5 @@ export default class InputGroup extends React.Component {
     return React.createElement(Group, props, children);
   }
 }
+
+export default polyfill(InputGroup);

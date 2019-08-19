@@ -7,6 +7,7 @@ import Col from 'antd/lib/col';
 import Input from 'antd/lib/input';
 import Radio from 'antd/lib/radio';
 import Select from 'antd/lib/select';
+import { polyfill } from 'react-lifecycles-compat';
 import Icon from './Icon';
 import Color from './Color';
 
@@ -20,7 +21,7 @@ const InputGroup = Input.Group;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-export default class GradientEdit extends React.Component {
+class GradientEdit extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     locale: PropTypes.object,
@@ -32,6 +33,21 @@ export default class GradientEdit extends React.Component {
 
   static defaultProps = {
     className: 'editor-gradient',
+  }
+
+  static getDerivedStateFromProps(props, { prevProps, $self }) {
+    let nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.type !== props.type) {
+      $self.percentRef.state.value = 0;
+      nextState = {
+        ...nextState,
+        ...$self.getGradientData(props),
+        active: 0,
+      }
+    }
+    return nextState;
   }
 
   constructor(props) {
@@ -47,21 +63,13 @@ export default class GradientEdit extends React.Component {
     this.state = {
       ...this.getGradientData(props),
       active: 0,
+      $self: this,
     };
   }
   componentDidMount() {
     window.addEventListener('mousemove', this.onPointMove);
     window.addEventListener('mouseup', this.onPointUp);
 
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.type !== this.props.type) {
-      this.percentRef.state.value = 0;
-      this.setState({
-        ...this.getGradientData(nextProps),
-        active: 0,
-      });
-    }
   }
 
   onBarClick = (e) => {
@@ -488,3 +496,5 @@ export default class GradientEdit extends React.Component {
     );
   }
 }
+
+export default polyfill(GradientEdit);

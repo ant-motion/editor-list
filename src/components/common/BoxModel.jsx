@@ -30,8 +30,13 @@ export default class BoxModel extends Component {
   getInput = (isRadius) => {
     const { value } = this.props;
     return ((isRadius ? this.radioKeys : this.props.keys).map(key => {
-      const v = (value && value[key]) ||
+      let v = (value && value[key]) ||
         (typeof value === 'string' ? value : null);
+      if (key === 'center') {
+        const values = Object.keys(value).map(c => value[c]);
+        const equal = values.every(c => c === values[0]);
+        v = equal ? values[0] : v;
+      }
       return (
         <AutoComplete
           key={key}

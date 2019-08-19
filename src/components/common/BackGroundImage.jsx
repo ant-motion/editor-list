@@ -5,12 +5,13 @@ import AntIcon from 'antd/lib/icon';
 import Popover from 'antd/lib/popover';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+import { polyfill } from 'react-lifecycles-compat';
 
 import { getBgImageUrl, getBgImageType, defaultBgImageValue } from '../../utils';
 
 import BackGroundPop from './BackGroundPop';
 
-export default class BackGroundImage extends React.Component {
+class BackGroundImage extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     locale: PropTypes.object,
@@ -23,11 +24,25 @@ export default class BackGroundImage extends React.Component {
     className: 'editor-bg-image',
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.editorElem !== this.props.editorElem) {
-      this.keys = [];
+  static getDerivedStateFromProps(props, { prevProps, $self }){
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps) {
+      if (props.editorElem !== prevProps.editorElem) {
+        $self.keys = [];
+      }
     }
+    return nextState;
   }
+
+  constructor(props){
+    super(props);
+    this.state = {
+      $self: this, // eslint-disable-line
+    };
+  }
+
   componentWillUnmount() {
     this.keys = [];
   }
@@ -177,3 +192,5 @@ export default class BackGroundImage extends React.Component {
     )
   }
 }
+
+export default polyfill(BackGroundImage);

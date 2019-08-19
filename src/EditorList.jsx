@@ -1,6 +1,7 @@
 import React, { Component, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import Collapse from 'antd/lib/collapse';
+import { polyfill } from 'react-lifecycles-compat';
 import Font from './components/Font';
 import BackGround from './components/BackGround';
 import Border from './components/Border';
@@ -63,6 +64,43 @@ class EditorList extends Component {
     locale: Locale,
   };
 
+  static getDerivedStateFromProps(props, { prevProps, $self, classState, cssValue, cssName }) {
+    let nextState = {
+      prevProps: props,
+    };
+    if (prevProps) {
+      if (prevProps.editorElem !== props.editorElem) {
+        $self.defaultValue = {};
+        $self.defaultData = {};
+        $self.editClassName = $self.getClassName(props);
+        nextState = {
+          ...nextState,
+          ...$self.setDefaultState(props.editorElem, props),
+        };
+      }
+      if (prevProps.isMobile !== props.isMobile) {
+        const domStyle = $self.getDefaultValue(props.editorElem,
+          props.isMobile, classState);
+        $self.defaultValue[classState] = domStyle;
+        const value = $self.getDefaultData(domStyle);
+        $self.defaultData = value;
+        nextState = {
+          ...nextState,
+          cssValue: {
+            ...cssValue,
+            [cssName]: {
+              ...cssValue[cssName],
+              value,
+            },
+          },
+          classState,
+          cssName,
+        }
+      }
+    }
+    return nextState;
+  }
+
   constructor(props) {
     super(props);
     this.select = {};
@@ -71,37 +109,26 @@ class EditorList extends Component {
     this.currentData = {};
     this.cssString = '';
     this.currentEditCssString = '';
-    this.state = this.setDefaultState(props.editorElem, props);
+    this.state = {
+      ...this.setDefaultState(props.editorElem, props),
+      $self: this,
+    };
     this.setEditorElemClassName();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.editorElem !== nextProps.editorElem) {
-      this.defaultValue = {};
-      this.defaultData = {};
-      this.editClassName = this.getClassName(nextProps);
-      this.setState(this.setDefaultState(nextProps.editorElem, nextProps), () => {
-        this.setEditorElemClassName(nextProps);
-      });
+  componentDidUpdate(prevProps) {
+    if (prevProps.editorElem !== this.props.editorElem) {
+      this.setEditorElemClassName(this.props);
+      if (!this.cssString) {
+        prevProps.editorElem.className = removeEditClassName(prevProps.editorElem.className, prevProps.editorDefaultClassName);
+      }
     }
-    if (this.props.isMobile !== nextProps.isMobile) {
-      const { classState, cssValue, cssName } = this.state;
-      const domStyle = this.getDefaultValue(nextProps.editorElem,
-        nextProps.isMobile, this.state.classState);
-      this.defaultValue[classState] = domStyle;
-      const value = this.getDefaultData(domStyle);
-      this.defaultData = value;
-      this.setState({
-        cssValue: {
-          ...cssValue,
-          [cssName]: {
-            ...cssValue[cssName],
-            value,
-          },
-        },
-        classState,
-        cssName,
-      });
+  }
+
+  componentWillUnmount(){
+    const { editorElem, editorDefaultClassName } = this.props;
+    if (!this.cssString) {
+      editorElem.className = removeEditClassName(editorElem.className, editorDefaultClassName);
     }
   }
 
@@ -796,4 +823,4 @@ EditorList.Shadow = Shadow;
 EditorList.Css = Css;
 EditorList.Transition = Transition;
 EditorList.Layout = Layout;
-export default EditorList;
+export default polyfill(EditorList);

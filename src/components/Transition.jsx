@@ -4,6 +4,7 @@ import Collapse from 'antd/lib/collapse';
 import Icon from 'antd/lib/icon';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+import { polyfill } from 'react-lifecycles-compat';
 import TweenOne from 'rc-tween-one';
 import AutoComplete from './common/AutoComplete';
 import SelectInput from './common/SelectInput';
@@ -27,7 +28,7 @@ const easeSource = {
   'cubic-bezier(0.78, 0.14, 0.15, 0.86)': 'circ 前后',
 };
 
-export default class EditorTransition extends Component {
+class EditorTransition extends Component {
   static propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func,
@@ -37,21 +38,24 @@ export default class EditorTransition extends Component {
 
   static defaultProps = {
     value: '',
-    onChange: () => {},
+    onChange: () => { },
   };
+
+  static getDerivedStateFromProps(props, { prevProps, getStateData }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.value !== props.value) {
+      nextState.data = getStateData(props);
+    }
+    return nextState;
+  }
 
   constructor(props) {
     super(props);
-    const values = props.value.split(/,\s?(?=[a-z])/g).map(c => c.trim());
-    let data = values.filter(str =>
-      (str && str !== 'all 0s ease 0s' && str !== 'all 0s ease'))
-      .map(str => {
-        const d = str.replace(/,\s+/g, ',').split(/\s+/g);
-        return ({ key: getRandomKey(), name: d[0], duration: d[1], ease: d[2], delay: d[3] });
-      });
-    data = data.length ? data : [{ key: getRandomKey() }];
     this.state = {
-      data,
+      data: this.getStateData(props),
+      getStateData: this.getStateData, // eslint-disable-line
     };
   }
 
@@ -87,6 +91,18 @@ export default class EditorTransition extends Component {
       }
       this.props.onChange('transition', value);
     });
+  }
+
+  getStateData = (props) => {
+    const values = props.value.split(/,\s?(?=[a-z])/g).map(c => c.trim());
+    let data = values.filter(str =>
+      (str && str !== 'all 0s ease 0s' && str !== 'all 0s ease'))
+      .map(str => {
+        const d = str.replace(/,\s+/g, ',').split(/\s+/g);
+        return ({ key: getRandomKey(), name: d[0], duration: d[1], ease: d[2], delay: d[3] });
+      });
+    data = data.length ? data : [{ key: getRandomKey() }];
+    return data;
   }
 
   getChildren = () => (
@@ -157,9 +173,7 @@ export default class EditorTransition extends Component {
   }
 
   render() {
-    const { ...props } = this.props;
-    const { locale } = props;
-    ['value', 'font'].map(key => delete props[key]);
+    const { locale, value, ...props } = this.props;
     return (
       <Panel {...props} header={props.header || locale.header}>
         <Row gutter={8}>
@@ -192,3 +206,5 @@ export default class EditorTransition extends Component {
 }
 
 EditorTransition.componentName = 'EditorTransition';
+
+export default polyfill(EditorTransition);
