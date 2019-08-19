@@ -1315,8 +1315,8 @@ html {
       align-items: flex-end;
 }
 .ant-col {
-  min-height: 1px;
   position: relative;
+  min-height: 1px;
 }
 .ant-col-1,
 .ant-col-xs-1,
@@ -4949,7 +4949,6 @@ html {
 .ant-select-selection-selected-value {
   float: left;
   max-width: 100%;
-  padding-right: 20px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -4987,6 +4986,12 @@ html {
   position: relative;
   height: 32px;
   cursor: pointer;
+}
+.ant-select-selection--single .ant-select-selection__rendered {
+  margin-right: 24px;
+}
+.ant-select-no-arrow .ant-select-selection__rendered {
+  margin-right: 11px;
 }
 .ant-select-selection__rendered {
   position: relative;
@@ -5026,7 +5031,7 @@ html {
   height: 24px;
 }
 .ant-select-sm .ant-select-selection__rendered {
-  margin: 0 7px;
+  margin-left: 7px;
   line-height: 22px;
 }
 .ant-select-sm .ant-select-selection--multiple {
@@ -5785,6 +5790,9 @@ textarea.ant-input {
 .ant-input-affix-wrapper .ant-input:not(:last-child) {
   padding-right: 30px;
 }
+.ant-input-affix-wrapper.ant-input-affix-wrapper-with-clear-btn .ant-input:not(:last-child) {
+  padding-right: 49px;
+}
 .ant-input-affix-wrapper .ant-input {
   min-height: 100%;
 }
@@ -5799,7 +5807,7 @@ textarea.ant-input {
 .ant-input-clear-icon {
   color: rgba(0, 0, 0, 0.25);
   font-size: 12px;
-  vertical-align: top;
+  vertical-align: 0;
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -6475,97 +6483,117 @@ span.ant-radio + * {
 .ant-tooltip-arrow {
   position: absolute;
   display: block;
-  width: 7.07106781px;
-  height: 7.07106781px;
+  width: 13.07106781px;
+  height: 13.07106781px;
+  overflow: hidden;
   background: transparent;
-  border-style: solid;
-  border-width: 3.53553391px;
-  -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
+  pointer-events: none;
+}
+.ant-tooltip-arrow::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.75);
+  content: '';
+  pointer-events: auto;
 }
 .ant-tooltip-placement-top .ant-tooltip-arrow,
 .ant-tooltip-placement-topLeft .ant-tooltip-arrow,
 .ant-tooltip-placement-topRight .ant-tooltip-arrow {
-  bottom: 5.2px;
-  border-top-color: transparent;
-  border-right-color: #404040;
-  border-bottom-color: #404040;
-  border-left-color: transparent;
+  bottom: -5.07106781px;
+}
+.ant-tooltip-placement-top .ant-tooltip-arrow::before,
+.ant-tooltip-placement-topLeft .ant-tooltip-arrow::before,
+.ant-tooltip-placement-topRight .ant-tooltip-arrow::before {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
+  -ms-transform: translateY(-6.53553391px) rotate(45deg);
+      transform: translateY(-6.53553391px) rotate(45deg);
 }
 .ant-tooltip-placement-top .ant-tooltip-arrow {
   left: 50%;
-  -ms-transform: translateX(-50%) rotate(45deg);
-      transform: translateX(-50%) rotate(45deg);
+  -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
 }
 .ant-tooltip-placement-topLeft .ant-tooltip-arrow {
-  left: 16px;
+  left: 13px;
 }
 .ant-tooltip-placement-topRight .ant-tooltip-arrow {
-  right: 16px;
+  right: 13px;
 }
 .ant-tooltip-placement-right .ant-tooltip-arrow,
 .ant-tooltip-placement-rightTop .ant-tooltip-arrow,
 .ant-tooltip-placement-rightBottom .ant-tooltip-arrow {
-  left: 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: #404040;
-  border-left-color: #404040;
+  left: -5.07106781px;
+}
+.ant-tooltip-placement-right .ant-tooltip-arrow::before,
+.ant-tooltip-placement-rightTop .ant-tooltip-arrow::before,
+.ant-tooltip-placement-rightBottom .ant-tooltip-arrow::before {
   box-shadow: -3px 3px 7px rgba(0, 0, 0, 0.07);
+  -ms-transform: translateX(6.53553391px) rotate(45deg);
+      transform: translateX(6.53553391px) rotate(45deg);
 }
 .ant-tooltip-placement-right .ant-tooltip-arrow {
   top: 50%;
-  -ms-transform: translateY(-50%) rotate(45deg);
-      transform: translateY(-50%) rotate(45deg);
+  -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
 }
 .ant-tooltip-placement-rightTop .ant-tooltip-arrow {
-  top: 8px;
+  top: 5px;
 }
 .ant-tooltip-placement-rightBottom .ant-tooltip-arrow {
-  bottom: 8px;
+  bottom: 5px;
 }
 .ant-tooltip-placement-left .ant-tooltip-arrow,
 .ant-tooltip-placement-leftTop .ant-tooltip-arrow,
 .ant-tooltip-placement-leftBottom .ant-tooltip-arrow {
-  right: 5px;
-  border-top-color: #404040;
-  border-right-color: #404040;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+  right: -5.07106781px;
+}
+.ant-tooltip-placement-left .ant-tooltip-arrow::before,
+.ant-tooltip-placement-leftTop .ant-tooltip-arrow::before,
+.ant-tooltip-placement-leftBottom .ant-tooltip-arrow::before {
   box-shadow: 3px -3px 7px rgba(0, 0, 0, 0.07);
+  -ms-transform: translateX(-6.53553391px) rotate(45deg);
+      transform: translateX(-6.53553391px) rotate(45deg);
 }
 .ant-tooltip-placement-left .ant-tooltip-arrow {
   top: 50%;
-  -ms-transform: translateY(-50%) rotate(45deg);
-      transform: translateY(-50%) rotate(45deg);
+  -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
 }
 .ant-tooltip-placement-leftTop .ant-tooltip-arrow {
-  top: 8px;
+  top: 5px;
 }
 .ant-tooltip-placement-leftBottom .ant-tooltip-arrow {
-  bottom: 8px;
+  bottom: 5px;
 }
 .ant-tooltip-placement-bottom .ant-tooltip-arrow,
 .ant-tooltip-placement-bottomLeft .ant-tooltip-arrow,
 .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
-  top: 5px;
-  border-top-color: #404040;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: #404040;
-  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.06);
+  top: -5.07106781px;
+}
+.ant-tooltip-placement-bottom .ant-tooltip-arrow::before,
+.ant-tooltip-placement-bottomLeft .ant-tooltip-arrow::before,
+.ant-tooltip-placement-bottomRight .ant-tooltip-arrow::before {
+  box-shadow: -3px -3px 7px rgba(0, 0, 0, 0.07);
+  -ms-transform: translateY(6.53553391px) rotate(45deg);
+      transform: translateY(6.53553391px) rotate(45deg);
 }
 .ant-tooltip-placement-bottom .ant-tooltip-arrow {
   left: 50%;
-  -ms-transform: translateX(-50%) rotate(45deg);
-      transform: translateX(-50%) rotate(45deg);
+  -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
 }
 .ant-tooltip-placement-bottomLeft .ant-tooltip-arrow {
-  left: 16px;
+  left: 13px;
 }
 .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
-  right: 16px;
+  right: 13px;
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
@@ -7748,6 +7776,9 @@ span.ant-radio + * {
 .ant-menu-dark .ant-menu-submenu-title:hover > .ant-menu-submenu-title:hover > .ant-menu-submenu-arrow::before {
   background: #fff;
 }
+.ant-menu-dark .ant-menu-item:hover {
+  background-color: transparent;
+}
 .ant-menu-dark .ant-menu-item-selected {
   color: #fff;
   border-right: 0;
@@ -7757,6 +7788,12 @@ span.ant-radio + * {
 }
 .ant-menu-dark .ant-menu-item-selected > a,
 .ant-menu-dark .ant-menu-item-selected > a:hover {
+  color: #fff;
+}
+.ant-menu-dark .ant-menu-item-selected .anticon {
+  color: #fff;
+}
+.ant-menu-dark .ant-menu-item-selected span {
   color: #fff;
 }
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
@@ -8247,7 +8284,7 @@ span.ant-radio + * {
   border-radius: 2px;
   visibility: hidden;
   animation: antCheckboxEffect 0.36s ease-in-out;
-  animation-fill-mode: both;
+  animation-fill-mode: backwards;
   content: '';
 }
 .ant-checkbox:hover::after,
@@ -8333,6 +8370,10 @@ span.ant-radio + * {
 .ant-checkbox-disabled + span {
   color: rgba(0, 0, 0, 0.25);
   cursor: not-allowed;
+}
+.ant-checkbox-disabled:hover::after,
+.ant-checkbox-wrapper:hover .ant-checkbox-disabled::after {
+  visibility: hidden;
 }
 .ant-checkbox-wrapper {
   box-sizing: border-box;
