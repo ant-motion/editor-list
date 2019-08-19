@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-editor-list@1.5.2</title>
+  <title>simple.js - example - rc-editor-list@1.5.3</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-editor-list@1.5.2</h1>
+      <h1>rc-editor-list@1.5.3</h1>
 
       <p>editor style panel visibility component for react</p>
     </div>
@@ -308,7 +308,7 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (&lt;div className="box"&gt;
+    return (&lt;div id="abc" className="box"&gt;
       &lt;div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css"&gt;
         测试测试测试测试测试测试测试&lt;br /&gt;
         ---------请点击---------
@@ -326,6 +326,7 @@ class Demo extends React.Component {
           editorElem={this.state.editorDom}
           onChange={this.onChange}
           isMobile={this.state.state === 'mobile'}
+          rootSelector=".box"
         /&gt;)}
     &lt;/div&gt;);
   }
