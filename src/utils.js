@@ -718,7 +718,7 @@ export function getParentClassName(dom, useTagName = true, length = 50) {
   function getParentClass(d) {
     let p = d.className;
     const tagName = useTagName ? d.tagName.toLocaleLowerCase() : null;
-    p = p ? `.${p.replace(/\s+/, '.')}` : tagName;
+    p = p ? `.${p.replace(/\s+/g, '.')}` : tagName;
     className = p ? `${p} > ${className}`.trim() : className;
     if (useTagName || (!useTagName && d.className)) {
       i += 1;
