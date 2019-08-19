@@ -735,7 +735,7 @@ export function getParentClassName(dom, rootSelector, useTagName = true, length 
     }
   }
   getParentClass(dom.parentNode);
-  return rootSelector ? `${rootSelector} > ${className}`.trim() : className;
+  return rootSelector ? `${rootSelector} ${className}`.trim() : className;
 }
 
 export function currentScrollTop() {
