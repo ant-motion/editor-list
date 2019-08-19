@@ -231,7 +231,7 @@ export function convertData(d, b) {
 }
 
 export function convertDefaultData(d) {
-  if (!d || d === 'rgba(0, 0, 0, 0)' ||
+  if (!d ||
     d === 'repeat' || d === '0% 0%' ||
     d === 'auto' || d === 'scroll' ||
     d === 'start' || d === 'visible'
@@ -718,7 +718,7 @@ export function getParentClassName(dom, useTagName = true, length = 50) {
   function getParentClass(d) {
     let p = d.className;
     const tagName = useTagName ? d.tagName.toLocaleLowerCase() : null;
-    p = p ? `.${p.split(' ')[0]}` : tagName;
+    p = p ? `.${p.replace(/\s+/, '.')}` : tagName;
     className = p ? `${p} > ${className}`.trim() : className;
     if (useTagName || (!useTagName && d.className)) {
       i += 1;
