@@ -712,13 +712,17 @@ export function getClassNameCssRule({ dom, className, isMobile, onlyMobile, stat
   return styleData;
 }
 
-export function getParentClassName(dom, useTagName = true, length = 50) {
+export function getParentClassName(dom, rootSelector, useTagName = true, length = 50) {
   let className = '';
   let i = 0;
+  const rootDom = dom.ownerDocument.querySelectorAll(rootSelector)[0];
   function getParentClass(d) {
     let p = d.className;
+    if (d === rootDom) {
+      return;
+    }
     const tagName = useTagName ? d.tagName.toLocaleLowerCase() : null;
-    p = p ? `.${p.replace(/\s+/g, '.')}` : tagName;
+    p = p ? `.${p.split(/\s+/g)[0]}` : tagName;
     className = p ? `${p} > ${className}`.trim() : className;
     if (useTagName || (!useTagName && d.className)) {
       i += 1;
@@ -731,7 +735,7 @@ export function getParentClassName(dom, useTagName = true, length = 50) {
     }
   }
   getParentClass(dom.parentNode);
-  return className;
+  return rootSelector ? `${rootSelector} > ${className}`.trim() : className;
 }
 
 export function currentScrollTop() {

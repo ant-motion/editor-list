@@ -82,6 +82,7 @@ React.render(<EditorList />, container);
 | editorDefaultClassName | string | editor_css| default editor class name, Cannot with current className |
 | parentClassNameCanUseTagName | bool |  true | parent can use tag name |
 | parentClassNameLength | number |  2 | parent class name length |
+| rootSelector | Selector |  null | root class name |
 | cssToDom    | bool | true | insert css into dom |
 
 ## License

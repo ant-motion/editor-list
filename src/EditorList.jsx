@@ -45,6 +45,7 @@ class EditorList extends Component {
     isMobile: PropTypes.bool,
     parentClassNameCanUseTagName: PropTypes.bool,
     parentClassNameLength: PropTypes.number,
+    rootSelector: PropTypes.string,
     editorDefaultClassName: PropTypes.string,
     cssToDom: PropTypes.bool,
     locale: PropTypes.object,
@@ -125,7 +126,7 @@ class EditorList extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     const { editorElem, editorDefaultClassName } = this.props;
     if (!this.cssString) {
       editorElem.className = removeEditClassName(editorElem.className, editorDefaultClassName);
@@ -450,12 +451,17 @@ class EditorList extends Component {
       editorDefaultClassName,
       isMobile,
       parentClassNameCanUseTagName,
-      parentClassNameLength
+      parentClassNameLength,
+      rootSelector,
     } = props;
     this.ownerDocument = dom.ownerDocument;
     this.editClassName = this.getClassName(props);
-    this.parentClassName = getParentClassName(dom,
-      parentClassNameCanUseTagName, parentClassNameLength);
+    this.parentClassName = getParentClassName(
+      dom,
+      rootSelector,
+      parentClassNameCanUseTagName,
+      parentClassNameLength,
+    );
     // 当前带样式的 value;
     const classState = 'default';
     const domStyle = this.getDefaultValue(dom, isMobile, classState);

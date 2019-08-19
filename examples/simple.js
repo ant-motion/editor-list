@@ -37,7 +37,7 @@ class Demo extends React.Component {
   }
 
   render() {
-    return (<div className="box">
+    return (<div id="abc" className="box">
       <div onClick={this.onClick} className="a c editor-user-css jeply9mvwlk-editor_css">
         测试测试测试测试测试测试测试<br />
         ---------请点击---------
@@ -55,6 +55,7 @@ class Demo extends React.Component {
           editorElem={this.state.editorDom}
           onChange={this.onChange}
           isMobile={this.state.state === 'mobile'}
+          rootSelector={'.box'}
         />)}
     </div>);
   }
