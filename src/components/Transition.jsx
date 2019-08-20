@@ -41,12 +41,12 @@ class EditorTransition extends Component {
     onChange: () => { },
   };
 
-  static getDerivedStateFromProps(props, { prevProps, getStateData }) {
+  static getDerivedStateFromProps(props, { prevProps, getStateData, data: prevData }) {
     const nextState = {
       prevProps: props,
     };
     if (prevProps && prevProps.value !== props.value) {
-      nextState.data = getStateData(props);
+      nextState.data = getStateData(props, prevData);
     }
     return nextState;
   }
@@ -93,14 +93,18 @@ class EditorTransition extends Component {
     });
   }
 
-  getStateData = (props) => {
+  getStateData = (props, prevData = []) => {
     const values = props.value.split(/,\s?(?=[a-z])/g).map(c => c.trim());
     let data = values.filter(str =>
       (str && str !== 'all 0s ease 0s' && str !== 'all 0s ease'))
-      .map(str => {
-        const d = str.replace(/,\s+/g, ',').split(/\s+/g);
-        return ({ key: getRandomKey(), name: d[0], duration: d[1], ease: d[2], delay: d[3] });
-      });
+      .map((str, i) => {
+        if (str.replace(/;/g, '') === 'none') {
+          return null;
+        }
+        const d = str.replace(/;/g, '').replace(/,\s+/g, ',').split(/\s+/g);
+        const prev = prevData[i];
+        return ({ key: prev ? prev.key : getRandomKey(), name: d[0], duration: d[1], ease: d[2], delay: d[3] });
+      }).filter(c => c);
     data = data.length ? data : [{ key: getRandomKey() }];
     return data;
   }
