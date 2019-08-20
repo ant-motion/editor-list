@@ -63,7 +63,6 @@ class Demo extends React.Component {
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));
 
-
 const t = document.createElement('style');
 t.innerHTML = `
 .demo > .box > .jeply9mvwlk-editor_css{

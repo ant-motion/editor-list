@@ -718,6 +718,7 @@ export function getParentClassName(dom, rootSelector, useTagName = true, length 
   const rootDom = dom.ownerDocument.querySelectorAll(rootSelector)[0];
   function getParentClass(d) {
     let p = d.className;
+    console.log(p)
     if (d === rootDom) {
       return;
     }

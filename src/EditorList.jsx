@@ -120,7 +120,8 @@ class EditorList extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.editorElem !== this.props.editorElem) {
       this.setEditorElemClassName(this.props);
-      if (!this.cssString) {
+      const inDom = this.getInDom(prevProps.editorElem);
+      if (!this.cssString && !inDom) {
         prevProps.editorElem.className = removeEditClassName(prevProps.editorElem.className, prevProps.editorDefaultClassName);
       }
     }
@@ -128,7 +129,8 @@ class EditorList extends Component {
 
   componentWillUnmount() {
     const { editorElem, editorDefaultClassName } = this.props;
-    if (!this.cssString) {
+    const inDom = this.getInDom(editorElem);
+    if (!this.cssString && !inDom) {
       editorElem.className = removeEditClassName(editorElem.className, editorDefaultClassName);
     }
   }
@@ -294,6 +296,12 @@ class EditorList extends Component {
       },
     }, this.setCssToDom);
   };
+
+  getInDom = (dom) =>
+    dom.className.split(' ').filter(c => c).some(str => {
+      const id = this.getEditId(str);
+      return this.ownerDocument.getElementById(id);
+    })
 
   getEditId = (str) => `${this.parentClassName}.${str}`.replace(/[^a-z]/ig, '')
 
@@ -485,7 +493,6 @@ class EditorList extends Component {
   getClassName = (props) => {
     const {
       editorElem,
-
       editorDefaultClassName,
     } = props;
     const currentEditorCssName = (editorElem.className || '').split(' ')
@@ -783,13 +790,14 @@ class EditorList extends Component {
   }
 
   cssObjectToString = (css, name) => {
-    const { rootSelector } = this.props;
+    const { rootSelector, editorElem } = this.props;
     const cssName = !this.classNameInDefaultDomClass(name, this.props.editorDefaultClassName)
       ? `${name}-${this.props.editorDefaultClassName}` : name;
     return Object.keys(css).sort((a, b) => (
       stateSort[a] > stateSort[b]
     )).map(key => {
       const className = this.parentClassName === rootSelector
+        && Array.prototype.slice.call(document.querySelectorAll(rootSelector)).some(c => c === editorElem)
         ? `${this.parentClassName}.${cssName}`
         : `${this.parentClassName} .${cssName}`
       switch (key) {
