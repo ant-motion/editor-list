@@ -62,22 +62,3 @@ class Demo extends React.Component {
 }
 
 ReactDOM.render(<Demo />, document.getElementById('__react-content'));
-
-const t = document.createElement('style');
-t.innerHTML = `
-.demo > .box > .jeply9mvwlk-editor_css{
-  text-decoration: underline;
-  color: #00ffff;
-}
-.demo > .box > .jeply9mvwlk-editor_css:focus{
-font-size: 64px;
-}
-@media screen and (max-width: 767px) {
-  .demo > .box > .jeply9mvwlk-editor_css{
-color: #00ff00;
-}
-}`;
-t.id = 'demo_box_jeply9mvwlk-editor_css'
-
-document.body.append(t);
-
