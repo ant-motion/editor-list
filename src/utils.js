@@ -537,7 +537,8 @@ function contrastParent(node, d) {
 
 function cssRulesForEach(item, i, newStyleState, styleObj,
   dom, ownerDocument, isMobile, state, className, onlyMobile, media, cj) {
-  const rep = new RegExp(state === 'active' ? `(\:${state}|\:hover)$` : `\:${state}$`);
+  const rep = new RegExp(`\:${state}$`);
+  // state === 'active' ? `(\:${state}|\:hover)$` : 
   // `\\.${className}(:(hover|focus|active))?\s*(?=(,|$))`
   const repClassName = className || dom.className.split(' ').join('|');
   const classRep = new RegExp(`\\.${state ?

@@ -148,32 +148,32 @@ class EditorList extends Component {
 
   onChangeCssState = (classState) => {
     const { onChange, isMobile, editorElem, editorDefaultClassName } = this.props;
-    this.defaultValue[classState] = this.defaultValue[classState] ||
-      this.getDefaultValue(editorElem, isMobile, classState);
-    this.currentData[classState] = this.currentData[classState] ||
-      this.getDefaultData(this.defaultValue[classState]);
-    const value = this.currentData[classState];
-
-    this.defaultData = this.getDefaultData(this.defaultValue[classState]);
-
+    const domStyle = this.getDefaultValue(editorElem, isMobile, classState);
+    this.currentData[classState]= this.getDefaultData(domStyle);
+    // 设置默认;
+    this.setDefaultData({
+      isMobile, dom: editorElem, classState,
+    });
     const { cssName, cssValue } = this.state;
     this.cssString = this.getAllCssString();
     this.currentEditCssString = this.getCurrentEditCssString();
-    this.setState({
-      cssValue: {
-        ...cssValue,
-        [cssName]: {
-          ...cssValue[cssName],
-          value,
-        },
+    const newCssValue = {
+      ...cssValue,
+      [cssName]: {
+        ...cssValue[cssName],
+        value: this.currentData[classState],
+        classState,
       },
+    };
+    this.setState({
+      cssValue: newCssValue,
       classState,
     });
     const $cssName = cssName === this.editClassName ?
       `${cssName}-${editorDefaultClassName}` : cssName;
     onChange({
       parentClassName: this.parentClassName,
-      cssValue,
+      cssValue: newCssValue,
       cssName: $cssName,
       id: this.getEditId($cssName),
       editClassName: this.editClassName,
@@ -266,7 +266,7 @@ class EditorList extends Component {
       .filter(c => c).map(c => c.trim());
     const stateCss = myCss[classState];
     if (stateCss) {
-      let stateCssArray = stateCss.split('\n').map(c => c.trim()).filter(c => c);
+      let stateCssArray = stateCss.replace(/\s+;/g, ';').split('\n').map(c => c.trim()).filter(c => c);
       const currentCssName = currentCss.map(str => str.split(':')[0].trim());
       const borderArray = currentCssName.filter(c => c === 'border-style' ||
         c === 'border-color' || c === 'border-width');
@@ -345,26 +345,14 @@ class EditorList extends Component {
 
   setDefaultData = ({ isMobile, dom, classState, cssName }) => {
     // 删除所有编辑的样式，，获取当前 dom 自身的值；
-    const className = dom.className;
-    const editStyle = {};
-    className.split(' ').filter(c => c).forEach(str => {
-      const id = this.getEditId(str);
-      const style = this.ownerDocument.getElementById(id);
-      if (style) {
-        editStyle[id] = style.innerHTML;
-        style.innerHTML = '';
-      }
-    })
+    const editStyle = this.rmEditorStyle(dom);
     this.defaultValue[classState] = cssName === this.editClassName || !cssName ?
       this.getDefaultValue(dom, isMobile, classState)
       : getClassNameCssRule(
         { dom, className: cssName, isMobile, state: null, getObject: true }
-      );;
+      );
     this.defaultData = this.getDefaultData(this.defaultValue[classState]);
-    Object.keys(editStyle).forEach(id => {
-      const style = this.ownerDocument.getElementById(id);
-      style.innerHTML = editStyle[id];
-    });
+    this.reEditorStyle(editStyle);
   }
 
   getAllCssString = () => {
@@ -787,6 +775,27 @@ class EditorList extends Component {
         locale={props.locale.EditorCss}
       />,
     ];
+  }
+
+  rmEditorStyle = (dom) => {
+    const className = dom.className;
+    const editStyle = {};
+    className.split(' ').filter(c => c).forEach(str => {
+      const id = this.getEditId(str);
+      const style = this.ownerDocument.getElementById(id);
+      if (style) {
+        editStyle[id] = style.innerHTML;
+        style.innerHTML = '';
+      }
+    })
+    return editStyle;
+  }
+
+  reEditorStyle = (editStyle) => {
+    Object.keys(editStyle).forEach(id => {
+      const style = this.ownerDocument.getElementById(id);
+      style.innerHTML = editStyle[id];
+    });
   }
 
   cssObjectToString = (css, name) => {
