@@ -295,8 +295,7 @@ class EditorList extends Component {
     }, this.setCssToDom);
   };
 
-  getEditId = (str) => `${this.parentClassName}.${str}`.replace(/>/g, '_j_')
-    .replace(/\s+/g, '_e_').replace(/\./g, '_p_').replace(/#/g, 'id_')
+  getEditId = (str) => `${this.parentClassName}.${str}`.replace(/[^a-z]/ig, '')
 
   getStateCSSValue = (
     cssName, classState, domStyle, value, props = this.props
