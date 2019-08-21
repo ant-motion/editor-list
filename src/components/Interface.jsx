@@ -8,6 +8,7 @@ import InputNumber from 'antd/lib/input-number';
 import Tooltip from 'antd/lib/tooltip';
 import Radio from 'antd/lib/radio';
 import AntIcon from 'antd/lib/icon';
+import Slider from 'antd/lib/slider';
 import { TweenOneGroup } from 'rc-tween-one';
 
 import Icon from './common/Icon';
@@ -143,6 +144,23 @@ export default class EditorInterface extends Component {
       </div>) : null;
     return (
       <Panel {...props} header={props.header || locale.header}>
+        <Row gutter={8}>
+          <Col span={3}>
+            <Icon type="opacity" prompt={locale.opacity} />
+          </Col>
+          <Col span={21}>
+            <Slider
+              min={0}
+              max={1}
+              value={value.opacity}
+              onChange={(e) => {
+                this.onChange('opacity', e);
+              }}
+              step={0.01}
+              style={{ margin: '6px' }}
+            />
+          </Col>
+        </Row>
         <Row gutter={8}>
           <Col span={3}>
             <Icon type="overflow" prompt={locale.overflow} />

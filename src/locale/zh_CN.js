@@ -105,6 +105,7 @@ export default {
       both: '清除元素浮动',
     },
     zIndex: '当前元素的层级深度',
+    opacity: '透明度',
   },
   EditorBackGround: {
     type: '填充类型',

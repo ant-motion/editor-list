@@ -572,6 +572,7 @@ class EditorList extends Component {
         zIndex: style.index || 0,
         float: style.float || 'none',
         clear: style.clear || 'none',
+        opacity: typeof style.opacity === 'number' ? style.opacity : 1,
       },
       background: {
         color: convertDefaultData(style.backgroundColor),

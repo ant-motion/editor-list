@@ -133,6 +133,7 @@ export const styleInUse = {
   'z-index': 1,
   float: 1,
   clear: 1,
+  opacity: 1,
 };
 export const alphaBg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/' +
   '9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0p' +
@@ -472,7 +473,7 @@ function backgroundToCss(d, current) {
 function defaultToCss(d, current) {
   return Object.keys(d).map(key => {
     const data = d[key];
-    if (!data || current[key] === data) {
+    if (!data && data !== 0 || current[key] === data) {
       return null;
     }
     return `${toCssLowerCase(key)}: ${data};`;

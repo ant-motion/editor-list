@@ -107,6 +107,7 @@ export default {
       both: 'Both',
     },
     zIndex: 'zIndex, current element depth.',
+    opacity: 'opacity',
   },
   EditorBackGround: {
     type: 'Type',
