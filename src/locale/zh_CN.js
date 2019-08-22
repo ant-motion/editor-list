@@ -106,6 +106,7 @@ export default {
     },
     zIndex: '当前元素的层级深度',
     opacity: '透明度',
+    opacity_help: '标签上设置了的 opacity，操作将没有反应；注：有动画的标签，此项操作无效。',
   },
   EditorBackGround: {
     type: '填充类型',

@@ -144,23 +144,21 @@ export default class EditorInterface extends Component {
       </div>) : null;
     return (
       <Panel {...props} header={props.header || locale.header}>
-        <Row gutter={8}>
-          <Col span={3}>
-            <Icon type="opacity" prompt={locale.opacity} />
-          </Col>
-          <Col span={21}>
-            <Slider
-              min={0}
-              max={1}
-              value={value.opacity}
-              onChange={(e) => {
-                this.onChange('opacity', e);
-              }}
-              step={0.01}
-              style={{ margin: '6px' }}
-            />
-          </Col>
-        </Row>
+        <RowHelp
+          title={<Icon type="opacity" prompt={locale.opacity} />}
+          help={locale.opacity_help}
+        >
+          <Slider
+            min={0}
+            max={1}
+            value={value.opacity}
+            onChange={(e) => {
+              this.onChange('opacity', e);
+            }}
+            step={0.01}
+            style={{ margin: '6px' }}
+          />
+        </RowHelp>
         <Row gutter={8}>
           <Col span={3}>
             <Icon type="overflow" prompt={locale.overflow} />

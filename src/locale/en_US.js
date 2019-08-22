@@ -108,6 +108,7 @@ export default {
     },
     zIndex: 'zIndex, current element depth.',
     opacity: 'opacity',
+    opacity_help: 'If opacity is set on the label, the operation will not respond. Note: With animated label, this operation is invalid.',
   },
   EditorBackGround: {
     type: 'Type',
