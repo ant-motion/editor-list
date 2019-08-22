@@ -120,7 +120,7 @@ class EditorList extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.editorElem !== this.props.editorElem) {
       this.setEditorElemClassName(this.props);
-      const inDom = this.getInDom(prevProps.editorElem);
+      const inDom = this.getInDom(prevProps.editorElem, this.prevParentClassName);
       if (!this.cssString && !inDom) {
         prevProps.editorElem.className = removeEditClassName(prevProps.editorElem.className, prevProps.editorDefaultClassName);
       }
@@ -297,13 +297,13 @@ class EditorList extends Component {
     }, this.setCssToDom);
   };
 
-  getInDom = (dom) =>
+  getInDom = (dom, parentClassName) =>
     dom.className.split(' ').filter(c => c).some(str => {
-      const id = this.getEditId(str);
+      const id = this.getEditId(str, parentClassName);
       return this.ownerDocument.getElementById(id);
     })
 
-  getEditId = (str) => `${this.parentClassName}.${str}`.replace(/[^a-z]/ig, '')
+  getEditId = (str, parentClassName) => `${parentClassName || this.parentClassName}.${str}`.replace(/[^a-z]/ig, '')
 
   getStateCSSValue = (
     cssName, classState, domStyle, value, props = this.props
@@ -452,6 +452,7 @@ class EditorList extends Component {
     } = props;
     this.ownerDocument = dom.ownerDocument;
     this.editClassName = this.getClassName(props);
+    this.prevParentClassName = this.parentClassName;
     this.parentClassName = getParentClassName(
       dom,
       rootSelector,
@@ -807,7 +808,7 @@ class EditorList extends Component {
       stateSort[a] > stateSort[b]
     )).map(key => {
       const className = this.parentClassName === rootSelector
-        && Array.prototype.slice.call(document.querySelectorAll(rootSelector)).some(c => c === editorElem)
+        && Array.prototype.slice.call(this.ownerDocument.querySelectorAll(rootSelector)).some(c => c === editorElem)
         ? `${this.parentClassName}.${cssName}`
         : `${this.parentClassName} .${cssName}`
       switch (key) {
