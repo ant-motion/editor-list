@@ -83,8 +83,8 @@ export const mobileTitle = '@media screen and (max-width: 767px) {';
 export const getBgImageUrl = (image) => image.replace(/url\((('|"|&quot;)?)([^\s]+)\2\)/ig, '$3');
 
 export const getBgImageType = (url) => {
-  let type = url && url.match(/^(repeating-)?linear-gradient\(/i) ? 'linear' : 'img';
-  type = url && url.match(/^(repeating-)?radial-gradient\(/i) ? 'radial' : type;
+  let type = url && url.match(/(repeating-)?linear-gradient\(/i) ? 'linear' : 'img';
+  type = url && url.match(/(repeating-)?radial-gradient\(/i) ? 'radial' : type;
   return type;
 }
 

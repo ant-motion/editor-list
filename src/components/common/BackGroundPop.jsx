@@ -166,7 +166,7 @@ export default class BackGroundPop extends React.Component {
               value={getBgImageUrl(value.image[num])}
               onChange={(e) => {
                 const v = e.target.value;
-                this.onChange('image', v);
+                this.onChange('image', `url(${v})`);
               }}
               size="small"
               placeholder="Add image url"
