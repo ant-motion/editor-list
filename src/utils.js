@@ -558,7 +558,7 @@ function cssRulesForEach(item, i, newStyleState, styleObj,
     }
     const select = cssStyle.selectorText;
     // 删除内建样式, https://github.com/ant-design/ant-design-landing/issues/42;
-    if (!select || !select.split(',').filter(c => c).some(str => !(str.trim().match(/^(\[[a-z]+=".*"\]|\:\:-.*)/g)))) {
+    if (!select || !select.split(',').filter(c => c).some(str => !(str.trim().match(/^(\[[a-z]+=".*"?\])|(\:\:\-webkit\-)/g)))) {
       return null;
     }
     // 去除所有不是状态的
