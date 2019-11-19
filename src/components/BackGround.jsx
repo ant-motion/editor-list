@@ -34,27 +34,27 @@ class EditorBg extends Component {
     onChange: () => { },
   };
 
-  onChange = (key, v) => {
+  onChange = (key, v, isDrag) => {
     const value = {
       ...this.props.value,
       [key]: v,
     };
-    this.props.onChange('background', value);
+    this.props.onChange('background', value, isDrag);
   }
 
   render() {
     const { value, locale, onChange, editorElem, ...props } = this.props;
     return (<Panel {...props} header={props.header || locale.header}>
       <Color
-        onChange={(e) => {
-          this.onChange('color', e);
+        onChange={(e, isDrag) => {
+          this.onChange('color', e, isDrag);
         }}
         title={<Icon type="bg-colors" prompt={locale.color}/>}
         color={value.color}
       />
       <Image 
-        onChange={(e) => {
-          this.onChange('image', e);
+        onChange={(e, isDrag) => {
+          this.onChange('image', e, isDrag);
         }}
         locale={locale}
         value={value.image}

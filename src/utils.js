@@ -746,13 +746,19 @@ export function currentScrollTop() {
   return window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
 }
 
-export function getParentNode(node, className) {
+export function getParentNode(node, className, toBool) {
   const parent = node.parentNode;
-  const classNameArray = (parent.className || '').split(' ').some(name => name === className);
+  const classNameArray = (parent.className || '').split(' ').some(name => {
+    if (Array.isArray(className)) {
+      return className.indexOf(name) >= 0;
+    }
+    return name === className;
+  });
   if (classNameArray || parent.tagName.toLocaleLowerCase() === 'body') {
-    return parent;
+    const isBody = parent.tagName.toLocaleLowerCase() === 'body';
+    return toBool ? !isBody : parent;
   }
-  return getParentNode(parent, className);
+  return getParentNode(parent, className, toBool);
 }
 
 export function getCssStr(cssString, className) {

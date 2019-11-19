@@ -76,7 +76,7 @@ React.render(<EditorList />, container);
 | name       |type            |default  |description     |
 |------------|----------------|---------|----------------|
 | editorElem | DOMElement     | null    | editor dom   |
-| onChange   | func           | null    | change callback |
+| onChange   | func           | null    | change callback(e: changeCallBack) |
 | useClassName | bool   | true   |  use className or style |
 | isMobile   | bool  | false | edit mobile style |
 | editorDefaultClassName | string | editor_css| default editor class name, Cannot with current className |
@@ -84,6 +84,18 @@ React.render(<EditorList />, container);
 | parentClassNameLength | number |  2 | parent class name length |
 | rootSelector | Selector |  null | root class name |
 | cssToDom    | bool | true | insert css into dom |
+
+#### changeCallBack
+| name       |type            |description     |
+|------------|----------------|----------------|
+| parentClassName | string   | parent selectors |
+| cssValue  | object | edit css value |
+| cssName   | string | edit className |
+| id        | string | Selectors replace(/[^a-z]/ig, ''), render style id |
+| editClassName | string | edit random id |
+| allCssString | string | all css string, including events and terminals |
+| currentEditCssString | string | current css string |
+| isDrag  | bool  | Is the color or slider changed by dragging |
 
 ## License
 

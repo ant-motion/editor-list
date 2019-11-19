@@ -37,7 +37,7 @@ class InputGroup extends React.Component {
     };
   }
 
-  onChange = (key, e) => {
+  onChange = (key, e, isDrag) => {
     const values = this.state.values;
     const value = e && e.target ? e.target.value : e;
     if (key === 'center') {
@@ -48,7 +48,7 @@ class InputGroup extends React.Component {
     } else {
       values[key] = value;
       values.center = null;
-      this.props.onChange(values);
+      this.props.onChange(values, isDrag);
     }
     this.setState({
       values,
@@ -71,8 +71,8 @@ class InputGroup extends React.Component {
       if (!item) {
         return null;
       }
-      const onChange = (e) => {
-        this.onChange(item.key, e);
+      const onChange = (e, isDrag) => {
+        this.onChange(item.key, e, isDrag);
       };
       return React.cloneElement(item, { ...item.props, onChange });
     });

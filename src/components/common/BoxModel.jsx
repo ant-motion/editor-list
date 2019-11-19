@@ -40,7 +40,6 @@ export default class BoxModel extends Component {
       return (
         <AutoComplete
           key={key}
-          style={{ width: 60 }}
           value={v}
           className={key}
           placeholder={key}
@@ -58,7 +57,6 @@ export default class BoxModel extends Component {
       return (
         <Color
           key={key}
-          style={{ width: 60 }}
           type="cut"
           className={key}
           color={v}
@@ -108,7 +106,9 @@ export default class BoxModel extends Component {
   render() {
     return (
       <div className="box-model-wrapper">
-        <InputGroup className="box-model" onChange={this.props.onChange}>
+        <InputGroup className="box-model" onChange={(v, isDrag) => {
+          this.props.onChange(v, isDrag)
+        }}>
           {this.getChildrenToBox()}
         </InputGroup>
       </div>

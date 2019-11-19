@@ -40,14 +40,14 @@ export default class BackGroundPop extends React.Component {
     className: 'editor-bg-image-pop',
   }
 
-  onChange = (k, v) => {
+  onChange = (k, v, isDrag) => {
     const { value, num } = this.props;
     Object.keys(value).forEach(key => {
       if (key === k) {
         value[key][num] = v;
       };
     });
-    this.props.onChange(value);
+    this.props.onChange(value, isDrag);
   }
 
   getType = () => {

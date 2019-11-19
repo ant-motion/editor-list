@@ -117,6 +117,7 @@ class GradientEdit extends React.Component {
       }
       this.isDrag = false;
       this.pos = {};
+      this.onChange();
     }
   }
 
@@ -149,7 +150,9 @@ class GradientEdit extends React.Component {
       this.setState({
         gradient,
         active
-      }, this.onChange);
+      }, () => {
+        this.onChange(true);
+      });
     }
   }
 
@@ -174,12 +177,14 @@ class GradientEdit extends React.Component {
     this.isPressEnter = true;
   }
 
-  onColorChange = (e) => {
+  onColorChange = (e, isDrag) => {
     const { active, gradient } = this.state;
     gradient[active][0] = e;
     this.setState({
       gradient,
-    }, this.onChange);
+    }, () => {
+      this.onChange(isDrag);
+    });
   }
 
   onRepeatChange = (e) => {
@@ -226,14 +231,14 @@ class GradientEdit extends React.Component {
     }, this.onChange);
   }
 
-  onChange = () => {
+  onChange = (isDrag) => {
     const { type, value, num, onChange } = this.props;
     const { type: contentType, gradient, repeat } = this.state;
     const name = `${repeat ? 'repeating-' : ''}${type}-gradient`;
     const gradientStr = `${name}(${contentType ? `${contentType}, ` : ''}${gradient.map(c => c.join(' ')).join(',')})`;
     value.image[num] = gradientStr;
     if (onChange) {
-      onChange(value);
+      onChange(value, isDrag);
     }
   }
 
@@ -476,7 +481,9 @@ class GradientEdit extends React.Component {
               span={[5, 7, 12]}
               title={<Icon type="bg-colors" prompt={locale.color} />}
               color={colorLookup[value[0]] || value[0]}
-              onChange={this.onColorChange}
+              onChange={(e, isDrag) => {
+                this.onColorChange(e, isDrag);
+              }}
             />
           </Col>
           <Col span={8}>

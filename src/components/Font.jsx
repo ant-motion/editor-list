@@ -44,12 +44,30 @@ class EditorFont extends Component {
     },
   };
 
-  onChange = (key, v) => {
+  static getDerivedStateFromProps(props, { prevProps }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.value !== props.value) {
+      nextState.value = props.value;
+    }
+    return nextState;
+  }
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value,
+    };
+  }
+
+  onChange = (key, v, isDrag) => {
     const value = {
       ...this.props.value,
       [key]: v,
     };
-    this.props.onChange('font', value);
+    this.props.onChange('font', value, isDrag);
   }
 
   getFontFamily = () => (
@@ -107,8 +125,7 @@ class EditorFont extends Component {
     '500', '600', '700', '800', '900'];
 
   render() {
-    const { ...props } = this.props;
-    const { value, locale } = props;
+    const { value, locale, ...props } = this.props;
     ['value', 'font'].map(key => delete props[key]);
     return (<Panel {...props} header={props.header || locale.header}>
       <Row gutter={8}>
@@ -136,7 +153,7 @@ class EditorFont extends Component {
             style={{ width: '100%' }}
             value={value.size}
             onChange={(e) => {
-              this.onChange('size', e);
+              this.onChange('size', e)
             }}
           />
         </Col>
@@ -182,8 +199,8 @@ class EditorFont extends Component {
       <Color
         color={value.color}
         title={<Icon type="font-colors" prompt={locale.color} />}
-        onChange={(e) => {
-          this.onChange('color', e);
+        onChange={(e, isDrag) => {
+          this.onChange('color', e, isDrag);
         }}
       />
       <Row>

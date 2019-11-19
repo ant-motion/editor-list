@@ -7,7 +7,6 @@ import Collapse from 'antd/lib/collapse';
 import Radio from 'antd/lib/radio';
 import Icon from './common/Icon';
 
-
 const Panel = Collapse.Panel;
 
 const RadioButton = Radio.Button;

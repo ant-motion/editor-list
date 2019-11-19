@@ -49,7 +49,7 @@ export default class EditorCss extends Component {
           theme: 'ambiance',
         }}
         onKeyUp={this.onKeyUp}
-        onChange={(e, metadata, v) => {
+        onBlur={(_, __, v) => {
           if (v.replace(/\s+/g, '') !== newValue.replace(/\s+/g, '')) {
             this.onChange(v);
           }

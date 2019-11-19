@@ -149,7 +149,7 @@ class EditorList extends Component {
   onChangeCssState = (classState) => {
     const { onChange, isMobile, editorElem, editorDefaultClassName } = this.props;
     const domStyle = this.getDefaultValue(editorElem, isMobile, classState);
-    this.currentData[classState]= this.getDefaultData(domStyle);
+    this.currentData[classState] = this.getDefaultData(domStyle);
     // 设置默认;
     this.setDefaultData({
       isMobile, dom: editorElem, classState,
@@ -253,7 +253,7 @@ class EditorList extends Component {
     });
   }
 
-  onChange = (key, data) => {
+  onChange = (key, data, isDrag) => {
     const { cssValue, classState, cssName } = this.state;
     const { value, css, mobileCss } = cssValue[cssName];
     const myCss = this.props.isMobile ? mobileCss : css;
@@ -294,7 +294,9 @@ class EditorList extends Component {
         ...cssValue,
         [cssName]: state,
       },
-    }, this.setCssToDom);
+    }, () => {
+      this.setCssToDom(isDrag);
+    });
   };
 
   getInDom = (dom, parentClassName) =>
@@ -389,7 +391,7 @@ class EditorList extends Component {
     return currentCss;
   }
 
-  setCssToDom = () => {
+  setCssToDom = (isDrag) => {
     const { cssName, cssValue } = this.state;
     const { css } = cssValue[cssName];
     const { editorElem, onChange, cssToDom, editorDefaultClassName } = this.props;
@@ -413,6 +415,7 @@ class EditorList extends Component {
       editClassName: this.editClassName,
       allCssString: this.cssString,
       currentEditCssString: this.currentEditCssString,
+      isDrag,
     });
   }
 

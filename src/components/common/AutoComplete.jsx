@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AntAutoComplete from 'antd/lib/auto-complete';
+import Input from 'antd/lib/input';
 import { getParentNode } from '../../utils';
 
 export default class AutoComplete extends React.Component {
@@ -9,6 +10,8 @@ export default class AutoComplete extends React.Component {
     dataSource: PropTypes.array,
     placeholder: PropTypes.string,
     size: PropTypes.string,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
   };
 
   static defaultProps = {
@@ -16,10 +19,21 @@ export default class AutoComplete extends React.Component {
     size: 'small',
   }
 
+  static getDerivedStateFromProps(props, { prevProps }) {
+    const nextState = {
+      prevProps: props,
+    };
+    if (prevProps && prevProps.value !== props.value) {
+      nextState.value = props.value;
+    }
+    return nextState;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       dataSource: [],
+      value: props.value,
     };
   }
 
@@ -33,16 +47,42 @@ export default class AutoComplete extends React.Component {
     });
   }
 
+  onChangeEnd = (v) => {
+    if (v !== this.props.value) {
+      const o = {
+        showAll: false,
+        value: v,
+      };
+      this.setState(o);
+      this.props.onChange(v);
+    }
+  };
+
+  onChange = (value) => {
+    this.setState({
+      value,
+    });
+  }
+
   render() {
+    const { onChange, ...props } = this.props;
+    const { value } = this.state;
     return (
-      <AntAutoComplete {...this.props}
+      <AntAutoComplete
+        {...props}
+        value={value}
         dataSource={this.state.dataSource}
         onSearch={this.onSearch}
+        onChange={this.onChange}
+        onBlur={this.onChangeEnd}
+        onSelect={this.onChangeEnd}
         placeholder={this.props.placeholder || '--'}
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
         getPopupContainer={node => getParentNode(node, 'editor-list')}
-      />
+      >
+        <Input onPressEnter={(e) => { this.onChangeEnd(e.target.value) }} />
+      </AntAutoComplete>
     );
   }
 }

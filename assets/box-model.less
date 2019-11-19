@@ -2,7 +2,7 @@
 
 .editor-list {
   .box-model-wrapper {
-    width: 145px;
+    width: ~"calc(100% - 76px)";
     height: 60px;
     margin: 20px auto;
     border: 1px solid @text-color;
@@ -15,7 +15,7 @@
     .top-left, .top-right, .bottom-right, .bottom-left {
       position: absolute;
       margin: auto;
-      width: 56px;
+      width: 76px;
       height: 22px;
       .ant-select-selection {
         background: @bgColor;
@@ -34,7 +34,7 @@
       }
     }
     .right {
-      right: -28px;
+      right: -38px;
       top: 0;
       bottom: 0;
       .editor-color-picker {
@@ -48,7 +48,7 @@
       right: 0;
     }
     .left {
-      left: -28px;
+      left: -38px;
       top: 0;
       bottom: 0;
     }
@@ -61,19 +61,19 @@
 
     .top-left {
       top: -11px;
-      left: -28px;
+      left: -38px;
     }
     .top-right {
       top: -11px;
-      right: -28px;
+      right: -38px;
     }
     .bottom-left {
       bottom: -11px;
-      left: -28px;
+      left: -38px;
     }
     .bottom-right {
       bottom: -11px;
-      right: -28px;
+      right: -38px;
     }
   }
 }

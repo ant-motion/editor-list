@@ -46,7 +46,7 @@ export default class EditorInterface extends Component {
     onChange: () => { },
   };
 
-  onChange = (key, v) => {
+  onChange = (key, v, isDrag) => {
     const value = key === 'offset' ? {
       ...this.props.value,
       ...v,
@@ -55,7 +55,7 @@ export default class EditorInterface extends Component {
         ...this.props.value,
         [key]: v,
       };
-    this.props.onChange('interface', value);
+    this.props.onChange('interface', value, isDrag);
   }
 
   render() {
@@ -153,6 +153,9 @@ export default class EditorInterface extends Component {
             max={1}
             value={value.opacity}
             onChange={(e) => {
+              this.onChange('opacity', e, true);
+            }}
+            onAfterChange={(e) => {
               this.onChange('opacity', e);
             }}
             step={0.01}

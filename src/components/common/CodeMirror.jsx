@@ -15,6 +15,7 @@ class RcCodeMirror extends React.Component {
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
     onKeyUp: PropTypes.func,
+    onBlur: PropTypes.func,
   };
 
   static defaultProps = {
@@ -29,7 +30,7 @@ class RcCodeMirror extends React.Component {
     const nextState = {
       prevProps: props,
     };
-    if (prevProps && props.value && props.value !==  $self.editor.getValue()) {
+    if (prevProps && props.value && props.value !== $self.editor.getValue()) {
       $self.updated = true;
       $self.editor.setValue(props.value);
     }
@@ -45,17 +46,22 @@ class RcCodeMirror extends React.Component {
 
   componentDidMount() {
     this.editor = codeMirror(this.ref);
-    this.editor.on('change', (cm, metadata) => {
+    this.editor.on('change', (_, metadata) => {
       if (this.props.onChange && !this.updated) {
         this.props.onChange(this.editor, metadata, this.editor.getValue());
       }
     });
+    this.editor.on('blur', (_, metadata) => {
+      if (this.props.onBlur) {
+        this.props.onBlur(this.editor, metadata, this.editor.getValue());
+      }
+    });
     if (this.props.onKeyUp) {
-      this.editor.on('keyup', (cm, event) => {
+      this.editor.on('keyup', (_, event) => {
         this.props.onKeyUp(this.editor, event);
       });
     }
-    this.editor.on('keydown', (cm, event) => {
+    this.editor.on('keydown', (_, event) => {
       this.updated = false;
       this.props.onKeyDown(this.editor, event);
     });

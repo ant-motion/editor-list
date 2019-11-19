@@ -32,10 +32,6 @@ export default class EditorClassName extends Component {
     this.props.onChange(value);
   }
 
-  onClick = ({ key }) => {
-    this.props.onChange(key);
-  }
-
   render() {
     const { ...props } = this.props;
     const { value, classNameArray, editClassName, locale } = props;

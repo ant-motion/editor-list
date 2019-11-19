@@ -67,7 +67,7 @@ class EditorShadow extends Component {
     };
   }
 
-  onChange = (key, v) => {
+  onChange = (key, v, isDrag) => {
     const keyValue = {
       ...this.defaultShadow,
       [key]: v,
@@ -80,7 +80,7 @@ class EditorShadow extends Component {
         mValue[this.state.key][$key] = keyValue[$key];
       }
     });
-    this.props.onChange('shadow', mValue);
+    this.props.onChange('shadow', mValue, isDrag);
     this.setState({
       open: {
         ...this.state.open,
@@ -211,8 +211,8 @@ class EditorShadow extends Component {
 
         <Color
           color={open[key] ? value[key].color : ''}
-          onChange={(e) => {
-            this.onChange('color', e);
+          onChange={(e, isDrag) => {
+            this.onChange('color', e, isDrag);
           }}
           title={<Icon type="bg-colors" prompt={locale.color} />}
         />

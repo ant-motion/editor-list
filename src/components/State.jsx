@@ -19,6 +19,7 @@ export default class EditorState extends Component {
     header: PropTypes.string,
     locale: PropTypes.object,
     showClassState: PropTypes.bool,
+    isMobile: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -31,9 +32,7 @@ export default class EditorState extends Component {
   }
 
   render() {
-    const { ...props } = this.props;
-    const { value, showClassState, locale, isMobile } = props;
-    ['value', 'onChange'].map(key => delete props[key]);
+    const { showClassState, locale, isMobile, value, onChange, ...props } = this.props;
     const childrenToRender = Object.keys(locale.styleSelect).map(key => {
       const item = locale.styleSelect;
       if (isMobile && item[key] === 'hover') {

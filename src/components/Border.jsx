@@ -35,12 +35,12 @@ export default class EditorBorder extends Component {
     };
   }
 
-  onChange = (e) => {
+  onChange = (e, isDrag) => {
     const value = {
       ...this.props.value,
       [this.state.key]: e,
     };
-    this.props.onChange('border', value);
+    this.props.onChange('border', value, isDrag);
   }
 
   getTabs = () => (
@@ -71,7 +71,9 @@ export default class EditorBorder extends Component {
         key={key}
         keys={this.keys}
         value={value[key]}
-        onChange={this.onChange}
+        onChange={(v, isDrag) => {
+          this.onChange(v, isDrag)
+        }}
       />
     </Panel>);
   }
