@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-editor-list@1.6.4 - editor style panel visibility component for react</title>
+  <title>rc-editor-list@1.7.0 - editor style panel visibility component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-editor-list@1.6.4</h1>
+  <h1>rc-editor-list@1.7.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -812,7 +812,7 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 <td>onChange</td>
 <td>func</td>
 <td>null</td>
-<td>change callback</td>
+<td>change callback(e: changeCallBack)</td>
 </tr>
 <tr>
 <td>useClassName</td>
@@ -855,6 +855,57 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 <td>bool</td>
 <td>true</td>
 <td>insert css into dom</td>
+</tr>
+</tbody>
+</table>
+<h4>changeCallBack<a id="user-content-changecallback" name="changecallback" class="anchor" aria-hidden="true" href="#changecallback"><span class="octicon octicon-link"></span></a></h4><table>
+<thead>
+<tr>
+<th>name</th>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parentClassName</td>
+<td>string</td>
+<td>parent selectors</td>
+</tr>
+<tr>
+<td>cssValue</td>
+<td>object</td>
+<td>edit css value</td>
+</tr>
+<tr>
+<td>cssName</td>
+<td>string</td>
+<td>edit className</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Selectors replace(/[^a-z]/ig, &#39;&#39;), render style id</td>
+</tr>
+<tr>
+<td>editClassName</td>
+<td>string</td>
+<td>edit random id</td>
+</tr>
+<tr>
+<td>allCssString</td>
+<td>string</td>
+<td>all css string, including events and terminals</td>
+</tr>
+<tr>
+<td>currentEditCssString</td>
+<td>string</td>
+<td>current css string</td>
+</tr>
+<tr>
+<td>isDrag</td>
+<td>bool</td>
+<td>Is the color or slider changed by dragging</td>
 </tr>
 </tbody>
 </table>
