@@ -193,24 +193,18 @@ class EditorList extends Component {
     this.setDefaultData({
       isMobile, dom: editorElem, classState, cssName
     });
-    if (!cssValue[cssName]) {
-      const state = {
-        cssName,
-        classState,
-      };
-      const newCssValue = this.getStateCSSValue(cssName, classState, domStyle, value);
-      this.setState({
-        ...state,
-        cssValue: {
-          ...cssValue,
-          ...newCssValue,
-        },
-      });
-    }
-    this.setState({
+    const state = {
       cssName,
-      classState: 'default',
-    });
+      classState,
+    };
+    if (!cssValue[cssName]) {
+      const newCssValue = this.getStateCSSValue(cssName, classState, domStyle, value);
+      state.cssValue = {
+        ...cssValue,
+        ...newCssValue,
+      };
+    }
+    this.setState(state);
     // 变更样式时不回调
   }
 
@@ -219,7 +213,6 @@ class EditorList extends Component {
     const { cssValue, cssName, classState } = this.state;
     const { css, mobileCss } = cssValue[cssName];
     const myCss = isMobile ? mobileCss : css;
-
     this.setState({
       cssValue: {
         ...cssValue,
@@ -289,14 +282,20 @@ class EditorList extends Component {
         [classState]: newCss,
       },
     };
-    this.setState({
-      cssValue: {
-        ...cssValue,
-        [cssName]: state,
-      },
-    }, () => {
+    const newCssValue = {
+      ...cssValue,
+      [cssName]: state,
+    };
+    if (isDrag) {
+      this.state.cssValue = newCssValue;
       this.setCssToDom(isDrag);
-    });
+    } else {
+      this.setState({
+        cssValue: newCssValue,
+      }, () => {
+        this.setCssToDom(isDrag);
+      });
+    }
   };
 
   getInDom = (dom, parentClassName) =>
@@ -576,7 +575,7 @@ class EditorList extends Component {
         zIndex: style.index || 0,
         float: style.float || 'none',
         clear: style.clear || 'none',
-        opacity: typeof style.opacity === 'number' ? style.opacity : 1,
+        opacity: parseFloat(style.opacity) === 0 || parseFloat(style.opacity) ? parseFloat(style.opacity) : 1,
       },
       background: {
         color: convertDefaultData(style.backgroundColor),

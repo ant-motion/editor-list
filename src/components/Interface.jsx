@@ -8,13 +8,14 @@ import InputNumber from 'antd/lib/input-number';
 import Tooltip from 'antd/lib/tooltip';
 import Radio from 'antd/lib/radio';
 import AntIcon from 'antd/lib/icon';
-import Slider from 'antd/lib/slider';
+
 import { TweenOneGroup } from 'rc-tween-one';
 
 import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';
 import RowHelp from './common/RowHelp';
 import BoxModel from './common/BoxModel';
+import Slider from './common/Slider';
 import { getOption, getParentNode } from '../utils';
 
 const RadioButton = Radio.Button;
@@ -79,7 +80,7 @@ export default class EditorInterface extends Component {
         <Row gutter={8} style={{ marginBottom: 0, marginTop: 28 }}>
           <Col span={4} offset={5}>
             zIndex
-              </Col>
+          </Col>
           <Col span={7}>
             <InputNumber
               min={0}
@@ -152,12 +153,7 @@ export default class EditorInterface extends Component {
             min={0}
             max={1}
             value={value.opacity}
-            onChange={(e) => {
-              this.onChange('opacity', e, true);
-            }}
-            onAfterChange={(e) => {
-              this.onChange('opacity', e);
-            }}
+            onChange={this.onChange}
             step={0.01}
             style={{ margin: '6px' }}
           />
