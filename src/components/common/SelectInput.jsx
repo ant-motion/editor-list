@@ -38,7 +38,7 @@ export default class SelectInput extends React.Component {
 
   onChangeEnd = (e) => {
     const { target } = e;
-    let v = target ? target.value : e;
+    const v = target ? target.value : e;
     if (v !== this.props.value) {
       this.setState({
         showAll: false,
