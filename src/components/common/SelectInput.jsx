@@ -1,6 +1,6 @@
 import React from 'react';
 import AutoComplete from 'antd/lib/auto-complete';
-import Input from 'antd/lib/input';
+// import Input from 'antd/lib/input';
 import PropTypes from 'prop-types';
 import { getParentNode } from '../../utils';
 
@@ -38,7 +38,7 @@ export default class SelectInput extends React.Component {
 
   onChangeEnd = (e) => {
     const { target } = e;
-    const v = target ? target.value : e;
+    let v = target ? target.value : e;
     if (v !== this.props.value) {
       this.setState({
         showAll: false,
@@ -92,16 +92,7 @@ export default class SelectInput extends React.Component {
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
       >
-        <Input
-          onPressEnter={(e) => {
-            const v = e.target.value;
-            setTimeout(() => {
-              if (!this.isSelect) {
-                this.onChangeEnd(v);
-              }
-            });
-          }}
-        />
+        {children}
       </AutoComplete>
     );
   }

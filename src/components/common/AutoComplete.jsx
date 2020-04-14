@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AntAutoComplete from 'antd/lib/auto-complete';
+import Input from 'antd/lib/input';
 import { getParentNode } from '../../utils';
 
 export default class AutoComplete extends React.Component {
@@ -15,12 +16,12 @@ export default class AutoComplete extends React.Component {
 
   static defaultProps = {
     dataSource: ['px', '%', 'rem', 'em', 'vw', 'vh'],
-    size: 'small',
+    size: 'small'
   };
 
   static getDerivedStateFromProps(props, { prevProps }) {
     const nextState = {
-      prevProps: props,
+      prevProps: props
     };
     if (prevProps && prevProps.value !== props.value) {
       nextState.value = props.value;
@@ -32,7 +33,7 @@ export default class AutoComplete extends React.Component {
     super(props);
     this.state = {
       dataSource: [],
-      value: props.value,
+      value: props.value
     };
   }
 
@@ -63,12 +64,12 @@ export default class AutoComplete extends React.Component {
 
   onChange = value => {
     this.setState({
-      value,
+      value
     });
   };
 
   render() {
-    const { onChange, dataSource, ...props } = this.props;
+    const { onChange, dataSource, size, ...props } = this.props;
     const { value, dataSource: options } = this.state;
     return (
       <AntAutoComplete
@@ -83,7 +84,14 @@ export default class AutoComplete extends React.Component {
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
         getPopupContainer={node => getParentNode(node, 'editor-list')}
-       />
+      >
+        <Input
+          size={size}
+          onPressEnter={e => {
+            this.onChangeEnd(e.target.value);
+          }}
+        />
+      </AntAutoComplete>
     );
   }
 }
