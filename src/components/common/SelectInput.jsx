@@ -36,7 +36,9 @@ export default class SelectInput extends React.Component {
     };
   }
 
-  onChangeEnd = (v) => {
+  onChangeEnd = (e) => {
+    const { target } = e;
+    const v = target ? target.value : e;
     if (v !== this.props.value) {
       this.setState({
         showAll: false,
@@ -64,7 +66,7 @@ export default class SelectInput extends React.Component {
     if (this.state.showAll) {
       return true;
     }
-    return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
   render() {
@@ -89,7 +91,6 @@ export default class SelectInput extends React.Component {
         size="small"
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
-        dataSource={children}
       >
         <Input
           onPressEnter={(e) => {

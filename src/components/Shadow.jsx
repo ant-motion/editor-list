@@ -6,7 +6,7 @@ import Col from 'antd/lib/col';
 import Radio from 'antd/lib/radio';
 import Switch from 'antd/lib/switch';
 import Tooltip from 'antd/lib/tooltip';
-import AntIcon from 'antd/lib/icon';
+import { Icon as AntIcon } from '@ant-design/compatible';
 import { polyfill } from 'react-lifecycles-compat';
 import Icon from './common/Icon';
 import AutoComplete from './common/AutoComplete';

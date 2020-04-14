@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Input from 'antd/lib/input';
-import Icon from 'antd/lib/icon';
+import { Icon } from '@ant-design/compatible';
 import Popover from 'antd/lib/popover';
 import classnames from 'classnames';
 import { SketchPicker } from 'react-color';

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AntAutoComplete from 'antd/lib/auto-complete';
-import Input from 'antd/lib/input';
 import { getParentNode } from '../../utils';
 
 export default class AutoComplete extends React.Component {
@@ -11,13 +10,13 @@ export default class AutoComplete extends React.Component {
     placeholder: PropTypes.string,
     size: PropTypes.string,
     onChange: PropTypes.func,
-    value: PropTypes.string,
+    value: PropTypes.string
   };
 
   static defaultProps = {
     dataSource: ['px', '%', 'rem', 'em', 'vw', 'vh'],
     size: 'small',
-  }
+  };
 
   static getDerivedStateFromProps(props, { prevProps }) {
     const nextState = {
@@ -37,41 +36,45 @@ export default class AutoComplete extends React.Component {
     };
   }
 
-  onSearch = (value) => {
+  onSearch = value => {
     if (this.props.onSearch) {
       this.props.onSearch();
     }
     this.setState({
-      dataSource: value && !value.match(/[a-z|%]/ig) ?
-        this.props.dataSource.map(key => `${value}${key}`) : [],
+      dataSource:
+        value && !value.match(/[a-z|%]/gi)
+          ? this.props.dataSource.map(key => ({ value: `${value}${key}` }))
+          : []
     });
-  }
+  };
 
-  onChangeEnd = (v) => {
+  onChangeEnd = e => {
+    const { target } = e;
+    const v = target ? target.value : e;
     if (v !== this.props.value) {
       const o = {
         showAll: false,
-        value: v,
+        value: v
       };
       this.setState(o);
       this.props.onChange(v);
     }
   };
 
-  onChange = (value) => {
+  onChange = value => {
     this.setState({
       value,
     });
-  }
+  };
 
   render() {
-    const { onChange, ...props } = this.props;
-    const { value } = this.state;
+    const { onChange, dataSource, ...props } = this.props;
+    const { value, dataSource: options } = this.state;
     return (
       <AntAutoComplete
         {...props}
-        value={value}
-        dataSource={this.state.dataSource}
+        value={value || undefined}
+        options={options}
         onSearch={this.onSearch}
         onChange={this.onChange}
         onBlur={this.onChangeEnd}
@@ -80,9 +83,7 @@ export default class AutoComplete extends React.Component {
         dropdownMatchSelectWidth={false}
         dropdownClassName="editor-list-dropdown"
         getPopupContainer={node => getParentNode(node, 'editor-list')}
-      >
-        <Input onPressEnter={(e) => { this.onChangeEnd(e.target.value) }} />
-      </AntAutoComplete>
+       />
     );
   }
 }

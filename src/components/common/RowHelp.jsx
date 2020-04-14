@@ -2,7 +2,7 @@
 import React from 'react';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
-import Icon from 'antd/lib/icon';
+import { Icon } from '@ant-design/compatible';
 import Tooltip from 'antd/lib/tooltip';
 
 export default (props) => {

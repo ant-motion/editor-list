@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import AntIcon from 'antd/lib/icon';
+import { Icon as AntIcon } from '@ant-design/compatible';
 import Popover from 'antd/lib/popover';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
@@ -180,7 +180,7 @@ class BackGroundImage extends React.Component {
       <div className={`${className}-wrapper`}>
         {childToRender}
         <Row gutter={8}>
-          <Col>
+          <Col span={24}>
             <a className="add-button" onClick={this.onAdd}>
               <AntIcon type="plus" />
               {' '}

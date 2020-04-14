@@ -42,7 +42,7 @@
   .ant-input-number,
   .ant-input {
     width: 100%;
-    background: transparent;
+    background: @bgColor;
     border-color: @input-line-color;
     color: @text-color;
 
@@ -52,7 +52,7 @@
     }
 
     input {
-      background: transparent !important;
+      background: @bgColor !important;
       color: @text-color;
       border-color: @input-line-color;
     }
@@ -86,9 +86,10 @@
       background-color: @bgColor;
     }
   }
-
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+  .ant-select,
   .ant-select-selection, .ant-select-auto-complete.ant-select {
-    background: transparent;
+    background: @bgColor;
     color: @text-color;
     border-color: @input-line-color;
 
@@ -114,6 +115,14 @@
         border-color: @input-line-color-hover;
         box-shadow: none;
       }
+    }
+  }
+
+  .ant-select-single .ant-select-selector {
+    padding: 0;
+    .ant-select-selection-search {
+      left: 0;
+      right: 0;
     }
   }
 
@@ -176,7 +185,6 @@
 
   .select-input {
     position: relative;
-
     & .anticon {
       position: absolute;
       right: 4px;

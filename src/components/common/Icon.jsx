@@ -1,6 +1,6 @@
 /* eslint-disable max-len, react/prop-types */
 import React from 'react';
-import Icon from 'antd/lib/icon';
+import { Icon } from '@ant-design/compatible';
 import Tooltip from 'antd/lib/tooltip';
 
 const icon = {

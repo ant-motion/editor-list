@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Collapse from 'antd/lib/collapse';
-import Icon from 'antd/lib/icon';
+import { Icon } from '@ant-design/compatible';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import { polyfill } from 'react-lifecycles-compat';
@@ -132,7 +132,8 @@ class EditorTransition extends Component {
             onChange={(e) => {
               this.onChange('duration', i, e);
             }}
-          /></Col>
+          />
+        </Col>
         <Col span={6}>
           <SelectInput
             style={{ width: '100%' }}
